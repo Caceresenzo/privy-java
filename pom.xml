@@ -7,12 +7,16 @@
 	<artifactId>parent</artifactId>
 	<version>latest</version>
 	<name>privy-parent</name>
+	<description>A Privy.io API client written in Java.</description>
 
 	<packaging>pom</packaging>
 
 	<properties>
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
+
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<lombok.version>1.18.34</lombok.version>
 	</properties>
@@ -33,6 +37,18 @@
 	</dependencyManagement>
 
 	<url>https://github.com/Caceresenzo/privy-java</url>
+
+	<scm>
+		<connection>scm:git:git://github.com/Caceresenzo/privy-java.git</connection>
+		<developerConnection>scm:git:ssh://github.com:Caceresenzo/privy-java.git</developerConnection>
+		<url>http://github.com/Caceresenzo/privy-java/tree/master</url>
+	</scm>
+
+	<licenses>
+		<license>
+			<name>MIT</name>
+		</license>
+	</licenses>
 
 	<developers>
 		<developer>
