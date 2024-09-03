@@ -18,6 +18,7 @@ import lombok.ToString;
 	@JsonSubTypes.Type(value = LinkedAccount.Wallet.class, name = "wallet"),
 	@JsonSubTypes.Type(value = LinkedAccount.Email.class, name = "email"),
 	@JsonSubTypes.Type(value = LinkedAccount.Phone.class, name = "phone"),
+	@JsonSubTypes.Type(value = LinkedAccount.TwitterOAuth.class, name = "twitter_oauth"),
 	@JsonSubTypes.Type(value = LinkedAccount.DiscordOAuth.class, name = "discord_oauth"),
 })
 public sealed interface LinkedAccount {
@@ -73,6 +74,25 @@ public sealed interface LinkedAccount {
 
 		@JsonProperty("number")
 		private String number;
+
+	}
+
+	@Data
+	@ToString(callSuper = false)
+	@EqualsAndHashCode(callSuper = true)
+	public static final class TwitterOAuth extends AccountInfo {
+
+		@JsonProperty("subject")
+		private String subject;
+
+		@JsonProperty("username")
+		private String username;
+
+		@JsonProperty("name")
+		private String name;
+
+		@JsonProperty("profile_picture_url")
+		private String profilePictureUrl;
 
 	}
 
