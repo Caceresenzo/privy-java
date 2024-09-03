@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -34,17 +35,7 @@ public class PrivyClientImpl implements PrivyClient {
 		Objects.requireNonNull(applicationId, "applicationId must be specified");
 		Objects.requireNonNull(applicationSecret, "applicationSecret must be specified");
 
-		SimpleModule module = new SimpleModule();
-		module.addDeserializer(Date.class, new UnixDateDeserializer());
-
-		final var mapper = JsonMapper.builder()
-			.serializationInclusion(JsonInclude.Include.NON_NULL)
-			.configure(SerializationFeature.INDENT_OUTPUT, true)
-			.configure(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS, false)
-			.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true)
-			.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-			.addModule(module)
-			.build();
+		final var mapper = createMapper();
 
 		this.delegate = Feign.builder()
 			.encoder(new JacksonEncoder(mapper))
@@ -87,6 +78,20 @@ public class PrivyClientImpl implements PrivyClient {
 		} catch (FeignException.NotFound __) {
 			return Optional.empty();
 		}
+	}
+
+	public static ObjectMapper createMapper() {
+		SimpleModule module = new SimpleModule();
+		module.addDeserializer(Date.class, new UnixDateDeserializer());
+
+		return JsonMapper.builder()
+			.serializationInclusion(JsonInclude.Include.NON_NULL)
+			.configure(SerializationFeature.INDENT_OUTPUT, true)
+			.configure(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS, false)
+			.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true)
+			.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+			.addModule(module)
+			.build();
 	}
 
 }
