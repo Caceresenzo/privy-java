@@ -10,6 +10,8 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type", visible = true, defaultImpl = LinkedAccount.Unknown.class)
 @JsonSubTypes({
@@ -21,7 +23,9 @@ import lombok.Data;
 public sealed interface LinkedAccount {
 
 	@Data
-	public static final class Wallet implements LinkedAccount {
+	@ToString(callSuper = false)
+	@EqualsAndHashCode(callSuper = true)
+	public static final class Wallet extends AccountInfo {
 
 		@JsonProperty("address")
 		private String address;
@@ -50,53 +54,32 @@ public sealed interface LinkedAccount {
 		@JsonProperty("recovery_method")
 		private String recoveryMethod;
 
-		@JsonProperty("verified_at")
-		private Date verifiedAt;
-
-		@JsonProperty("first_verified_at")
-		private Date firstVerifiedAt;
-
-		@JsonProperty("latest_verified_at")
-		private Date latestVerifiedAt;
-
 	}
 
 	@Data
-	public static final class Email implements LinkedAccount {
+	@ToString(callSuper = false)
+	@EqualsAndHashCode(callSuper = true)
+	public static final class Email extends AccountInfo {
 
 		@JsonProperty("address")
 		private String address;
 
-		@JsonProperty("verified_at")
-		private Date verifiedAt;
-
-		@JsonProperty("first_verified_at")
-		private Date firstVerifiedAt;
-
-		@JsonProperty("latest_verified_at")
-		private Date latestVerifiedAt;
-
 	}
 
 	@Data
-	public static final class Phone implements LinkedAccount {
+	@ToString(callSuper = false)
+	@EqualsAndHashCode(callSuper = true)
+	public static final class Phone extends AccountInfo {
 
 		@JsonProperty("number")
 		private String number;
 
-		@JsonProperty("verified_at")
-		private Date verifiedAt;
-
-		@JsonProperty("first_verified_at")
-		private Date firstVerifiedAt;
-
-		@JsonProperty("latest_verified_at")
-		private Date latestVerifiedAt;
-
 	}
 
 	@Data
-	public static final class DiscordOAuth implements LinkedAccount {
+	@ToString(callSuper = false)
+	@EqualsAndHashCode(callSuper = true)
+	public static final class DiscordOAuth extends AccountInfo {
 
 		@JsonProperty("subject")
 		private String subject;
@@ -106,15 +89,6 @@ public sealed interface LinkedAccount {
 
 		@JsonProperty("email")
 		private String email;
-
-		@JsonProperty("verified_at")
-		private Date verifiedAt;
-
-		@JsonProperty("first_verified_at")
-		private Date firstVerifiedAt;
-
-		@JsonProperty("latest_verified_at")
-		private Date latestVerifiedAt;
 
 	}
 
@@ -127,6 +101,20 @@ public sealed interface LinkedAccount {
 		@JsonAnySetter
 		@JsonAnyGetter
 		private Map<String, Object> properties;
+
+	}
+
+	@Data
+	static sealed class AccountInfo implements LinkedAccount {
+
+		@JsonProperty("verified_at")
+		private Date verifiedAt;
+
+		@JsonProperty("first_verified_at")
+		private Date firstVerifiedAt;
+
+		@JsonProperty("latest_verified_at")
+		private Date latestVerifiedAt;
 
 	}
 
