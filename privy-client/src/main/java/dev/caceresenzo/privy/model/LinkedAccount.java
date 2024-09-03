@@ -1,46 +1,30 @@
 package dev.caceresenzo.privy.model;
 
 import java.util.Date;
+import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type", visible = true, defaultImpl = LinkedAccount.Unknown.class)
 @JsonSubTypes({
-	@JsonSubTypes.Type(value = LinkedAccount.Email.class, name = "email"),
 	@JsonSubTypes.Type(value = LinkedAccount.Wallet.class, name = "wallet"),
+	@JsonSubTypes.Type(value = LinkedAccount.Email.class, name = "email"),
 	@JsonSubTypes.Type(value = LinkedAccount.Phone.class, name = "phone"),
 	@JsonSubTypes.Type(value = LinkedAccount.DiscordOAuth.class, name = "discord_oauth"),
 })
-@Data
-public class LinkedAccount {
-
-	@JsonProperty("address")
-	protected String address;
-
-	@JsonProperty("verified_at")
-	protected Date verifiedAt;
-
-	@JsonProperty("first_verified_at")
-	protected Date firstVerifiedAt;
-
-	@JsonProperty("latest_verified_at")
-	protected Date latestVerifiedAt;
+public sealed interface LinkedAccount {
 
 	@Data
-	@ToString(callSuper = true)
-	@EqualsAndHashCode(callSuper = true)
-	public static final class Email extends LinkedAccount {}
+	public static final class Wallet implements LinkedAccount {
 
-	@Data
-	@ToString(callSuper = true)
-	@EqualsAndHashCode(callSuper = true)
-	public static final class Wallet extends LinkedAccount {
+		@JsonProperty("address")
+		private String address;
 
 		@JsonProperty("imported")
 		private boolean imported;
@@ -66,22 +50,53 @@ public class LinkedAccount {
 		@JsonProperty("recovery_method")
 		private String recoveryMethod;
 
+		@JsonProperty("verified_at")
+		private Date verifiedAt;
+
+		@JsonProperty("first_verified_at")
+		private Date firstVerifiedAt;
+
+		@JsonProperty("latest_verified_at")
+		private Date latestVerifiedAt;
+
 	}
 
 	@Data
-	@ToString(callSuper = true)
-	@EqualsAndHashCode(callSuper = true)
-	public static final class Phone extends LinkedAccount {
+	public static final class Email implements LinkedAccount {
+
+		@JsonProperty("address")
+		private String address;
+
+		@JsonProperty("verified_at")
+		private Date verifiedAt;
+
+		@JsonProperty("first_verified_at")
+		private Date firstVerifiedAt;
+
+		@JsonProperty("latest_verified_at")
+		private Date latestVerifiedAt;
+
+	}
+
+	@Data
+	public static final class Phone implements LinkedAccount {
 
 		@JsonProperty("number")
 		private String number;
 
+		@JsonProperty("verified_at")
+		private Date verifiedAt;
+
+		@JsonProperty("first_verified_at")
+		private Date firstVerifiedAt;
+
+		@JsonProperty("latest_verified_at")
+		private Date latestVerifiedAt;
+
 	}
 
 	@Data
-	@ToString(callSuper = true)
-	@EqualsAndHashCode(callSuper = true)
-	public static final class DiscordOAuth extends LinkedAccount {
+	public static final class DiscordOAuth implements LinkedAccount {
 
 		@JsonProperty("subject")
 		private String subject;
@@ -92,15 +107,26 @@ public class LinkedAccount {
 		@JsonProperty("email")
 		private String email;
 
+		@JsonProperty("verified_at")
+		private Date verifiedAt;
+
+		@JsonProperty("first_verified_at")
+		private Date firstVerifiedAt;
+
+		@JsonProperty("latest_verified_at")
+		private Date latestVerifiedAt;
+
 	}
 
 	@Data
-	@ToString(callSuper = true)
-	@EqualsAndHashCode(callSuper = true)
-	public static final class Unknown extends LinkedAccount {
+	public static final class Unknown implements LinkedAccount {
 
 		@JsonProperty("type")
 		private String type;
+
+		@JsonAnySetter
+		@JsonAnyGetter
+		private Map<String, Object> properties;
 
 	}
 
