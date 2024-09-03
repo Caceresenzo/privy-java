@@ -1,5 +1,6 @@
 package dev.caceresenzo.privy.client;
 
+import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -7,12 +8,14 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import dev.caceresenzo.privy.PrivyClient;
 import dev.caceresenzo.privy.auth.AuthRequestInterceptor;
 import dev.caceresenzo.privy.client.FeignPrivyClient.AddressRequest;
 import dev.caceresenzo.privy.client.FeignPrivyClient.PhoneRequest;
 import dev.caceresenzo.privy.model.User;
+import dev.caceresenzo.privy.serial.UnixDateDeserializer;
 import feign.Feign;
 import feign.FeignException;
 import feign.jackson.JacksonDecoder;
@@ -31,12 +34,16 @@ public class PrivyClientImpl implements PrivyClient {
 		Objects.requireNonNull(applicationId, "applicationId must be specified");
 		Objects.requireNonNull(applicationSecret, "applicationSecret must be specified");
 
+		SimpleModule module = new SimpleModule();
+		module.addDeserializer(Date.class, new UnixDateDeserializer());
+
 		final var mapper = JsonMapper.builder()
 			.serializationInclusion(JsonInclude.Include.NON_NULL)
 			.configure(SerializationFeature.INDENT_OUTPUT, true)
 			.configure(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS, false)
 			.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true)
 			.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+			.addModule(module)
 			.build();
 
 		this.delegate = Feign.builder()
