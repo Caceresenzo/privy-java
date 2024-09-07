@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.caceresenzo.privy.client.PrivyClientImpl;
 import lombok.SneakyThrows;
 
+@SuppressWarnings("deprecation")
 class LinkedAccountTest {
 
 	static ObjectMapper mapper;
@@ -50,7 +51,7 @@ class LinkedAccountTest {
 
 		assertEquals("0x0123456789abcdef0123456789abcdef01234567", wallet.getAddress());
 		assertFalse(wallet.isImported());
-		assertEquals(0, wallet.getWalletIndex());
+		assertEquals(0, wallet.getHdWalletIndex());
 		assertEquals("eip155:1", wallet.getChainId());
 		assertEquals("ethereum", wallet.getChainType());
 		assertEquals("privy", wallet.getWalletClient());
@@ -121,7 +122,7 @@ class LinkedAccountTest {
 			}
 			""");
 
-		final var discord = assertInstanceOf(LinkedAccount.DiscordOAuth.class, linkedAccount);
+		final var discord = assertInstanceOf(LinkedAccount.Discord.class, linkedAccount);
 
 		assertEquals("123456789", discord.getSubject());
 		assertEquals("johndoe#0", discord.getUsername());
@@ -148,7 +149,7 @@ class LinkedAccountTest {
 			}
 			""");
 
-		final var twitter = assertInstanceOf(LinkedAccount.TwitterOAuth.class, linkedAccount);
+		final var twitter = assertInstanceOf(LinkedAccount.Twitter.class, linkedAccount);
 
 		assertEquals("123456789", twitter.getSubject());
 		assertEquals("John Doe", twitter.getName());
@@ -162,7 +163,7 @@ class LinkedAccountTest {
 	}
 
 	@Test
-	void unknown() {
+	void other() {
 		final var linkedAccount = read("""
 			{
 			  "type": "unsupported",
@@ -172,14 +173,15 @@ class LinkedAccountTest {
 			}
 			""");
 
-		final var unknown = assertInstanceOf(LinkedAccount.Unknown.class, linkedAccount);
+		final var other = assertInstanceOf(LinkedAccount.Other.class, linkedAccount);
 
-		assertEquals("unsupported", unknown.getType());
-		assertThat(unknown.getProperties()).containsExactly(
+		assertEquals("unsupported", other.getType());
+		assertThat(other.getProperties()).containsExactly(
 			Map.entry("subject", "123456789"),
-			Map.entry("name", "John Doe"),
-			Map.entry("verified_at", 1725376993)
+			Map.entry("name", "John Doe")
 		);
+
+		assertEquals(new Date(1725376993l * 1000), other.getVerifiedAt());
 	}
 
 	@SneakyThrows

@@ -25,4 +25,36 @@ public class User {
 	@JsonProperty("created_at")
 	private Date createdAt;
 
+	public LinkedAccount.Wallet getWallet() {
+		return getAccount(LinkedAccount.Wallet.class);
+	}
+
+	public LinkedAccount.Email getEmail() {
+		return getAccount(LinkedAccount.Email.class);
+	}
+
+	public LinkedAccount.Phone getPhone() {
+		return getAccount(LinkedAccount.Phone.class);
+	}
+
+	public LinkedAccount.Twitter getTwitter() {
+		return getAccount(LinkedAccount.Twitter.class);
+	}
+
+	public LinkedAccount.Discord getDiscord() {
+		return getAccount(LinkedAccount.Discord.class);
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T extends LinkedAccount> T getAccount(Class<T> clazz) {
+		for (final var account : getLinkedAccounts()) {
+
+			if (account.getClass().isAssignableFrom(clazz)) {
+				return (T) account;
+			}
+		}
+
+		return null;
+	}
+
 }
