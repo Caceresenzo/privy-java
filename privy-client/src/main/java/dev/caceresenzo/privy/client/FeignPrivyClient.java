@@ -1,5 +1,6 @@
 package dev.caceresenzo.privy.client;
 
+import dev.caceresenzo.privy.client.pagination.Page;
 import dev.caceresenzo.privy.model.ApplicationSettings;
 import dev.caceresenzo.privy.model.User;
 import feign.Headers;
@@ -9,6 +10,12 @@ import feign.RequestLine;
 public interface FeignPrivyClient {
 
 	public static final String JSON_CONTENT_TYPE = "Content-Type: application/json";
+
+	@RequestLine("GET /api/v1/users?limit={limit}")
+	Page<User> getUsers(@Param long limit);
+
+	@RequestLine("GET /api/v1/users?limit={limit}&cursor={cursor}")
+	Page<User> getUsers(@Param long limit, @Param String cursor);
 
 	@RequestLine("GET /api/v1/users/{id}")
 	User getUserById(@Param String id);

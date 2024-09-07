@@ -3,6 +3,8 @@ package dev.caceresenzo.privy.client;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -15,6 +17,7 @@ import dev.caceresenzo.privy.PrivyClient;
 import dev.caceresenzo.privy.auth.AuthRequestInterceptor;
 import dev.caceresenzo.privy.client.FeignPrivyClient.AddressRequest;
 import dev.caceresenzo.privy.client.FeignPrivyClient.PhoneRequest;
+import dev.caceresenzo.privy.client.pagination.PageSpliterator;
 import dev.caceresenzo.privy.model.ApplicationSettings;
 import dev.caceresenzo.privy.model.User;
 import dev.caceresenzo.privy.serial.UnixDateDeserializer;
@@ -26,25 +29,45 @@ import feign.jackson.JacksonEncoder;
 public class PrivyClientImpl implements PrivyClient {
 
 	private final String applicationId;
+	private final long maxPageSize;
 	private final FeignPrivyClient delegate;
 
 	public PrivyClientImpl(
 		String apiUrl,
 		String applicationId,
-		String applicationSecret
+		String applicationSecret,
+		long maxPageSize
 	) {
 		Objects.requireNonNull(apiUrl, "apiUrl must be specified");
 		Objects.requireNonNull(applicationId, "applicationId must be specified");
 		Objects.requireNonNull(applicationSecret, "applicationSecret must be specified");
 
+		if (maxPageSize < 1) {
+			throw new IllegalArgumentException("maxPageSize must be positive");
+		}
+
 		final var mapper = createMapper();
 
 		this.applicationId = applicationId;
+		this.maxPageSize = maxPageSize;
 		this.delegate = Feign.builder()
 			.encoder(new JacksonEncoder(mapper))
 			.decoder(new JacksonDecoder(mapper))
 			.requestInterceptor(new AuthRequestInterceptor(applicationId, applicationSecret))
 			.target(FeignPrivyClient.class, apiUrl);
+	}
+
+	@Override
+	public Stream<User> getUsers() {
+		final var firstPage = delegate.getUsers(maxPageSize);
+
+		return StreamSupport.stream(
+			new PageSpliterator<>(
+				firstPage,
+				(nextCursor) -> delegate.getUsers(maxPageSize, nextCursor)
+			),
+			false
+		);
 	}
 
 	@Override
