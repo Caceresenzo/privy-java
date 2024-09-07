@@ -15,6 +15,7 @@ import dev.caceresenzo.privy.PrivyClient;
 import dev.caceresenzo.privy.auth.AuthRequestInterceptor;
 import dev.caceresenzo.privy.client.FeignPrivyClient.AddressRequest;
 import dev.caceresenzo.privy.client.FeignPrivyClient.PhoneRequest;
+import dev.caceresenzo.privy.model.ApplicationSettings;
 import dev.caceresenzo.privy.model.User;
 import dev.caceresenzo.privy.serial.UnixDateDeserializer;
 import feign.Feign;
@@ -24,6 +25,7 @@ import feign.jackson.JacksonEncoder;
 
 public class PrivyClientImpl implements PrivyClient {
 
+	private final String applicationId;
 	private final FeignPrivyClient delegate;
 
 	public PrivyClientImpl(
@@ -37,6 +39,7 @@ public class PrivyClientImpl implements PrivyClient {
 
 		final var mapper = createMapper();
 
+		this.applicationId = applicationId;
 		this.delegate = Feign.builder()
 			.encoder(new JacksonEncoder(mapper))
 			.decoder(new JacksonDecoder(mapper))
@@ -78,6 +81,11 @@ public class PrivyClientImpl implements PrivyClient {
 		} catch (FeignException.NotFound __) {
 			return Optional.empty();
 		}
+	}
+
+	@Override
+	public ApplicationSettings getApplicationSettings() {
+		return delegate.getApplicationSettings(applicationId);
 	}
 
 	public static ObjectMapper createMapper() {

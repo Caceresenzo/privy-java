@@ -1,5 +1,6 @@
 package dev.caceresenzo.privy.client;
 
+import dev.caceresenzo.privy.model.ApplicationSettings;
 import dev.caceresenzo.privy.model.User;
 import feign.Headers;
 import feign.Param;
@@ -23,6 +24,9 @@ public interface FeignPrivyClient {
 	@RequestLine("POST /api/v1/users/phone/number")
 	@Headers(JSON_CONTENT_TYPE)
 	User getUserByPhone(PhoneRequest body);
+
+	@RequestLine("GET /api/v1/apps/{applicationId}")
+	ApplicationSettings getApplicationSettings(@Param String applicationId);
 
 	static record AddressRequest(String address) {}
 

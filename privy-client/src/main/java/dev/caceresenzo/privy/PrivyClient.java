@@ -3,6 +3,7 @@ package dev.caceresenzo.privy;
 import java.util.Optional;
 
 import dev.caceresenzo.privy.client.PrivyClientImpl;
+import dev.caceresenzo.privy.model.ApplicationSettings;
 import dev.caceresenzo.privy.model.User;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -16,6 +17,8 @@ public interface PrivyClient {
 	Optional<User> findUserByWallet(String address);
 
 	Optional<User> findUserByPhone(String number);
+
+	ApplicationSettings getApplicationSettings();
 
 	public static Builder builder() {
 		return new Builder();
