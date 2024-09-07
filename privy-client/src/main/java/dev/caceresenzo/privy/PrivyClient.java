@@ -11,7 +11,9 @@ import lombok.experimental.Accessors;
 
 public interface PrivyClient {
 
-	Stream<User> getUsers();
+	Stream<User> findAllUsers();
+
+	Stream<User> findAllUsers(String search);
 
 	Optional<User> findUserById(String id);
 

@@ -5,6 +5,8 @@ import java.util.Objects;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import lombok.Data;
 
@@ -59,6 +61,10 @@ public class PageSpliterator<T> implements Spliterator<T> {
 	public void setPage(Page<T> page) {
 		this.currentIterator = page.data().iterator();
 		this.nextCursor = page.nextCursor();
+	}
+
+	public Stream<T> asStream() {
+		return StreamSupport.stream(this, false);
 	}
 
 }

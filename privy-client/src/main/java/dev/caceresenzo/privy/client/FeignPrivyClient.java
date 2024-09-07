@@ -1,11 +1,14 @@
 package dev.caceresenzo.privy.client;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import dev.caceresenzo.privy.client.pagination.Page;
 import dev.caceresenzo.privy.model.ApplicationSettings;
 import dev.caceresenzo.privy.model.User;
 import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
+import lombok.With;
 
 public interface FeignPrivyClient {
 
@@ -16,6 +19,10 @@ public interface FeignPrivyClient {
 
 	@RequestLine("GET /api/v1/users?limit={limit}&cursor={cursor}")
 	Page<User> getUsers(@Param long limit, @Param String cursor);
+
+	@RequestLine("POST /api/v1/users/search")
+	@Headers(JSON_CONTENT_TYPE)
+	Page<User> searchUsers(SearchRequest body);
 
 	@RequestLine("GET /api/v1/users/{id}")
 	User getUserById(@Param String id);
@@ -34,6 +41,12 @@ public interface FeignPrivyClient {
 
 	@RequestLine("GET /api/v1/apps/{applicationId}")
 	ApplicationSettings getApplicationSettings(@Param String applicationId);
+
+	static record SearchRequest(
+		String searchTerm,
+		long limit,
+		@JsonInclude(JsonInclude.Include.NON_NULL) @With String cursor
+	) {}
 
 	static record AddressRequest(String address) {}
 

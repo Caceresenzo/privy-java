@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -58,16 +57,29 @@ public class PrivyClientImpl implements PrivyClient {
 	}
 
 	@Override
-	public Stream<User> getUsers() {
+	public Stream<User> findAllUsers() {
 		final var firstPage = delegate.getUsers(maxPageSize);
 
-		return StreamSupport.stream(
-			new PageSpliterator<>(
-				firstPage,
-				(nextCursor) -> delegate.getUsers(maxPageSize, nextCursor)
-			),
-			false
+		return new PageSpliterator<>(
+			firstPage,
+			(nextCursor) -> delegate.getUsers(maxPageSize, nextCursor)
+		).asStream();
+	}
+
+	@Override
+	public Stream<User> findAllUsers(String search) {
+		final var body = new FeignPrivyClient.SearchRequest(
+			search,
+			maxPageSize,
+			null
 		);
+
+		final var firstPage = delegate.searchUsers(body);
+
+		return new PageSpliterator<>(
+			firstPage,
+			(nextCursor) -> delegate.searchUsers(body.withCursor(nextCursor))
+		).asStream();
 	}
 
 	@Override
