@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import dev.caceresenzo.privy.PrivyClient;
+import dev.caceresenzo.privy.PrivyException;
 import dev.caceresenzo.privy.auth.AuthRequestInterceptor;
 import dev.caceresenzo.privy.client.FeignPrivyClient.AddressRequest;
 import dev.caceresenzo.privy.client.FeignPrivyClient.PhoneRequest;
@@ -21,7 +22,7 @@ import dev.caceresenzo.privy.model.ApplicationSettings;
 import dev.caceresenzo.privy.model.User;
 import dev.caceresenzo.privy.serial.UnixDateDeserializer;
 import feign.Feign;
-import feign.FeignException;
+import feign.Retryer;
 import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
 
@@ -53,6 +54,8 @@ public class PrivyClientImpl implements PrivyClient {
 			.encoder(new JacksonEncoder(mapper))
 			.decoder(new JacksonDecoder(mapper))
 			.requestInterceptor(new AuthRequestInterceptor(applicationId, applicationSecret))
+			.errorDecoder(new FeignPrivyErrorDecoder(mapper))
+			.retryer(Retryer.NEVER_RETRY)
 			.target(FeignPrivyClient.class, apiUrl);
 	}
 
@@ -86,7 +89,7 @@ public class PrivyClientImpl implements PrivyClient {
 	public Optional<User> findUserById(String id) {
 		try {
 			return Optional.of(delegate.getUserById(id));
-		} catch (FeignException.NotFound __) {
+		} catch (PrivyException.UserNotFound __) {
 			return Optional.empty();
 		}
 	}
@@ -95,7 +98,7 @@ public class PrivyClientImpl implements PrivyClient {
 	public Optional<User> findUserByEmail(String address) {
 		try {
 			return Optional.of(delegate.getUserByEmail(new AddressRequest(address)));
-		} catch (FeignException.NotFound __) {
+		} catch (PrivyException.UserNotFound __) {
 			return Optional.empty();
 		}
 	}
@@ -104,7 +107,7 @@ public class PrivyClientImpl implements PrivyClient {
 	public Optional<User> findUserByWallet(String address) {
 		try {
 			return Optional.of(delegate.getUserByWallet(new AddressRequest(address)));
-		} catch (FeignException.NotFound __) {
+		} catch (PrivyException.UserNotFound __) {
 			return Optional.empty();
 		}
 	}
@@ -113,7 +116,7 @@ public class PrivyClientImpl implements PrivyClient {
 	public Optional<User> findUserByPhone(String number) {
 		try {
 			return Optional.of(delegate.getUserByPhone(new PhoneRequest(number)));
-		} catch (FeignException.NotFound __) {
+		} catch (PrivyException.UserNotFound __) {
 			return Optional.empty();
 		}
 	}
@@ -124,7 +127,7 @@ public class PrivyClientImpl implements PrivyClient {
 			delegate.deleteUserById(id);
 
 			return true;
-		} catch (FeignException.NotFound __) {
+		} catch (PrivyException.UserNotFound __) {
 			return false;
 		}
 	}
