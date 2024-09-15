@@ -23,6 +23,8 @@ public interface PrivyClient {
 
 	Optional<User> findUserByPhone(String number);
 
+	boolean deleteUserById(String id);
+
 	ApplicationSettings getApplicationSettings();
 
 	public static Builder builder() {

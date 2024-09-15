@@ -27,6 +27,9 @@ public interface FeignPrivyClient {
 	@RequestLine("GET /api/v1/users/{id}")
 	User getUserById(@Param String id);
 
+	@RequestLine("DELETE /api/v1/users/{id}")
+	void deleteUserById(@Param String id);
+
 	@RequestLine("POST /api/v1/users/email/address")
 	@Headers(JSON_CONTENT_TYPE)
 	User getUserByEmail(AddressRequest body);

@@ -119,6 +119,17 @@ public class PrivyClientImpl implements PrivyClient {
 	}
 
 	@Override
+	public boolean deleteUserById(String id) {
+		try {
+			delegate.deleteUserById(id);
+
+			return true;
+		} catch (FeignException.NotFound __) {
+			return false;
+		}
+	}
+
+	@Override
 	public ApplicationSettings getApplicationSettings() {
 		return delegate.getApplicationSettings(applicationId);
 	}
