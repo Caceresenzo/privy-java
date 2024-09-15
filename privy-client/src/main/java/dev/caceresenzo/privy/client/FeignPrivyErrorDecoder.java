@@ -1,5 +1,8 @@
 package dev.caceresenzo.privy.client;
 
+import java.util.Map;
+import java.util.function.BiFunction;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -13,6 +16,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FeignPrivyErrorDecoder extends ErrorDecoder.Default {
 
+	private static final Map<String, BiFunction<String, Exception, PrivyException>> MAPPERS = Map.of(
+		PrivyException.InvalidApplicationSecret.MESSAGE, PrivyException.InvalidApplicationSecret::new,
+		PrivyException.InvalidApplicationId.MESSAGE, PrivyException.InvalidApplicationId::new,
+		PrivyException.UserNotFound.MESSAGE, PrivyException.UserNotFound::new,
+		PrivyException.InvalidEmailAddress.MESSAGE, PrivyException.InvalidEmailAddress::new,
+		PrivyException.InvalidPhoneNumber.MESSAGE, PrivyException.InvalidPhoneNumber::new,
+		PrivyException.InvalidWalletAddress.MESSAGE, PrivyException.InvalidWalletAddress::new
+	);
+
 	private final ObjectMapper objectMapper;
 
 	@Override
@@ -25,8 +37,9 @@ public class FeignPrivyErrorDecoder extends ErrorDecoder.Default {
 
 		final var message = extractMessage(exception);
 
-		if (PrivyException.UserNotFound.MESSAGE.equals(message)) {
-			throw new PrivyException.UserNotFound(message);
+		final var mapper = MAPPERS.get(message);
+		if (mapper != null) {
+			throw mapper.apply(message, exception);
 		}
 
 		throw new PrivyException(message, exception);
