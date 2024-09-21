@@ -48,4 +48,18 @@ public class PrivyException extends RuntimeException {
 
 	}
 
+	@StandardException
+	public static class InvalidTwitterUsernameAddress extends PrivyException {
+
+		public static final String MESSAGE_PREFIX = "Twitter user with username ";
+
+	}
+
+	@StandardException
+	public static class InvalidTwitterSubjectAddress extends PrivyException {
+
+		public static final String MESSAGE_PREFIX = "Twitter user with subject ";
+
+	}
+
 }
