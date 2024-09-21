@@ -72,9 +72,9 @@ public class PrivyClientImpl implements PrivyClient {
 	}
 
 	@Override
-	public Stream<User> findAllUsers(String search) {
+	public Stream<User> findAllUsers(String searchTerm) {
 		final var body = new FeignPrivyClient.SearchRequest(
-			search,
+			searchTerm,
 			maxPageSize,
 			null
 		);
@@ -122,7 +122,7 @@ public class PrivyClientImpl implements PrivyClient {
 			return Optional.empty();
 		}
 	}
-	
+
 	@Override
 	public Optional<User> findUserByTwitterUsername(String username) {
 		try {
@@ -131,7 +131,7 @@ public class PrivyClientImpl implements PrivyClient {
 			return Optional.empty();
 		}
 	}
-	
+
 	@Override
 	public Optional<User> findUserByTwitterSubject(String subject) {
 		try {
