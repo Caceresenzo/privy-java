@@ -26,14 +26,21 @@ public class FeignPrivyErrorDecoder extends ErrorDecoder.Default {
 		this.objectMapper = objectMapper;
 
 		this.mappers = new ArrayList<>();
-		this.mappers.add(ErrorMapper.equals(PrivyException.InvalidApplicationSecret.MESSAGE, PrivyException.InvalidApplicationSecret::new));
-		this.mappers.add(ErrorMapper.equals(PrivyException.InvalidApplicationId.MESSAGE, PrivyException.InvalidApplicationId::new));
-		this.mappers.add(ErrorMapper.equals(PrivyException.UserNotFound.MESSAGE, PrivyException.UserNotFound::new));
-		this.mappers.add(ErrorMapper.equals(PrivyException.InvalidEmailAddress.MESSAGE, PrivyException.InvalidEmailAddress::new));
-		this.mappers.add(ErrorMapper.equals(PrivyException.InvalidPhoneNumber.MESSAGE, PrivyException.InvalidPhoneNumber::new));
-		this.mappers.add(ErrorMapper.equals(PrivyException.InvalidWalletAddress.MESSAGE, PrivyException.InvalidWalletAddress::new));
-		this.mappers.add(ErrorMapper.startsWith(PrivyException.InvalidTwitterUsernameAddress.MESSAGE_PREFIX, PrivyException.InvalidTwitterUsernameAddress::new));
-		this.mappers.add(ErrorMapper.startsWith(PrivyException.InvalidTwitterSubjectAddress.MESSAGE_PREFIX, PrivyException.InvalidTwitterSubjectAddress::new));
+		{
+			this.mappers.add(ErrorMapper.equals("Invalid Privy app ID", PrivyException.InvalidApplicationSecret::new));
+			this.mappers.add(ErrorMapper.equals("Invalid app ID or app secret.", PrivyException.InvalidApplicationId::new));
+
+			this.mappers.add(ErrorMapper.equals("User not found", PrivyException.UserNotFound::new));
+			this.mappers.add(ErrorMapper.startsWith("User with email ", PrivyException.UserNotFound::new));
+			this.mappers.add(ErrorMapper.startsWith("User with wallet address ", PrivyException.UserNotFound::new));
+			this.mappers.add(ErrorMapper.startsWith("User with phone number ", PrivyException.UserNotFound::new));
+			this.mappers.add(ErrorMapper.startsWith("Twitter user with username ", PrivyException.UserNotFound::new));
+			this.mappers.add(ErrorMapper.startsWith("Twitter user with subject ", PrivyException.UserNotFound::new));
+
+			this.mappers.add(ErrorMapper.equals("[Input error] `address`: Invalid email address", PrivyException.InvalidEmailAddress::new));
+			this.mappers.add(ErrorMapper.equals("[Input error] `number`: Phone number is not valid", PrivyException.InvalidPhoneNumber::new));
+			this.mappers.add(ErrorMapper.equals("[Input error] `address`: Invalid Ethereum address", PrivyException.InvalidWalletAddress::new));
+		}
 	}
 
 	@Override

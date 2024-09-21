@@ -7,59 +7,21 @@ import lombok.experimental.StandardException;
 public class PrivyException extends RuntimeException {
 
 	@StandardException
-	public static class InvalidApplicationId extends PrivyException {
-
-		public static final String MESSAGE = "Invalid Privy app ID";
-
-	}
+	public static class InvalidApplicationId extends PrivyException {}
 
 	@StandardException
-	public static class InvalidApplicationSecret extends PrivyException {
-
-		public static final String MESSAGE = "Invalid app ID or app secret.";
-
-	}
+	public static class InvalidApplicationSecret extends PrivyException {}
 
 	@StandardException
-	public static class UserNotFound extends PrivyException {
-
-		public static final String MESSAGE = "User not found";
-
-	}
+	public static class UserNotFound extends PrivyException {}
 
 	@StandardException
-	public static class InvalidEmailAddress extends PrivyException {
-
-		public static final String MESSAGE = "[Input error] `address`: Invalid email address";
-
-	}
+	public static class InvalidEmailAddress extends PrivyException {}
 
 	@StandardException
-	public static class InvalidPhoneNumber extends PrivyException {
-
-		public static final String MESSAGE = "[Input error] `number`: Phone number is not valid";
-
-	}
+	public static class InvalidPhoneNumber extends PrivyException {}
 
 	@StandardException
-	public static class InvalidWalletAddress extends PrivyException {
-
-		public static final String MESSAGE = "[Input error] `address`: Invalid Ethereum address";
-
-	}
-
-	@StandardException
-	public static class InvalidTwitterUsernameAddress extends PrivyException {
-
-		public static final String MESSAGE_PREFIX = "Twitter user with username ";
-
-	}
-
-	@StandardException
-	public static class InvalidTwitterSubjectAddress extends PrivyException {
-
-		public static final String MESSAGE_PREFIX = "Twitter user with subject ";
-
-	}
+	public static class InvalidWalletAddress extends PrivyException {}
 
 }
