@@ -89,6 +89,10 @@ public class PrivyClientImpl implements PrivyClient {
 
 	@Override
 	public Optional<User> findUserById(String id) {
+		if (id == null) {
+			return Optional.empty();
+		}
+
 		try {
 			return Optional.of(delegate.getUserById(id));
 		} catch (PrivyException.UserNotFound __) {
@@ -98,6 +102,10 @@ public class PrivyClientImpl implements PrivyClient {
 
 	@Override
 	public Optional<User> findUserByEmail(String address) {
+		if (address == null) {
+			return Optional.empty();
+		}
+
 		try {
 			return Optional.of(delegate.getUserByEmail(new AddressRequest(address)));
 		} catch (PrivyException.UserNotFound __) {
@@ -107,6 +115,10 @@ public class PrivyClientImpl implements PrivyClient {
 
 	@Override
 	public Optional<User> findUserByWallet(String address) {
+		if (address == null) {
+			return Optional.empty();
+		}
+
 		try {
 			return Optional.of(delegate.getUserByWallet(new AddressRequest(address)));
 		} catch (PrivyException.UserNotFound __) {
@@ -116,6 +128,10 @@ public class PrivyClientImpl implements PrivyClient {
 
 	@Override
 	public Optional<User> findUserByPhone(String number) {
+		if (number == null) {
+			return Optional.empty();
+		}
+
 		try {
 			return Optional.of(delegate.getUserByPhone(new PhoneRequest(number)));
 		} catch (PrivyException.UserNotFound __) {
@@ -125,6 +141,10 @@ public class PrivyClientImpl implements PrivyClient {
 
 	@Override
 	public Optional<User> findUserByTwitterUsername(String username) {
+		if (username == null) {
+			return Optional.empty();
+		}
+
 		try {
 			return Optional.of(delegate.getUserByTwitterUsername(new UsernameRequest(username)));
 		} catch (PrivyException.UserNotFound __) {
@@ -134,6 +154,10 @@ public class PrivyClientImpl implements PrivyClient {
 
 	@Override
 	public Optional<User> findUserByTwitterSubject(String subject) {
+		if (subject == null) {
+			return Optional.empty();
+		}
+
 		try {
 			return Optional.of(delegate.getUserByTwitterSubject(new SubjectRequest(subject)));
 		} catch (PrivyException.UserNotFound __) {
@@ -143,6 +167,10 @@ public class PrivyClientImpl implements PrivyClient {
 
 	@Override
 	public boolean deleteUserById(String id) {
+		if (id == null) {
+			return false;
+		}
+
 		try {
 			delegate.deleteUserById(id);
 
