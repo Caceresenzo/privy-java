@@ -42,6 +42,14 @@ public interface FeignPrivyClient {
 	@Headers(JSON_CONTENT_TYPE)
 	User getUserByPhone(PhoneRequest body);
 
+	@RequestLine("POST /api/v1/users/twitter/username")
+	@Headers(JSON_CONTENT_TYPE)
+	User getUserByTwitterUsername(UsernameRequest body);
+
+	@RequestLine("POST /api/v1/users/twitter/subject")
+	@Headers(JSON_CONTENT_TYPE)
+	User getUserByTwitterSubject(SubjectRequest body);
+
 	@RequestLine("GET /api/v1/apps/{applicationId}")
 	ApplicationSettings getApplicationSettings(@Param String applicationId);
 
@@ -54,5 +62,9 @@ public interface FeignPrivyClient {
 	static record AddressRequest(String address) {}
 
 	static record PhoneRequest(String number) {}
+
+	static record UsernameRequest(String username) {}
+
+	static record SubjectRequest(String subject) {}
 
 }

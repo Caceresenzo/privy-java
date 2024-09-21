@@ -23,6 +23,10 @@ public interface PrivyClient {
 
 	Optional<User> findUserByPhone(String number);
 
+	Optional<User> findUserByTwitterUsername(String username);
+
+	Optional<User> findUserByTwitterSubject(String subject);
+
 	boolean deleteUserById(String id);
 
 	ApplicationSettings getApplicationSettings();

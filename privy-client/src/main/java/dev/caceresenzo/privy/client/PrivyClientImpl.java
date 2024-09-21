@@ -17,6 +17,8 @@ import dev.caceresenzo.privy.PrivyException;
 import dev.caceresenzo.privy.auth.AuthRequestInterceptor;
 import dev.caceresenzo.privy.client.FeignPrivyClient.AddressRequest;
 import dev.caceresenzo.privy.client.FeignPrivyClient.PhoneRequest;
+import dev.caceresenzo.privy.client.FeignPrivyClient.SubjectRequest;
+import dev.caceresenzo.privy.client.FeignPrivyClient.UsernameRequest;
 import dev.caceresenzo.privy.client.pagination.PageSpliterator;
 import dev.caceresenzo.privy.model.ApplicationSettings;
 import dev.caceresenzo.privy.model.User;
@@ -116,6 +118,24 @@ public class PrivyClientImpl implements PrivyClient {
 	public Optional<User> findUserByPhone(String number) {
 		try {
 			return Optional.of(delegate.getUserByPhone(new PhoneRequest(number)));
+		} catch (PrivyException.UserNotFound __) {
+			return Optional.empty();
+		}
+	}
+	
+	@Override
+	public Optional<User> findUserByTwitterUsername(String username) {
+		try {
+			return Optional.of(delegate.getUserByTwitterUsername(new UsernameRequest(username)));
+		} catch (PrivyException.UserNotFound __) {
+			return Optional.empty();
+		}
+	}
+	
+	@Override
+	public Optional<User> findUserByTwitterSubject(String subject) {
+		try {
+			return Optional.of(delegate.getUserByTwitterSubject(new SubjectRequest(subject)));
 		} catch (PrivyException.UserNotFound __) {
 			return Optional.empty();
 		}
