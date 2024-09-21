@@ -27,13 +27,31 @@ PrivyClient client = PrivyClient.builder()
 
 ## Usage
 
+### Stream Users
+
+```java
+Stream<User> users = findAllUsers();
+
+/* or get a list via */
+List<User> users = findAllUsers().toList();
+```
+
+### Stream Users by a Search Term
+
+```java
+Stream<User> users = findAllUsers("john");
+
+/* or get a list via */
+List<User> users = findAllUsers("john").toList();
+```
+
 ### Find a User by an ID
 
 ```java
 Optional<User> user = client.findUserById("did:privy:a0b1c2d3e4f5g6h7i8j9k0l1m");
 ```
 
-### Find a User by an Email
+### Find a User by an Email Address
 
 ```java
 Optional<User> user = client.findUserByEmail("john.doe@gmail.com");
@@ -43,6 +61,30 @@ Optional<User> user = client.findUserByEmail("john.doe@gmail.com");
 
 ```java
 Optional<User> user = client.findUserByWallet("0xa0b1c2d3e4f5g6h7i8j9k0l1m2n3o4p5q6r7s8t9");
+```
+
+### Find a User by a Phone Number
+
+```java
+Optional<User> user = client.findUserByWallet("+1 (234) 567-8912");
+```
+
+### Find a User by a Twitter Username
+
+```java
+Optional<User> user = client.findUserByTwitterUsername("johndoe");
+```
+
+### Find a User by a Twitter Subject
+
+```java
+Optional<User> user = client.findUserByTwitterSubject("1234567890");
+```
+
+### Delete a User by an ID
+
+```java
+boolean deleted = client.deleteUserById("did:privy:a0b1c2d3e4f5g6h7i8j9k0l1m");
 ```
 
 ## Spring Boot Starter
