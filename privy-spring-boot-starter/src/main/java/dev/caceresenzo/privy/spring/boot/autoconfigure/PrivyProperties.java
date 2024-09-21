@@ -14,5 +14,6 @@ public class PrivyProperties {
 	private String apiUrl;
 	private String applicationId;
 	private String applicationSecret;
+	private Long maxPageSize;
 
 }

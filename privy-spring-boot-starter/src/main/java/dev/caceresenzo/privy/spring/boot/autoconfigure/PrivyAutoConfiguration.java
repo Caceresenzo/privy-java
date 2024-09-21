@@ -28,9 +28,14 @@ public class PrivyAutoConfiguration {
 			.applicationId(properties.getApplicationId())
 			.applicationSecret(properties.getApplicationSecret());
 
-		final String apiUrl = properties.getApiUrl();
+		final var apiUrl = properties.getApiUrl();
 		if (apiUrl != null) {
 			builder.apiUrl(apiUrl);
+		}
+
+		final var maxPageSize = properties.getMaxPageSize();
+		if (maxPageSize != null) {
+			builder.maxPageSize(maxPageSize);
 		}
 
 		return builder.build();
