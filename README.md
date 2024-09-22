@@ -22,7 +22,7 @@
 
 ```xml
 <properties>
-    <privy.version>0.2.0</privy.version>
+    <privy.version>0.3.0</privy.version>
 </properties>
 
 <dependencies>
