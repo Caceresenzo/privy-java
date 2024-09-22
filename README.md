@@ -159,7 +159,7 @@ public class HelloRestController {
 	public String greet(
 		@AuthenticationPrincipal Jwt jwt
 	) {
-		final String subject = jwt.getSubject();
+		String subject = jwt.getSubject();
 
 		return "Welcome %s!".formatted(subject);
 	}
