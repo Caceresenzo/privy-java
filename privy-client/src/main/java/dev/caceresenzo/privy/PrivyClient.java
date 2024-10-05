@@ -78,6 +78,14 @@ public interface PrivyClient {
 	Optional<User> findUserByTwitterSubject(String subject);
 
 	/**
+	 * Get the user object associated with a Discord username.
+	 *
+	 * @param username Discord username to search for.
+	 * @returns A {@link User user}, if it exists.
+	 */
+	Optional<User> findUserByDiscordUsername(String username);
+
+	/**
 	 * Delete the user object associated with the given user DID (decentralized ID).
 	 *
 	 * @param id The Privy DID of the user.

@@ -166,6 +166,19 @@ public class PrivyClientImpl implements PrivyClient {
 	}
 
 	@Override
+	public Optional<User> findUserByDiscordUsername(String username) {
+		if (username == null) {
+			return Optional.empty();
+		}
+
+		try {
+			return Optional.of(delegate.getUserByDiscordUsername(new UsernameRequest(username)));
+		} catch (PrivyException.UserNotFound __) {
+			return Optional.empty();
+		}
+	}
+
+	@Override
 	public boolean deleteUserById(String id) {
 		if (id == null) {
 			return false;

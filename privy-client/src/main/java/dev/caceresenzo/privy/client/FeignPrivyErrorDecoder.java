@@ -36,6 +36,7 @@ public class FeignPrivyErrorDecoder extends ErrorDecoder.Default {
 			this.mappers.add(ErrorMapper.startsWith("User with phone number ", PrivyException.UserNotFound::new));
 			this.mappers.add(ErrorMapper.startsWith("Twitter user with username ", PrivyException.UserNotFound::new));
 			this.mappers.add(ErrorMapper.startsWith("Twitter user with subject ", PrivyException.UserNotFound::new));
+			this.mappers.add(ErrorMapper.startsWith("Discord user with username ", PrivyException.UserNotFound::new));
 
 			this.mappers.add(ErrorMapper.equals("[Input error] `address`: Invalid email address", PrivyException.InvalidEmailAddress::new));
 			this.mappers.add(ErrorMapper.equals("[Input error] `number`: Phone number is not valid", PrivyException.InvalidPhoneNumber::new));

@@ -50,6 +50,10 @@ public interface FeignPrivyClient {
 	@Headers(JSON_CONTENT_TYPE)
 	User getUserByTwitterSubject(SubjectRequest body);
 
+	@RequestLine("POST /api/v1/users/discord/username")
+	@Headers(JSON_CONTENT_TYPE)
+	User getUserByDiscordUsername(UsernameRequest body);
+
 	@RequestLine("GET /api/v1/apps/{applicationId}")
 	ApplicationSettings getApplicationSettings(@Param String applicationId);
 

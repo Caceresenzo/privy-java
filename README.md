@@ -12,6 +12,7 @@
     - [Find a User by a Phone Number](#find-a-user-by-a-phone-number)
     - [Find a User by a Twitter Username](#find-a-user-by-a-twitter-username)
     - [Find a User by a Twitter Subject](#find-a-user-by-a-twitter-subject)
+    - [Find a User by a Discord Username](#find-a-user-by-a-discord-username)
     - [Delete a User by an ID](#delete-a-user-by-an-id)
   - [Spring Boot Starter](#spring-boot-starter)
   - [Spring OAuth 2.0 Resource Server](#spring-oauth-20-resource-server)
@@ -97,6 +98,12 @@ Optional<User> user = client.findUserByTwitterUsername("johndoe");
 
 ```java
 Optional<User> user = client.findUserByTwitterSubject("1234567890");
+```
+
+### Find a User by a Discord Username
+
+```java
+Optional<User> user = client.findUserByDiscordUsername("johndoe#0");
 ```
 
 ### Delete a User by an ID
