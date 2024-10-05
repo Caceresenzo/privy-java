@@ -14,15 +14,15 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import dev.caceresenzo.privy.PrivyClient;
 import dev.caceresenzo.privy.PrivyException;
-import dev.caceresenzo.privy.auth.AuthRequestInterceptor;
 import dev.caceresenzo.privy.client.FeignPrivyClient.AddressRequest;
 import dev.caceresenzo.privy.client.FeignPrivyClient.PhoneRequest;
 import dev.caceresenzo.privy.client.FeignPrivyClient.SubjectRequest;
 import dev.caceresenzo.privy.client.FeignPrivyClient.UsernameRequest;
+import dev.caceresenzo.privy.client.auth.AuthRequestInterceptor;
 import dev.caceresenzo.privy.client.pagination.PageSpliterator;
+import dev.caceresenzo.privy.client.serial.UnixDateDeserializer;
 import dev.caceresenzo.privy.model.ApplicationSettings;
 import dev.caceresenzo.privy.model.User;
-import dev.caceresenzo.privy.serial.UnixDateDeserializer;
 import feign.Feign;
 import feign.Retryer;
 import feign.jackson.JacksonDecoder;
