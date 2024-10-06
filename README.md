@@ -22,9 +22,9 @@
 - [Spring Boot Starter](#spring-boot-starter)
   - [Client](#client-1)
   - [Webhook](#webhook-1)
-  - [Spring OAuth 2.0 Resource Server](#spring-oauth-20-resource-server)
     - [Controller Example](#controller-example)
-
+  - [Spring OAuth 2.0 Resource Server](#spring-oauth-20-resource-server)
+    - [Controller Example](#controller-example-1)
 
 # Installation
 
@@ -48,9 +48,9 @@
 
 ```java
 PrivyClient client = PrivyClient.builder()
-    .applicationId("a0b1c2d3e4f5g6h7i8j9k0l1m")
-    .applicationSecret("a0b1c2d3e4f5g6h7i8j9k0l1m2n3o4p5q6r7s8t9u0v1w2x3y4z5a6b7c8d9e0f1g2h3i4j5k6l7m8n9o0p1q2r3")
-    .build();
+	.applicationId("a0b1c2d3e4f5g6h7i8j9k0l1m")
+	.applicationSecret("a0b1c2d3e4f5g6h7i8j9k0l1m2n3o4p5q6r7s8t9u0v1w2x3y4z5a6b7c8d9e0f1g2h3i4j5k6l7m8n9o0p1q2r3")
+	.build();
 ```
 
 ## Usage
@@ -127,8 +127,8 @@ boolean deleted = client.deleteUserById("0xa0b1c2d3e4f5g6h7i8j9k0l1m2n3o4p5q6r7s
 
 ```java
 PrivyWebhook webhook = PrivyWebhook.builder()
-    .signingKey("whsec_a0b1c2d3e4f5g6h7i8j9k0l1m2n3o4p5")
-    .build();
+	.signingKey("whsec_a0b1c2d3e4f5g6h7i8j9k0l1m2n3o4p5")
+	.build();
 ```
 
 ## Usage
@@ -137,21 +137,21 @@ PrivyWebhook webhook = PrivyWebhook.builder()
 
 ```java
 PrivyWebhook.Headers headers = new PrivyWebhook.Headers(
-  "msg_a0b1c2d3e4f5g6h7i8j9k0l1m2n",
-  "1234567890",
-  "v1,a0b1c2d3e4f5g6h7i8j9k0l1m2n3o4p5q6r7s8t9u0v1"
+	"msg_a0b1c2d3e4f5g6h7i8j9k0l1m2n",
+	"1234567890",
+	"v1,a0b1c2d3e4f5g6h7i8j9k0l1m2n3o4p5q6r7s8t9u0v1"
 );
 
 String body = """
-  {
-    "message": "Hello, World!",
-    "type": "privy.test"
-  }
-  """;
+	{
+	  "message": "Hello, World!",
+	  "type": "privy.test"
+	}
+	""";
 
 Event event = webhook.verify(
-  headers,
-  body
+	headers,
+	body
 );
 ```
 
@@ -160,38 +160,38 @@ Event event = webhook.verify(
 
 ```java
 switch (event) {
-  case Event.Test test -> {
-    System.out.println("Testing: %s".formatted(test.getMessage()));
-  }
+	case Event.Test test -> {
+		System.out.println("Testing: %s".formatted(test.getMessage()));
+	}
 
-  case Event.UserCreated userCreated -> {
-    System.out.println("User Created: %s".formatted(userCreated.getUser().getId()));
-  }
+	case Event.UserCreated userCreated -> {
+		System.out.println("User Created: %s".formatted(userCreated.getUser().getId()));
+	}
 
-  case Event.UserAuthenticated userAuthenticated -> {
-    System.out.println("User Authenticated: %s".formatted(userAuthenticated.getUser().getId()));
-    System.out.println(" with account: %s".formatted(userAuthenticated.getAccount()));
-  }
+	case Event.UserAuthenticated userAuthenticated -> {
+		System.out.println("User Authenticated: %s".formatted(userAuthenticated.getUser().getId()));
+		System.out.println(" with account: %s".formatted(userAuthenticated.getAccount()));
+	}
 
-  case Event.UserLinkedAccount userLinkedAccount -> {
-    System.out.println("User Linked Account: %s".formatted(userLinkedAccount.getUser().getId()));
-    System.out.println(" with account: %s".formatted(userLinkedAccount.getAccount()));
-  }
+	case Event.UserLinkedAccount userLinkedAccount -> {
+		System.out.println("User Linked Account: %s".formatted(userLinkedAccount.getUser().getId()));
+		System.out.println(" with account: %s".formatted(userLinkedAccount.getAccount()));
+	}
 
-  case Event.UserUnlinkedAccount userUnlinkedAccount -> {
-    System.out.println("User Unlinked Account: %s".formatted(userUnlinkedAccount.getUser().getId()));
-    System.out.println(" with account: %s".formatted(userUnlinkedAccount.getAccount()));
-  }
+	case Event.UserUnlinkedAccount userUnlinkedAccount -> {
+		System.out.println("User Unlinked Account: %s".formatted(userUnlinkedAccount.getUser().getId()));
+		System.out.println(" with account: %s".formatted(userUnlinkedAccount.getAccount()));
+	}
 
-  case Event.UserUpdatedAccount userUpdatedAccount -> {
-    System.out.println("User Updated Account: %s".formatted(userUpdatedAccount.getUser().getId()));
-    System.out.println(" with account: %s".formatted(userUpdatedAccount.getAccount()));
-  }
+	case Event.UserUpdatedAccount userUpdatedAccount -> {
+		System.out.println("User Updated Account: %s".formatted(userUpdatedAccount.getUser().getId()));
+		System.out.println(" with account: %s".formatted(userUpdatedAccount.getAccount()));
+	}
 
-  case Event.Other other -> {
-    System.out.println("Unknown event: %s".formatted(other.getType()));
-    System.out.println(" with properties: %s".formatted(other.getProperties()));
-  }
+	case Event.Other other -> {
+		System.out.println("Unknown event: %s".formatted(other.getType()));
+		System.out.println(" with properties: %s".formatted(other.getProperties()));
+	}
 }
 ```
 </details>
@@ -227,6 +227,36 @@ Which is enabled when the Webhook Signing Key is specified in the configuration:
 ```yml
 privy:
   webhook-signing-key: whsec_a0b1c2d3e4f5g6h7i8j9k0l1m2n3o4p5
+```
+
+### Controller Example
+
+```java
+@RestController
+@RequestMapping(path = "/privy/webhook", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequiredArgsConstructor
+public class ProvyRestControllerV1 {
+
+	private final PrivyWebhook privyWebhook;
+
+	@PostMapping
+	@ResponseStatus(HttpStatus.ACCEPTED)
+	public void webhook(
+		@RequestHeader(PrivyWebhook.Headers.ID_NAME) String id,
+		@RequestHeader(PrivyWebhook.Headers.TIMESTAMP_NAME) String timestamp,
+		@RequestHeader(PrivyWebhook.Headers.SIGNATURE_NAME) String signature,
+		@RequestBody String body
+	) {
+		PrivyWebhook.Headers headers = new PrivyWebhook.Headers(id, timestamp, signature);
+		Event event = privyWebhook.verify(headers, body);
+
+		System.out.println(event);
+
+		// switch (event)
+		// see "Testing the event type"
+	}
+
+}
 ```
 
 ## Spring OAuth 2.0 Resource Server
