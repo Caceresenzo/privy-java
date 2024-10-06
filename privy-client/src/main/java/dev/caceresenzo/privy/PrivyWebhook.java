@@ -20,7 +20,13 @@ public interface PrivyWebhook {
 		String id,
 		String timestamp,
 		String signature
-	) {}
+	) {
+
+		public static final String ID_NAME = "svix-id";
+		public static final String TIMESTAMP_NAME = "svix-timestamp";
+		public static final String SIGNATURE_NAME = "svix-signature";
+
+	}
 
 	/**
 	 * Create a new builder.
