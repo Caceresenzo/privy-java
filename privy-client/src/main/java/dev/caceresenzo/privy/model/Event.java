@@ -19,7 +19,7 @@ import lombok.Data;
 	@JsonSubTypes.Type(value = Event.UserUnlinkedAccount.class, name = "user.unlinked_account"),
 	@JsonSubTypes.Type(value = Event.UserUpdatedAccount.class, name = "user.updated_account"),
 })
-public interface Event {
+public sealed interface Event {
 
 	/** A user was created in the application. */
 	@Data
