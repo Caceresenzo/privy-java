@@ -1,7 +1,8 @@
 # Privy Client for Java
 
 - [Privy Client for Java](#privy-client-for-java)
-  - [Installation](#installation)
+- [Installation](#installation)
+- [Client](#client)
   - [Configuration](#configuration)
   - [Usage](#usage)
     - [Stream Users](#stream-users)
@@ -14,12 +15,18 @@
     - [Find a User by a Twitter Subject](#find-a-user-by-a-twitter-subject)
     - [Find a User by a Discord Username](#find-a-user-by-a-discord-username)
     - [Delete a User by an ID](#delete-a-user-by-an-id)
-  - [Spring Boot Starter](#spring-boot-starter)
+- [Webhook](#webhook)
+  - [Configuration](#configuration-1)
+  - [Usage](#usage-1)
+    - [Verify an Event](#verify-an-event)
+- [Spring Boot Starter](#spring-boot-starter)
+  - [Client](#client-1)
+  - [Webhook](#webhook-1)
   - [Spring OAuth 2.0 Resource Server](#spring-oauth-20-resource-server)
     - [Controller Example](#controller-example)
 
 
-## Installation
+# Installation
 
 ```xml
 <properties>
@@ -34,6 +41,8 @@
     </dependency>
 </dependencies>
 ```
+
+# Client
 
 ## Configuration
 
@@ -109,10 +118,85 @@ Optional<User> user = client.findUserByDiscordUsername("johndoe#0");
 ### Delete a User by an ID
 
 ```java
-boolean deleted = client.deleteUserById("did:privy:a0b1c2d3e4f5g6h7i8j9k0l1m");
+boolean deleted = client.deleteUserById("0xa0b1c2d3e4f5g6h7i8j9k0l1m2n3o4p5q6r7s8t9");
 ```
 
-## Spring Boot Starter
+# Webhook
+
+## Configuration
+
+```java
+PrivyWebhook webhook = PrivyWebhook.builder()
+    .signingKey("whsec_a0b1c2d3e4f5g6h7i8j9k0l1m2n3o4p5")
+    .build();
+```
+
+## Usage
+
+### Verify an Event
+
+```java
+PrivyWebhook.Headers headers = new PrivyWebhook.Headers(
+  "msg_a0b1c2d3e4f5g6h7i8j9k0l1m2n",
+  "1234567890",
+  "v1,a0b1c2d3e4f5g6h7i8j9k0l1m2n3o4p5q6r7s8t9u0v1"
+);
+
+String body = """
+  {
+    "message": "Hello, World!",
+    "type": "privy.test"
+  }
+  """;
+
+Event event = webhook.verify(
+  headers,
+  body
+);
+```
+
+<details>
+<summary>Testing the event type</summary>
+
+```java
+switch (event) {
+  case Event.Test test -> {
+    System.out.println("Testing: %s".formatted(test.getMessage()));
+  }
+
+  case Event.UserCreated userCreated -> {
+    System.out.println("User Created: %s".formatted(userCreated.getUser().getId()));
+  }
+
+  case Event.UserAuthenticated userAuthenticated -> {
+    System.out.println("User Authenticated: %s".formatted(userAuthenticated.getUser().getId()));
+    System.out.println(" with account: %s".formatted(userAuthenticated.getAccount()));
+  }
+
+  case Event.UserLinkedAccount userLinkedAccount -> {
+    System.out.println("User Linked Account: %s".formatted(userLinkedAccount.getUser().getId()));
+    System.out.println(" with account: %s".formatted(userLinkedAccount.getAccount()));
+  }
+
+  case Event.UserUnlinkedAccount userUnlinkedAccount -> {
+    System.out.println("User Unlinked Account: %s".formatted(userUnlinkedAccount.getUser().getId()));
+    System.out.println(" with account: %s".formatted(userUnlinkedAccount.getAccount()));
+  }
+
+  case Event.UserUpdatedAccount userUpdatedAccount -> {
+    System.out.println("User Updated Account: %s".formatted(userUpdatedAccount.getUser().getId()));
+    System.out.println(" with account: %s".formatted(userUpdatedAccount.getAccount()));
+  }
+
+  case Event.Other other -> {
+    System.out.println("Unknown event: %s".formatted(other.getType()));
+    System.out.println(" with properties: %s".formatted(other.getProperties()));
+  }
+}
+```
+</details>
+
+# Spring Boot Starter
 
 There is a Spring Boot auto-configuration available.
 
@@ -126,12 +210,23 @@ There is a Spring Boot auto-configuration available.
 </dependencies>
 ```
 
+## Client
+
 Which is enabled when the Application ID is specified in the configuration:
 
 ```yml
 privy:
   application-id: a0b1c2d3e4f5g6h7i8j9k0l1m
   application-secret: a0b1c2d3e4f5g6h7i8j9k0l1m2n3o4p5q6r7s8t9u0v1w2x3y4z5a6b7c8d9e0f1g2h3i4j5k6l7m8n9o0p1q2r3
+```
+
+## Webhook
+
+Which is enabled when the Webhook Signing Key is specified in the configuration:
+
+```yml
+privy:
+  webhook-signing-key: whsec_a0b1c2d3e4f5g6h7i8j9k0l1m2n3o4p5
 ```
 
 ## Spring OAuth 2.0 Resource Server
