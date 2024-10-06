@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import dev.caceresenzo.privy.PrivyClient;
+import dev.caceresenzo.privy.PrivyWebhook;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -22,7 +23,7 @@ public class PrivyAutoConfiguration {
 	@ConditionalOnProperty(PrivyProperties.PREFIX_APPLICATION_ID)
 	@ConditionalOnMissingBean
 	PrivyClient privyClient(PrivyProperties properties) throws IOException {
-		log.info("Configuring Privy");
+		log.info("Configuring Privy Client");
 
 		final PrivyClient.Builder builder = PrivyClient.builder()
 			.applicationId(properties.getApplicationId())
@@ -39,6 +40,17 @@ public class PrivyAutoConfiguration {
 		}
 
 		return builder.build();
+	}
+
+	@Bean
+	@ConditionalOnProperty(PrivyProperties.PREFIX_WEBHOOK_SIGNING_KEY)
+	@ConditionalOnMissingBean
+	PrivyWebhook privyWebhook(PrivyProperties properties) throws IOException {
+		log.info("Configuring Privy Webhook");
+
+		return PrivyWebhook.builder()
+			.signingKey(properties.getWebhookSigningKey())
+			.build();
 	}
 
 }
