@@ -7,7 +7,7 @@ import java.util.function.BiFunction;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import dev.caceresenzo.privy.PrivyException;
+import dev.caceresenzo.privy.PrivyClientException;
 import feign.FeignException;
 import feign.Response;
 import feign.RetryableException;
@@ -27,20 +27,20 @@ public class FeignPrivyErrorDecoder extends ErrorDecoder.Default {
 
 		this.mappers = new ArrayList<>();
 		{
-			this.mappers.add(ErrorMapper.equals("Invalid Privy app ID", PrivyException.InvalidApplicationSecret::new));
-			this.mappers.add(ErrorMapper.equals("Invalid app ID or app secret.", PrivyException.InvalidApplicationId::new));
+			this.mappers.add(ErrorMapper.equals("Invalid Privy app ID", PrivyClientException.InvalidApplicationSecret::new));
+			this.mappers.add(ErrorMapper.equals("Invalid app ID or app secret.", PrivyClientException.InvalidApplicationId::new));
 
-			this.mappers.add(ErrorMapper.equals("User not found", PrivyException.UserNotFound::new));
-			this.mappers.add(ErrorMapper.startsWith("User with email ", PrivyException.UserNotFound::new));
-			this.mappers.add(ErrorMapper.startsWith("User with wallet address ", PrivyException.UserNotFound::new));
-			this.mappers.add(ErrorMapper.startsWith("User with phone number ", PrivyException.UserNotFound::new));
-			this.mappers.add(ErrorMapper.startsWith("Twitter user with username ", PrivyException.UserNotFound::new));
-			this.mappers.add(ErrorMapper.startsWith("Twitter user with subject ", PrivyException.UserNotFound::new));
-			this.mappers.add(ErrorMapper.startsWith("Discord user with username ", PrivyException.UserNotFound::new));
+			this.mappers.add(ErrorMapper.equals("User not found", PrivyClientException.UserNotFound::new));
+			this.mappers.add(ErrorMapper.startsWith("User with email ", PrivyClientException.UserNotFound::new));
+			this.mappers.add(ErrorMapper.startsWith("User with wallet address ", PrivyClientException.UserNotFound::new));
+			this.mappers.add(ErrorMapper.startsWith("User with phone number ", PrivyClientException.UserNotFound::new));
+			this.mappers.add(ErrorMapper.startsWith("Twitter user with username ", PrivyClientException.UserNotFound::new));
+			this.mappers.add(ErrorMapper.startsWith("Twitter user with subject ", PrivyClientException.UserNotFound::new));
+			this.mappers.add(ErrorMapper.startsWith("Discord user with username ", PrivyClientException.UserNotFound::new));
 
-			this.mappers.add(ErrorMapper.equals("[Input error] `address`: Invalid email address", PrivyException.InvalidEmailAddress::new));
-			this.mappers.add(ErrorMapper.equals("[Input error] `number`: Phone number is not valid", PrivyException.InvalidPhoneNumber::new));
-			this.mappers.add(ErrorMapper.equals("[Input error] `address`: Invalid Ethereum address", PrivyException.InvalidWalletAddress::new));
+			this.mappers.add(ErrorMapper.equals("[Input error] `address`: Invalid email address", PrivyClientException.InvalidEmailAddress::new));
+			this.mappers.add(ErrorMapper.equals("[Input error] `number`: Phone number is not valid", PrivyClientException.InvalidPhoneNumber::new));
+			this.mappers.add(ErrorMapper.equals("[Input error] `address`: Invalid Ethereum address", PrivyClientException.InvalidWalletAddress::new));
 		}
 	}
 
@@ -59,7 +59,7 @@ public class FeignPrivyErrorDecoder extends ErrorDecoder.Default {
 			}
 		}
 
-		throw new PrivyException(message, exception);
+		throw new PrivyClientException(message, exception);
 	}
 
 	public String extractMessage(FeignException exception) {
@@ -85,9 +85,9 @@ public class FeignPrivyErrorDecoder extends ErrorDecoder.Default {
 
 		boolean match(String message);
 
-		PrivyException map(String message, Exception cause);
+		PrivyClientException map(String message, Exception cause);
 
-		public static ErrorMapper equals(String exactMessage, BiFunction<String, Exception, PrivyException> mapper) {
+		public static ErrorMapper equals(String exactMessage, BiFunction<String, Exception, PrivyClientException> mapper) {
 			return new ErrorMapper() {
 
 				@Override
@@ -96,14 +96,14 @@ public class FeignPrivyErrorDecoder extends ErrorDecoder.Default {
 				}
 
 				@Override
-				public PrivyException map(String message, Exception cause) {
+				public PrivyClientException map(String message, Exception cause) {
 					return mapper.apply(message, cause);
 				}
 
 			};
 		}
 
-		public static ErrorMapper startsWith(String prefix, BiFunction<String, Exception, PrivyException> mapper) {
+		public static ErrorMapper startsWith(String prefix, BiFunction<String, Exception, PrivyClientException> mapper) {
 			return new ErrorMapper() {
 
 				@Override
@@ -116,7 +116,7 @@ public class FeignPrivyErrorDecoder extends ErrorDecoder.Default {
 				}
 
 				@Override
-				public PrivyException map(String message, Exception cause) {
+				public PrivyClientException map(String message, Exception cause) {
 					return mapper.apply(message, cause);
 				}
 

@@ -1,28 +1,20 @@
 package dev.caceresenzo.privy.client;
 
-import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-
 import dev.caceresenzo.privy.PrivyClient;
-import dev.caceresenzo.privy.PrivyException;
+import dev.caceresenzo.privy.PrivyClientException;
 import dev.caceresenzo.privy.client.FeignPrivyClient.AddressRequest;
 import dev.caceresenzo.privy.client.FeignPrivyClient.PhoneRequest;
 import dev.caceresenzo.privy.client.FeignPrivyClient.SubjectRequest;
 import dev.caceresenzo.privy.client.FeignPrivyClient.UsernameRequest;
 import dev.caceresenzo.privy.client.auth.AuthRequestInterceptor;
 import dev.caceresenzo.privy.client.pagination.PageSpliterator;
-import dev.caceresenzo.privy.client.serial.UnixDateDeserializer;
 import dev.caceresenzo.privy.model.ApplicationSettings;
 import dev.caceresenzo.privy.model.User;
+import dev.caceresenzo.privy.util.PrivyUtils;
 import feign.Feign;
 import feign.Retryer;
 import feign.jackson.JacksonDecoder;
@@ -48,7 +40,7 @@ public class PrivyClientImpl implements PrivyClient {
 			throw new IllegalArgumentException("maxPageSize must be positive");
 		}
 
-		final var mapper = createMapper();
+		final var mapper = PrivyUtils.createMapper();
 
 		this.applicationId = applicationId;
 		this.maxPageSize = maxPageSize;
@@ -95,7 +87,7 @@ public class PrivyClientImpl implements PrivyClient {
 
 		try {
 			return Optional.of(delegate.getUserById(id));
-		} catch (PrivyException.UserNotFound __) {
+		} catch (PrivyClientException.UserNotFound __) {
 			return Optional.empty();
 		}
 	}
@@ -108,7 +100,7 @@ public class PrivyClientImpl implements PrivyClient {
 
 		try {
 			return Optional.of(delegate.getUserByEmail(new AddressRequest(address)));
-		} catch (PrivyException.UserNotFound __) {
+		} catch (PrivyClientException.UserNotFound __) {
 			return Optional.empty();
 		}
 	}
@@ -121,7 +113,7 @@ public class PrivyClientImpl implements PrivyClient {
 
 		try {
 			return Optional.of(delegate.getUserByWallet(new AddressRequest(address)));
-		} catch (PrivyException.UserNotFound __) {
+		} catch (PrivyClientException.UserNotFound __) {
 			return Optional.empty();
 		}
 	}
@@ -134,7 +126,7 @@ public class PrivyClientImpl implements PrivyClient {
 
 		try {
 			return Optional.of(delegate.getUserByPhone(new PhoneRequest(number)));
-		} catch (PrivyException.UserNotFound __) {
+		} catch (PrivyClientException.UserNotFound __) {
 			return Optional.empty();
 		}
 	}
@@ -147,7 +139,7 @@ public class PrivyClientImpl implements PrivyClient {
 
 		try {
 			return Optional.of(delegate.getUserByTwitterUsername(new UsernameRequest(username)));
-		} catch (PrivyException.UserNotFound __) {
+		} catch (PrivyClientException.UserNotFound __) {
 			return Optional.empty();
 		}
 	}
@@ -160,7 +152,7 @@ public class PrivyClientImpl implements PrivyClient {
 
 		try {
 			return Optional.of(delegate.getUserByTwitterSubject(new SubjectRequest(subject)));
-		} catch (PrivyException.UserNotFound __) {
+		} catch (PrivyClientException.UserNotFound __) {
 			return Optional.empty();
 		}
 	}
@@ -173,7 +165,7 @@ public class PrivyClientImpl implements PrivyClient {
 
 		try {
 			return Optional.of(delegate.getUserByDiscordUsername(new UsernameRequest(username)));
-		} catch (PrivyException.UserNotFound __) {
+		} catch (PrivyClientException.UserNotFound __) {
 			return Optional.empty();
 		}
 	}
@@ -188,7 +180,7 @@ public class PrivyClientImpl implements PrivyClient {
 			delegate.deleteUserById(id);
 
 			return true;
-		} catch (PrivyException.UserNotFound __) {
+		} catch (PrivyClientException.UserNotFound __) {
 			return false;
 		}
 	}
@@ -196,20 +188,6 @@ public class PrivyClientImpl implements PrivyClient {
 	@Override
 	public ApplicationSettings getApplicationSettings() {
 		return delegate.getApplicationSettings(applicationId);
-	}
-
-	public static ObjectMapper createMapper() {
-		SimpleModule module = new SimpleModule();
-		module.addDeserializer(Date.class, new UnixDateDeserializer());
-
-		return JsonMapper.builder()
-			.serializationInclusion(JsonInclude.Include.NON_NULL)
-			.configure(SerializationFeature.INDENT_OUTPUT, true)
-			.configure(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS, false)
-			.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true)
-			.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-			.addModule(module)
-			.build();
 	}
 
 }

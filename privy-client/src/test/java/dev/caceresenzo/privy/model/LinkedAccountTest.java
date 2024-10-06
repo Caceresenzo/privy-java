@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import dev.caceresenzo.privy.client.PrivyClientImpl;
+import dev.caceresenzo.privy.util.PrivyUtils;
 import lombok.SneakyThrows;
 
 @SuppressWarnings("deprecation")
@@ -24,7 +24,7 @@ class LinkedAccountTest {
 
 	@BeforeAll
 	static void setUp() {
-		mapper = PrivyClientImpl.createMapper();
+		mapper = PrivyUtils.createMapper();
 	}
 
 	@Test
