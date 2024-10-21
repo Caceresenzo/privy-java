@@ -2,6 +2,7 @@ package dev.caceresenzo.privy.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -129,6 +130,53 @@ class EventTest {
 
 		assertInstanceOf(LinkedAccount.Email.class, userUpdatedAccount.getAccount());
 		assertEquals("42", userUpdatedAccount.getUser().getId());
+	}
+
+	@Test
+	void userTransferredAccount() {
+		final var event = read("""
+			{
+			    "type": "user.transferred_account",
+			    "fromUser": {
+			        "id": "did:privy:clu2wsin402h9h9kt6ae7dfuh"
+			    },
+			    "toUser": {
+			        "created_at": 969628260,
+			        "has_accepted_terms": false,
+			        "id": "did:privy:cfbsvtqo2c22202mo08847jdux2z",
+			        "is_guest": false,
+			        "linked_accounts": [{
+			                "address": "bilbo@privy.io",
+			                "first_verified_at": 969628260,
+			                "latest_verified_at": 969628260,
+			                "type": "email",
+			                "verified_at": 969628260
+			            }, {
+			                "address": "+1234567890",
+			                "first_verified_at": 969628260,
+			                "latest_verified_at": 969628260,
+			                "type": "phone",
+			                "verified_at": 969628260
+			            }
+			        ]
+			    },
+			    "account": {
+			        "address": "+1234567890",
+			        "first_verified_at": 969628260,
+			        "latest_verified_at": 969628260,
+			        "type": "phone",
+			        "verified_at": 969628260
+			    },
+			    "deletedUser": true
+			}
+			""");
+
+		final var userTransferredAccount = assertInstanceOf(Event.UserTransferredAccount.class, event);
+
+		assertInstanceOf(LinkedAccount.Phone.class, userTransferredAccount.getAccount());
+		assertEquals("did:privy:clu2wsin402h9h9kt6ae7dfuh", userTransferredAccount.getFromUserId());
+		assertEquals("did:privy:cfbsvtqo2c22202mo08847jdux2z", userTransferredAccount.getToUserId());
+		assertTrue(userTransferredAccount.isDeleted());
 	}
 
 	@SneakyThrows

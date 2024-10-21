@@ -188,6 +188,12 @@ switch (event) {
 		System.out.println(" with account: %s".formatted(userUpdatedAccount.getAccount()));
 	}
 
+	case Event.UserTransferredAccount userTransferredAccount -> {
+		System.out.println("User Transferred Account: %s -> %s".formatted(userTransferredAccount.getFromUser().getId(), userTransferredAccount.getToUser().getId()));
+		System.out.println(" with account: %s".formatted(userTransferredAccount.getAccount()));
+		System.out.println(" and the old user was deleted? %s".formatted(userTransferredAccount.isDeleted()));
+	}
+
 	case Event.Other other -> {
 		System.out.println("Unknown event: %s".formatted(other.getType()));
 		System.out.println(" with properties: %s".formatted(other.getProperties()));

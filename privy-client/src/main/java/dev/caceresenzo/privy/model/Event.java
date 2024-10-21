@@ -18,6 +18,7 @@ import lombok.Data;
 	@JsonSubTypes.Type(value = Event.UserLinkedAccount.class, name = "user.linked_account"),
 	@JsonSubTypes.Type(value = Event.UserUnlinkedAccount.class, name = "user.unlinked_account"),
 	@JsonSubTypes.Type(value = Event.UserUpdatedAccount.class, name = "user.updated_account"),
+	@JsonSubTypes.Type(value = Event.UserTransferredAccount.class, name = "user.transferred_account"),
 })
 public sealed interface Event {
 
@@ -84,6 +85,32 @@ public sealed interface Event {
 
 		@JsonProperty("user")
 		private User user;
+
+	}
+
+	/** A user successfully transferred their account to a new account. */
+	@Data
+	public static final class UserTransferredAccount implements Event {
+
+		@JsonProperty("account")
+		private LinkedAccount account;
+
+		@JsonProperty("fromUser")
+		private User fromUser;
+
+		@JsonProperty("toUser")
+		private User toUser;
+
+		@JsonProperty("deletedUser")
+		private boolean deleted;
+
+		public String getFromUserId() {
+			return fromUser.getId();
+		}
+
+		public String getToUserId() {
+			return toUser.getId();
+		}
 
 	}
 
