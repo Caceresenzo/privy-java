@@ -46,7 +46,7 @@ public abstract sealed class LinkedAccount {
 
 		/**
 		 * Chain type of the wallet address.
-		 * 
+		 *
 		 * @deprecated Use `chainId` instead.
 		 */
 		@Deprecated

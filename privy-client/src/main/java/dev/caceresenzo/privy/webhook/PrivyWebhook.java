@@ -30,10 +30,10 @@ public interface PrivyWebhook {
 
 	/**
 	 * Create a new builder.
-	 * 
+	 *
 	 * @return A new {@link Builder} instance.
 	 */
-	public static Builder builder() {
+	static Builder builder() {
 		return new Builder();
 	}
 
@@ -46,7 +46,7 @@ public interface PrivyWebhook {
 
 		/**
 		 * Build the webhook.
-		 * 
+		 *
 		 * @return A configured webhook instance.
 		 */
 		public PrivyWebhook build() {

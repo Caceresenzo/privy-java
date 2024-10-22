@@ -12,7 +12,7 @@ import lombok.With;
 
 public interface FeignPrivyClient {
 
-	public static final String JSON_CONTENT_TYPE = "Content-Type: application/json";
+	String JSON_CONTENT_TYPE = "Content-Type: application/json";
 
 	@RequestLine("GET /api/v1/users?limit={limit}")
 	Page<User> getUsers(@Param long limit);

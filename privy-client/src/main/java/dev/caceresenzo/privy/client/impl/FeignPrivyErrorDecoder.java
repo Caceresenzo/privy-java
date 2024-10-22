@@ -21,8 +21,6 @@ public class FeignPrivyErrorDecoder extends ErrorDecoder.Default {
 	private final List<ErrorMapper> mappers;
 
 	public FeignPrivyErrorDecoder(ObjectMapper objectMapper) {
-		super();
-
 		this.objectMapper = objectMapper;
 
 		this.mappers = new ArrayList<>();
@@ -81,13 +79,13 @@ public class FeignPrivyErrorDecoder extends ErrorDecoder.Default {
 
 	public static record ErrorDto(@JsonProperty("error") String message) {}
 
-	public static interface ErrorMapper {
+	public interface ErrorMapper {
 
 		boolean match(String message);
 
 		PrivyClientException map(String message, Exception cause);
 
-		public static ErrorMapper equals(String exactMessage, BiFunction<String, Exception, PrivyClientException> mapper) {
+		static ErrorMapper equals(String exactMessage, BiFunction<String, Exception, PrivyClientException> mapper) {
 			return new ErrorMapper() {
 
 				@Override
@@ -103,7 +101,7 @@ public class FeignPrivyErrorDecoder extends ErrorDecoder.Default {
 			};
 		}
 
-		public static ErrorMapper startsWith(String prefix, BiFunction<String, Exception, PrivyClientException> mapper) {
+		static ErrorMapper startsWith(String prefix, BiFunction<String, Exception, PrivyClientException> mapper) {
 			return new ErrorMapper() {
 
 				@Override

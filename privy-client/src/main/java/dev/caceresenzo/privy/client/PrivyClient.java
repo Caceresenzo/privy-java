@@ -29,7 +29,7 @@ public interface PrivyClient {
 
 	/**
 	 * Get the user object associated with the given user DID (decentralized ID).
-	 * 
+	 *
 	 * @param id The Privy DID of the user.
 	 * @return A {@link User user}, if it exists.
 	 */
@@ -103,10 +103,10 @@ public interface PrivyClient {
 
 	/**
 	 * Create a new builder.
-	 * 
+	 *
 	 * @return A new {@link Builder} instance.
 	 */
-	public static Builder builder() {
+	static Builder builder() {
 		return new Builder();
 	}
 
@@ -131,7 +131,7 @@ public interface PrivyClient {
 
 		/**
 		 * Build the client.
-		 * 
+		 *
 		 * @return A configured client instance.
 		 */
 		public PrivyClient build() {
