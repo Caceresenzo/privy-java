@@ -42,14 +42,27 @@ class EventTest {
 			{
 				"type": "user.created",
 				"user": {
-					"id": 42
+					"created_at": 969628260,
+					"has_accepted_terms": false,
+					"id": "did:privy:cfbsvtqo2c22202mo08847jdux2z",
+					"is_guest": false,
+					"linked_accounts": [
+						{
+							"address": "bilbo@privy.io",
+							"first_verified_at": 969628260,
+							"latest_verified_at": 969628260,
+							"type": "email",
+							"verified_at": 969628260
+						}
+					],
+					"mfa_methods": []
 				}
 			}
 			""");
 
 		final var userCreated = assertInstanceOf(Event.UserCreated.class, event);
 
-		assertEquals("42", userCreated.getUser().getId());
+		assertEquals("did:privy:cfbsvtqo2c22202mo08847jdux2z", userCreated.getUser().getId());
 	}
 
 	@Test
@@ -58,10 +71,27 @@ class EventTest {
 			{
 				"type": "user.authenticated",
 				"account": {
-					"type": "email"
+					"address": "bilbo@privy.io",
+					"first_verified_at": 969628260,
+					"latest_verified_at": 969628260,
+					"type": "email",
+					"verified_at": 969628260
 				},
 				"user": {
-					"id": 42
+					"created_at": 969628260,
+					"has_accepted_terms": false,
+					"id": "did:privy:cfbsvtqo2c22202mo08847jdux2z",
+					"is_guest": false,
+					"linked_accounts": [
+						{
+							"address": "bilbo@privy.io",
+							"first_verified_at": 969628260,
+							"latest_verified_at": 969628260,
+							"type": "email",
+							"verified_at": 969628260
+						}
+					],
+					"mfa_methods": []
 				}
 			}
 			""");
@@ -69,7 +99,7 @@ class EventTest {
 		final var userAuthenticated = assertInstanceOf(Event.UserAuthenticated.class, event);
 
 		assertInstanceOf(LinkedAccount.Email.class, userAuthenticated.getAccount());
-		assertEquals("42", userAuthenticated.getUser().getId());
+		assertEquals("did:privy:cfbsvtqo2c22202mo08847jdux2z", userAuthenticated.getUser().getId());
 	}
 
 	@Test
@@ -78,10 +108,27 @@ class EventTest {
 			{
 				"type": "user.linked_account",
 				"account": {
-					"type": "email"
+					"address": "bilbo@privy.io",
+					"first_verified_at": 969628260,
+					"latest_verified_at": 969628260,
+					"type": "email",
+					"verified_at": 969628260
 				},
 				"user": {
-					"id": 42
+					"created_at": 969628260,
+					"has_accepted_terms": false,
+					"id": "did:privy:cfbsvtqo2c22202mo08847jdux2z",
+					"is_guest": false,
+					"linked_accounts": [
+						{
+							"address": "bilbo@privy.io",
+							"first_verified_at": 969628260,
+							"latest_verified_at": 969628260,
+							"type": "email",
+							"verified_at": 969628260
+						}
+					],
+					"mfa_methods": []
 				}
 			}
 			""");
@@ -89,7 +136,7 @@ class EventTest {
 		final var userLinkedAccount = assertInstanceOf(Event.UserLinkedAccount.class, event);
 
 		assertInstanceOf(LinkedAccount.Email.class, userLinkedAccount.getAccount());
-		assertEquals("42", userLinkedAccount.getUser().getId());
+		assertEquals("did:privy:cfbsvtqo2c22202mo08847jdux2z", userLinkedAccount.getUser().getId());
 	}
 
 	@Test
@@ -98,10 +145,27 @@ class EventTest {
 			{
 				"type": "user.unlinked_account",
 				"account": {
-					"type": "email"
+					"address": "bilbo@privy.io",
+					"first_verified_at": 969628260,
+					"latest_verified_at": 969628260,
+					"type": "email",
+					"verified_at": 969628260
 				},
 				"user": {
-					"id": 42
+					"created_at": 969628260,
+					"has_accepted_terms": false,
+					"id": "did:privy:cfbsvtqo2c22202mo08847jdux2z",
+					"is_guest": false,
+					"linked_accounts": [
+						{
+							"address": "bilbo@privy.io",
+							"first_verified_at": 969628260,
+							"latest_verified_at": 969628260,
+							"type": "email",
+							"verified_at": 969628260
+						}
+					],
+					"mfa_methods": []
 				}
 			}
 			""");
@@ -109,7 +173,7 @@ class EventTest {
 		final var userUnlinkedAccount = assertInstanceOf(Event.UserUnlinkedAccount.class, event);
 
 		assertInstanceOf(LinkedAccount.Email.class, userUnlinkedAccount.getAccount());
-		assertEquals("42", userUnlinkedAccount.getUser().getId());
+		assertEquals("did:privy:cfbsvtqo2c22202mo08847jdux2z", userUnlinkedAccount.getUser().getId());
 	}
 
 	@Test
@@ -118,10 +182,27 @@ class EventTest {
 			{
 				"type": "user.updated_account",
 				"account": {
-					"type": "email"
+					"address": "bilbo@privy.io",
+					"first_verified_at": 969628260,
+					"latest_verified_at": 969628260,
+					"type": "email",
+					"verified_at": 969628260
 				},
 				"user": {
-					"id": 42
+					"created_at": 969628260,
+					"has_accepted_terms": false,
+					"id": "did:privy:cfbsvtqo2c22202mo08847jdux2z",
+					"is_guest": false,
+					"linked_accounts": [
+						{
+							"address": "bilbo@privy.io",
+							"first_verified_at": 969628260,
+							"latest_verified_at": 969628260,
+							"type": "email",
+							"verified_at": 969628260
+						}
+					],
+					"mfa_methods": []
 				}
 			}
 			""");
@@ -129,7 +210,7 @@ class EventTest {
 		final var userUpdatedAccount = assertInstanceOf(Event.UserUpdatedAccount.class, event);
 
 		assertInstanceOf(LinkedAccount.Email.class, userUpdatedAccount.getAccount());
-		assertEquals("42", userUpdatedAccount.getUser().getId());
+		assertEquals("did:privy:cfbsvtqo2c22202mo08847jdux2z", userUpdatedAccount.getUser().getId());
 	}
 
 	@Test
