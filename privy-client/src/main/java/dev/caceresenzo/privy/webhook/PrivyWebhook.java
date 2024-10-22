@@ -1,7 +1,7 @@
-package dev.caceresenzo.privy;
+package dev.caceresenzo.privy.webhook;
 
 import dev.caceresenzo.privy.model.Event;
-import dev.caceresenzo.privy.webhook.WebhookImpl;
+import dev.caceresenzo.privy.webhook.impl.WebhookImpl;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

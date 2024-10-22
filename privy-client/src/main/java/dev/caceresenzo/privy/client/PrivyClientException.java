@@ -1,5 +1,6 @@
-package dev.caceresenzo.privy;
+package dev.caceresenzo.privy.client;
 
+import dev.caceresenzo.privy.PrivyException;
 import lombok.experimental.StandardException;
 
 @StandardException

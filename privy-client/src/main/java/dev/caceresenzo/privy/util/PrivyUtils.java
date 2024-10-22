@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
-import dev.caceresenzo.privy.client.serial.UnixDateDeserializer;
+import dev.caceresenzo.privy.client.impl.serial.UnixDateDeserializer;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass

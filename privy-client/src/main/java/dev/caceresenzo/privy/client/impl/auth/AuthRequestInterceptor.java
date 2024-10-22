@@ -1,4 +1,4 @@
-package dev.caceresenzo.privy.client.auth;
+package dev.caceresenzo.privy.client.impl.auth;
 
 import feign.RequestTemplate;
 import feign.auth.BasicAuthRequestInterceptor;

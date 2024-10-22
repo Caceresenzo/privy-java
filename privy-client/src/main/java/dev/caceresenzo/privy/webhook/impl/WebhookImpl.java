@@ -1,4 +1,4 @@
-package dev.caceresenzo.privy.webhook;
+package dev.caceresenzo.privy.webhook.impl;
 
 import java.net.http.HttpHeaders;
 import java.util.List;
@@ -9,10 +9,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.svix.exceptions.WebhookVerificationException;
 
-import dev.caceresenzo.privy.PrivyWebhook;
-import dev.caceresenzo.privy.PrivyWebhookException;
 import dev.caceresenzo.privy.model.Event;
 import dev.caceresenzo.privy.util.PrivyUtils;
+import dev.caceresenzo.privy.webhook.PrivyWebhook;
+import dev.caceresenzo.privy.webhook.PrivyWebhookException;
 
 public class WebhookImpl implements PrivyWebhook {
 

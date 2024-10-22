@@ -4,9 +4,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import dev.caceresenzo.privy.PrivyWebhook;
 import dev.caceresenzo.privy.spring.boot.autoconfigure.PrivyAutoConfiguration;
 import dev.caceresenzo.privy.spring.boot.autoconfigure.PrivyProperties;
+import dev.caceresenzo.privy.webhook.PrivyWebhook;
 
 @SpringBootTest(
 	classes = {

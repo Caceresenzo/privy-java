@@ -9,8 +9,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import dev.caceresenzo.privy.PrivyClient;
-import dev.caceresenzo.privy.PrivyWebhook;
+import dev.caceresenzo.privy.client.PrivyClient;
+import dev.caceresenzo.privy.webhook.PrivyWebhook;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

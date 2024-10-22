@@ -1,9 +1,10 @@
-package dev.caceresenzo.privy;
+package dev.caceresenzo.privy.client;
 
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import dev.caceresenzo.privy.client.PrivyClientImpl;
+import dev.caceresenzo.privy.PrivyException;
+import dev.caceresenzo.privy.client.impl.PrivyClientImpl;
 import dev.caceresenzo.privy.model.ApplicationSettings;
 import dev.caceresenzo.privy.model.User;
 import lombok.Data;

@@ -1,8 +1,8 @@
-package dev.caceresenzo.privy.client;
+package dev.caceresenzo.privy.client.impl;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import dev.caceresenzo.privy.client.pagination.Page;
+import dev.caceresenzo.privy.client.impl.pagination.Page;
 import dev.caceresenzo.privy.model.ApplicationSettings;
 import dev.caceresenzo.privy.model.User;
 import feign.Headers;

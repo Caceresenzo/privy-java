@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import dev.caceresenzo.privy.PrivyClient;
+import dev.caceresenzo.privy.client.PrivyClient;
 import dev.caceresenzo.privy.spring.boot.autoconfigure.PrivyAutoConfiguration;
 import dev.caceresenzo.privy.spring.boot.autoconfigure.PrivyProperties;
 

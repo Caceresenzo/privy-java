@@ -1,4 +1,4 @@
-package dev.caceresenzo.privy.client.pagination;
+package dev.caceresenzo.privy.client.impl.pagination;
 
 import java.util.List;
 

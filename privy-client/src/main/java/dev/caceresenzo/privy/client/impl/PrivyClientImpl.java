@@ -1,17 +1,17 @@
-package dev.caceresenzo.privy.client;
+package dev.caceresenzo.privy.client.impl;
 
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import dev.caceresenzo.privy.PrivyClient;
-import dev.caceresenzo.privy.PrivyClientException;
-import dev.caceresenzo.privy.client.FeignPrivyClient.AddressRequest;
-import dev.caceresenzo.privy.client.FeignPrivyClient.PhoneRequest;
-import dev.caceresenzo.privy.client.FeignPrivyClient.SubjectRequest;
-import dev.caceresenzo.privy.client.FeignPrivyClient.UsernameRequest;
-import dev.caceresenzo.privy.client.auth.AuthRequestInterceptor;
-import dev.caceresenzo.privy.client.pagination.PageSpliterator;
+import dev.caceresenzo.privy.client.PrivyClient;
+import dev.caceresenzo.privy.client.PrivyClientException;
+import dev.caceresenzo.privy.client.impl.FeignPrivyClient.AddressRequest;
+import dev.caceresenzo.privy.client.impl.FeignPrivyClient.PhoneRequest;
+import dev.caceresenzo.privy.client.impl.FeignPrivyClient.SubjectRequest;
+import dev.caceresenzo.privy.client.impl.FeignPrivyClient.UsernameRequest;
+import dev.caceresenzo.privy.client.impl.auth.AuthRequestInterceptor;
+import dev.caceresenzo.privy.client.impl.pagination.PageSpliterator;
 import dev.caceresenzo.privy.model.ApplicationSettings;
 import dev.caceresenzo.privy.model.User;
 import dev.caceresenzo.privy.util.PrivyUtils;

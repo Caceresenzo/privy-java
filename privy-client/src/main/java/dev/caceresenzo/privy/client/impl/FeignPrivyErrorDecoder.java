@@ -1,4 +1,4 @@
-package dev.caceresenzo.privy.client;
+package dev.caceresenzo.privy.client.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,7 @@ import java.util.function.BiFunction;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import dev.caceresenzo.privy.PrivyClientException;
+import dev.caceresenzo.privy.client.PrivyClientException;
 import feign.FeignException;
 import feign.Response;
 import feign.RetryableException;

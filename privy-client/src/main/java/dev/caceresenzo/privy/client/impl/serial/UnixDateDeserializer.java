@@ -1,4 +1,4 @@
-package dev.caceresenzo.privy.client.serial;
+package dev.caceresenzo.privy.client.impl.serial;
 
 import java.io.IOException;
 import java.util.Date;
