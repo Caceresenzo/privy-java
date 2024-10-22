@@ -138,14 +138,14 @@ class LinkedAccountTest {
 	void twitter() {
 		final var linkedAccount = read("""
 			{
-			  "type": "twitter_oauth",
-			  "subject": "123456789",
-			  "name": "John Doe",
-			  "username": "johndoe",
-			  "profile_picture_url": "https://pbs.twimg.com/profile_images/x/x.jpg",
-			  "verified_at": 1725376993,
-			  "first_verified_at": 1725376993,
-			  "latest_verified_at": 1725376993
+				"type": "twitter_oauth",
+				"subject": "123456789",
+				"name": "John Doe",
+				"username": "johndoe",
+				"profile_picture_url": "https://pbs.twimg.com/profile_images/x/x.jpg",
+				"verified_at": 1725376993,
+				"first_verified_at": 1725376993,
+				"latest_verified_at": 1725376993
 			}
 			""");
 
@@ -163,13 +163,41 @@ class LinkedAccountTest {
 	}
 
 	@Test
+	void github() {
+		final var linkedAccount = read("""
+			{
+				"type": "github_oauth",
+				"subject": "1234567",
+				"username": "johndoe",
+				"email": "johndoe@example.com",
+				"name": "John Doe",
+				"verified_at": 1725376993,
+				"first_verified_at": 1725376993,
+				"latest_verified_at": 1725376993
+			}
+			""");
+
+		final var github = assertInstanceOf(LinkedAccount.Github.class, linkedAccount);
+
+		assertEquals("1234567", github.getSubject());
+		assertEquals("johndoe", github.getUsername());
+		assertEquals("johndoe@example.com", github.getEmail());
+		assertEquals("John Doe", github.getName());
+
+		final var date = new Date(1725376993l * 1000);
+		assertEquals(date, github.getVerifiedAt());
+		assertEquals(date, github.getFirstVerifiedAt());
+		assertEquals(date, github.getLatestVerifiedAt());
+	}
+
+	@Test
 	void other() {
 		final var linkedAccount = read("""
 			{
-			  "type": "unsupported",
-			  "subject": "123456789",
-			  "name": "John Doe",
-			  "verified_at": 1725376993
+				"type": "unsupported",
+				"subject": "123456789",
+				"name": "John Doe",
+				"verified_at": 1725376993
 			}
 			""");
 

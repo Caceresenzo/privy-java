@@ -21,6 +21,7 @@ import lombok.ToString;
 	@JsonSubTypes.Type(value = LinkedAccount.Phone.class, name = "phone"),
 	@JsonSubTypes.Type(value = LinkedAccount.Twitter.class, name = "twitter_oauth"),
 	@JsonSubTypes.Type(value = LinkedAccount.Discord.class, name = "discord_oauth"),
+	@JsonSubTypes.Type(value = LinkedAccount.Github.class, name = "github_oauth"),
 })
 @Data
 public abstract sealed class LinkedAccount {
@@ -169,6 +170,30 @@ public abstract sealed class LinkedAccount {
 		/** The email associated with the Discord account. */
 		@JsonProperty("email")
 		private String email;
+
+	}
+
+	/** Object representation of a user's Github account. */
+	@Data
+	@ToString(callSuper = false)
+	@EqualsAndHashCode(callSuper = true)
+	public static final class Github extends LinkedAccount {
+
+		/** The `sub` claim from the Github-issued JWT for this account. */
+		@JsonProperty("subject")
+		private String subject;
+
+		/** The username associated with the Github account. */
+		@JsonProperty("username")
+		private String username;
+
+		/** The email associated with the Github account. */
+		@JsonProperty("email")
+		private String email;
+
+		/** The name associated with the Github account. */
+		@JsonProperty("name")
+		private String name;
 
 	}
 
