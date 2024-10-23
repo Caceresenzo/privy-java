@@ -38,7 +38,10 @@
 
 	<url>https://github.com/Caceresenzo/privy-java</url>
 
-	<scm>
+	<scm
+		child.scm.connection.inherit.append.path="false"
+		child.scm.developerConnection.inherit.append.path="false"
+	>
 		<connection>scm:git:git://github.com/Caceresenzo/privy-java.git</connection>
 		<developerConnection>scm:git:ssh://github.com:Caceresenzo/privy-java.git</developerConnection>
 		<url>http://github.com/Caceresenzo/privy-java/tree/master</url>
