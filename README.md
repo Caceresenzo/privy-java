@@ -30,7 +30,7 @@
 
 ```xml
 <properties>
-    <privy.version>0.6.0</privy.version>
+    <privy.version>0.6.1</privy.version>
 </properties>
 
 <dependencies>
