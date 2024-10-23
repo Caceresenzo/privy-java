@@ -22,8 +22,8 @@
 	</properties>
 
 	<modules>
-		<module>privy-client</module>
-		<module>privy-spring-boot-starter</module>
+		<module>client</module>
+		<module>spring-boot-starter</module>
 	</modules>
 
 	<dependencyManagement>
