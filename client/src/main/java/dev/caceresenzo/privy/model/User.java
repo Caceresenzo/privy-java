@@ -2,6 +2,7 @@ package dev.caceresenzo.privy.model;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -25,36 +26,44 @@ public class User {
 	@JsonProperty("created_at")
 	private Date createdAt;
 
-	public LinkedAccount.Wallet getWallet() {
+	public Optional<LinkedAccount.Wallet> getWallet() {
 		return getAccount(LinkedAccount.Wallet.class);
 	}
 
-	public LinkedAccount.Email getEmail() {
+	public Optional<LinkedAccount.Email> getEmail() {
 		return getAccount(LinkedAccount.Email.class);
 	}
 
-	public LinkedAccount.Phone getPhone() {
+	public Optional<LinkedAccount.Phone> getPhone() {
 		return getAccount(LinkedAccount.Phone.class);
 	}
 
-	public LinkedAccount.Twitter getTwitter() {
+	public Optional<LinkedAccount.Google> getGoogle() {
+		return getAccount(LinkedAccount.Google.class);
+	}
+
+	public Optional<LinkedAccount.Twitter> getTwitter() {
 		return getAccount(LinkedAccount.Twitter.class);
 	}
 
-	public LinkedAccount.Discord getDiscord() {
+	public Optional<LinkedAccount.Discord> getDiscord() {
 		return getAccount(LinkedAccount.Discord.class);
 	}
 
+	public Optional<LinkedAccount.Github> getGithub() {
+		return getAccount(LinkedAccount.Github.class);
+	}
+
 	@SuppressWarnings("unchecked")
-	public <T extends LinkedAccount> T getAccount(Class<T> clazz) {
+	public <T extends LinkedAccount> Optional<T> getAccount(Class<T> clazz) {
 		for (final var account : getLinkedAccounts()) {
 
 			if (account.getClass().isAssignableFrom(clazz)) {
-				return (T) account;
+				return Optional.of((T) account);
 			}
 		}
 
-		return null;
+		return Optional.empty();
 	}
 
 }
