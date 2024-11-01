@@ -21,7 +21,6 @@
 			<groupId>dev.caceresenzo.privy</groupId>
 			<artifactId>client</artifactId>
 			<version>${project.version}</version>
-			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
