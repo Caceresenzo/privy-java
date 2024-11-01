@@ -1,5 +1,7 @@
 # Privy Client for Java
 
+This Java client connects with Privy.io, enabling simple user management and secure event handling. It also includes a Spring Boot starter for quick integration.
+
 - [Privy Client for Java](#privy-client-for-java)
 - [Installation](#installation)
 - [Client](#client)
