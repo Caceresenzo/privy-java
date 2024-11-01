@@ -81,7 +81,7 @@ List<User> users = findAllUsers("john").toList();
 ```java
 Optional<User> user = client.findUserById("did:privy:a0b1c2d3e4f5g6h7i8j9k0l1m");
 
-/* the did is optional */
+/* the "did:privy:" prefix is optional */
 Optional<User> user = client.findUserById("a0b1c2d3e4f5g6h7i8j9k0l1m");
 ```
 
