@@ -3,28 +3,29 @@
 - [Privy Client for Java](#privy-client-for-java)
 - [Installation](#installation)
 - [Client](#client)
-  - [Configuration](#configuration)
-  - [Usage](#usage)
-    - [Stream Users](#stream-users)
-    - [Stream Users by a Search Term](#stream-users-by-a-search-term)
-    - [Find a User by an ID](#find-a-user-by-an-id)
-    - [Find a User by an Email Address](#find-a-user-by-an-email-address)
-    - [Find a User by a Wallet Address](#find-a-user-by-a-wallet-address)
-    - [Find a User by a Phone Number](#find-a-user-by-a-phone-number)
-    - [Find a User by a Twitter Username](#find-a-user-by-a-twitter-username)
-    - [Find a User by a Twitter Subject](#find-a-user-by-a-twitter-subject)
-    - [Find a User by a Discord Username](#find-a-user-by-a-discord-username)
-    - [Delete a User by an ID](#delete-a-user-by-an-id)
+	- [Configuration](#configuration)
+	- [Usage](#usage)
+		- [Stream Users](#stream-users)
+		- [Stream Users by a Search Term](#stream-users-by-a-search-term)
+		- [Find a User by an ID](#find-a-user-by-an-id)
+		- [Find a User by an Email Address](#find-a-user-by-an-email-address)
+		- [Find a User by a Wallet Address](#find-a-user-by-a-wallet-address)
+		- [Find a User by a Phone Number](#find-a-user-by-a-phone-number)
+		- [Find a User by a Twitter Username](#find-a-user-by-a-twitter-username)
+		- [Find a User by a Twitter Subject](#find-a-user-by-a-twitter-subject)
+		- [Find a User by a Discord Username](#find-a-user-by-a-discord-username)
+		- [Delete a User by an ID](#delete-a-user-by-an-id)
+		- [Linked Accounts](#linked-accounts)
 - [Webhook](#webhook)
-  - [Configuration](#configuration-1)
-  - [Usage](#usage-1)
-    - [Verify an Event](#verify-an-event)
+	- [Configuration](#configuration-1)
+	- [Usage](#usage-1)
+		- [Verify an Event](#verify-an-event)
 - [Spring Boot Starter](#spring-boot-starter)
-  - [Client](#client-1)
-  - [Webhook](#webhook-1)
-    - [Controller Example](#controller-example)
-  - [Spring OAuth 2.0 Resource Server](#spring-oauth-20-resource-server)
-    - [Controller Example](#controller-example-1)
+	- [Client](#client-1)
+	- [Webhook](#webhook-1)
+		- [Controller Example](#controller-example)
+	- [Spring OAuth 2.0 Resource Server](#spring-oauth-20-resource-server)
+		- [Controller Example](#controller-example-1)
 
 # Installation
 
@@ -77,6 +78,9 @@ List<User> users = findAllUsers("john").toList();
 
 ```java
 Optional<User> user = client.findUserById("did:privy:a0b1c2d3e4f5g6h7i8j9k0l1m");
+
+/* the did is optional */
+Optional<User> user = client.findUserById("a0b1c2d3e4f5g6h7i8j9k0l1m");
 ```
 
 ### Find a User by an Email Address
@@ -120,6 +124,83 @@ Optional<User> user = client.findUserByDiscordUsername("johndoe#0");
 ```java
 boolean deleted = client.deleteUserById("0xa0b1c2d3e4f5g6h7i8j9k0l1m2n3o4p5q6r7s8t9");
 ```
+
+### Linked Accounts
+
+```java
+User user = client.findUserById("a0b1c2d3e4f5g6h7i8j9k0l1m").orElseThrow();
+
+/* access it via known type */
+Optional<LinkedAccount.Email> email = user.getEmail();
+Optional<LinkedAccount.Google> google = user.getGoogle();
+Optional<LinkedAccount.Github> github = user.getGithub();
+
+/* access it via class */
+Optional<LinkedAccount.Email> email = user.getAccount(LinkedAccount.Email.class);
+Optional<LinkedAccount.Google> google = user.getAccount(LinkedAccount.Google.class);
+Optional<LinkedAccount.Github> github = user.getAccount(LinkedAccount.Github.class);
+
+/* iterate over accounts */
+for (LinkedAccount account : user.getLinkedAccounts()) {
+	System.out.println(account);
+
+	// switch (account)
+	// see "Testing the linked account type"
+}
+```
+
+<details>
+<summary>Testing the linked account type</summary>
+
+```java
+switch (account) {
+	case LinkedAccount.Wallet wallet -> {
+		System.out.println("Wallet");
+		System.out.println(" with address: %s".formatted(wallet.getAddress()));
+		System.out.println(" with chain id: %s".formatted(wallet.getChainId()));
+	}
+
+	case LinkedAccount.Email email -> {
+		System.out.println("Email");
+		System.out.println(" with address: %s".formatted(email.getAddress()));
+	}
+
+	case LinkedAccount.Phone phone -> {
+		System.out.println("Phone");
+		System.out.println(" with number: %s".formatted(phone.getNumber()));
+	}
+
+	case LinkedAccount.Google google -> {
+		System.out.println("Google %s".formatted(google.getSubject()));
+		System.out.println(" with email: %s".formatted(google.getEmail()));
+		System.out.println(" with name: %s".formatted(google.getName()));
+	}
+
+	case LinkedAccount.Twitter twitter -> {
+		System.out.println("Twitter %s".formatted(twitter.getSubject()));
+		System.out.println(" with username: %s".formatted(twitter.getUsername()));
+		System.out.println(" with name: %s".formatted(twitter.getName()));
+	}
+
+	case LinkedAccount.Discord discord -> {
+		System.out.println("Discord %s".formatted(discord.getSubject()));
+		System.out.println(" with username: %s".formatted(discord.getUsername()));
+		System.out.println(" with email: %s".formatted(discord.getEmail()));
+	}
+
+	case LinkedAccount.Github github -> {
+		System.out.println("Github %s".formatted(github.getSubject()));
+		System.out.println(" with username: %s".formatted(github.getUsername()));
+		System.out.println(" with name: %s".formatted(github.getName()));
+	}
+
+	case LinkedAccount.Other other -> {
+		System.out.println("Unknown %s".formatted(other.getType()));
+		System.out.println(" with properties: %s".formatted(other.getProperties()));
+	}
+}
+```
+</details>
 
 # Webhook
 
