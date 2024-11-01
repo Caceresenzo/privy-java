@@ -19,6 +19,7 @@ import lombok.ToString;
 	@JsonSubTypes.Type(value = LinkedAccount.Wallet.class, name = "wallet"),
 	@JsonSubTypes.Type(value = LinkedAccount.Email.class, name = "email"),
 	@JsonSubTypes.Type(value = LinkedAccount.Phone.class, name = "phone"),
+	@JsonSubTypes.Type(value = LinkedAccount.Google.class, name = "google_oauth"),
 	@JsonSubTypes.Type(value = LinkedAccount.Twitter.class, name = "twitter_oauth"),
 	@JsonSubTypes.Type(value = LinkedAccount.Discord.class, name = "discord_oauth"),
 	@JsonSubTypes.Type(value = LinkedAccount.Github.class, name = "github_oauth"),
@@ -126,6 +127,26 @@ public abstract sealed class LinkedAccount {
 		/** The phone number. */
 		@JsonProperty("number")
 		private String number;
+
+	}
+
+	/** Object representation of a user's Google account. */
+	@Data
+	@ToString(callSuper = false)
+	@EqualsAndHashCode(callSuper = true)
+	public static final class Google extends LinkedAccount {
+
+		/** Object representation of a user's Google account. */
+		@JsonProperty("subject")
+		private String subject;
+
+		/** The email associated with the Google account. */
+		@JsonProperty("email")
+		private String email;
+
+		/** The name associated with the Google account. */
+		@JsonProperty("name")
+		private String name;
 
 	}
 

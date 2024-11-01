@@ -109,29 +109,29 @@ class LinkedAccountTest {
 	}
 
 	@Test
-	void discord() {
+	void google() {
 		final var linkedAccount = read("""
 			{
-				"type": "discord_oauth",
-				"subject": "123456789",
-				"username": "johndoe#0",
+				"type": "google_oauth",
+				"subject": "123456789012345678901",
 				"email": "johndoe@example.com",
-				"verified_at": 1725127202,
-				"first_verified_at": 1725127202,
-				"latest_verified_at": 1725127202
+				"name": "John Doe",
+				"verified_at": 1725376993,
+				"first_verified_at": 1725376993,
+				"latest_verified_at": 1725376993
 			}
 			""");
 
-		final var discord = assertInstanceOf(LinkedAccount.Discord.class, linkedAccount);
+		final var google = assertInstanceOf(LinkedAccount.Google.class, linkedAccount);
 
-		assertEquals("123456789", discord.getSubject());
-		assertEquals("johndoe#0", discord.getUsername());
-		assertEquals("johndoe@example.com", discord.getEmail());
+		assertEquals("123456789012345678901", google.getSubject());
+		assertEquals("johndoe@example.com", google.getEmail());
+		assertEquals("John Doe", google.getName());
 
-		final var date = new Date(1725127202l * 1000);
-		assertEquals(date, discord.getVerifiedAt());
-		assertEquals(date, discord.getFirstVerifiedAt());
-		assertEquals(date, discord.getLatestVerifiedAt());
+		final var date = new Date(1725376993l * 1000);
+		assertEquals(date, google.getVerifiedAt());
+		assertEquals(date, google.getFirstVerifiedAt());
+		assertEquals(date, google.getLatestVerifiedAt());
 	}
 
 	@Test
@@ -160,6 +160,32 @@ class LinkedAccountTest {
 		assertEquals(date, twitter.getVerifiedAt());
 		assertEquals(date, twitter.getFirstVerifiedAt());
 		assertEquals(date, twitter.getLatestVerifiedAt());
+	}
+
+	@Test
+	void discord() {
+		final var linkedAccount = read("""
+			{
+				"type": "discord_oauth",
+				"subject": "123456789",
+				"username": "johndoe#0",
+				"email": "johndoe@example.com",
+				"verified_at": 1725127202,
+				"first_verified_at": 1725127202,
+				"latest_verified_at": 1725127202
+			}
+			""");
+
+		final var discord = assertInstanceOf(LinkedAccount.Discord.class, linkedAccount);
+
+		assertEquals("123456789", discord.getSubject());
+		assertEquals("johndoe#0", discord.getUsername());
+		assertEquals("johndoe@example.com", discord.getEmail());
+
+		final var date = new Date(1725127202l * 1000);
+		assertEquals(date, discord.getVerifiedAt());
+		assertEquals(date, discord.getFirstVerifiedAt());
+		assertEquals(date, discord.getLatestVerifiedAt());
 	}
 
 	@Test
