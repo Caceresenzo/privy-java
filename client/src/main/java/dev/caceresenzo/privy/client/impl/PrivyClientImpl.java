@@ -176,12 +176,12 @@ public class PrivyClientImpl implements PrivyClient {
 	}
 
 	@Override
-	public User setUserCustomMetadata(String id, CustomMetadata metadata) {
+	public User setCustomMetadata(String userId, CustomMetadata metadata) {
 		if (metadata == null) {
 			metadata = EMPTY_METADATA;
 		}
 
-		return delegate.setCustomMetadata(id, new CustomMetadataUpdateRequest(metadata));
+		return delegate.setCustomMetadata(userId, new CustomMetadataUpdateRequest(metadata));
 	}
 
 	@Override

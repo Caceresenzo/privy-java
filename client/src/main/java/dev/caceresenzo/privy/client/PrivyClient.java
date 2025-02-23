@@ -87,7 +87,14 @@ public interface PrivyClient {
 	 */
 	Optional<User> findUserByDiscordUsername(String username);
 
-	User setUserCustomMetadata(String id, CustomMetadata metadata);
+	/**
+	 * Add customMetadata field to the user object.
+	 * 
+	 * @param userId DID of the user to set custom metadata for.
+	 * @param metadata the custom metadata to set for the user.
+	 * @return {@link User User} object updated with custom metadata.
+	 */
+	User setCustomMetadata(String userId, CustomMetadata metadata);
 
 	/**
 	 * Delete the user object associated with the given user DID (decentralized ID).
