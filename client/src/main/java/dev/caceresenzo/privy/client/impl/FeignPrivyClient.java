@@ -1,9 +1,11 @@
 package dev.caceresenzo.privy.client.impl;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import dev.caceresenzo.privy.client.impl.pagination.Page;
 import dev.caceresenzo.privy.model.ApplicationSettings;
+import dev.caceresenzo.privy.model.CustomMetadata;
 import dev.caceresenzo.privy.model.User;
 import feign.Headers;
 import feign.Param;
@@ -53,6 +55,10 @@ public interface FeignPrivyClient {
 	@RequestLine("POST /api/v1/users/discord/username")
 	@Headers(JSON_CONTENT_TYPE)
 	User getUserByDiscordUsername(UsernameRequest body);
+	
+	@RequestLine("POST /api/v1/users/{id}/custom_metadata")
+	@Headers(JSON_CONTENT_TYPE)
+	User setCustomMetadata(@Param String id, CustomMetadataUpdateRequest body);
 
 	@RequestLine("GET /api/v1/apps/{applicationId}")
 	ApplicationSettings getApplicationSettings(@Param String applicationId);
@@ -70,5 +76,9 @@ public interface FeignPrivyClient {
 	static record UsernameRequest(String username) {}
 
 	static record SubjectRequest(String subject) {}
+
+	static record CustomMetadataUpdateRequest(
+		@JsonProperty("custom_metadata") CustomMetadata metadata
+	) {}
 
 }

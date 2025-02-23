@@ -23,6 +23,9 @@ public class User {
 	@JsonProperty("is_guest")
 	public boolean isGuest;
 
+	@JsonProperty("custom_metadata")
+	public CustomMetadata customMetadata;
+
 	@JsonProperty("created_at")
 	private Date createdAt;
 

@@ -1,5 +1,6 @@
 package dev.caceresenzo.privy.client.impl;
 
+import java.util.Collections;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -7,12 +8,14 @@ import java.util.stream.Stream;
 import dev.caceresenzo.privy.client.PrivyClient;
 import dev.caceresenzo.privy.client.PrivyClientException;
 import dev.caceresenzo.privy.client.impl.FeignPrivyClient.AddressRequest;
+import dev.caceresenzo.privy.client.impl.FeignPrivyClient.CustomMetadataUpdateRequest;
 import dev.caceresenzo.privy.client.impl.FeignPrivyClient.PhoneRequest;
 import dev.caceresenzo.privy.client.impl.FeignPrivyClient.SubjectRequest;
 import dev.caceresenzo.privy.client.impl.FeignPrivyClient.UsernameRequest;
 import dev.caceresenzo.privy.client.impl.auth.AuthRequestInterceptor;
 import dev.caceresenzo.privy.client.impl.pagination.PageSpliterator;
 import dev.caceresenzo.privy.model.ApplicationSettings;
+import dev.caceresenzo.privy.model.CustomMetadata;
 import dev.caceresenzo.privy.model.User;
 import dev.caceresenzo.privy.util.PrivyUtils;
 import feign.Feign;
@@ -21,6 +24,8 @@ import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
 
 public class PrivyClientImpl implements PrivyClient {
+
+	private static final CustomMetadata EMPTY_METADATA = CustomMetadata.fromValues(Collections.emptyMap());
 
 	private final String applicationId;
 	private final long maxPageSize;
@@ -168,6 +173,15 @@ public class PrivyClientImpl implements PrivyClient {
 		} catch (PrivyClientException.UserNotFound __) {
 			return Optional.empty();
 		}
+	}
+
+	@Override
+	public User setUserCustomMetadata(String id, CustomMetadata metadata) {
+		if (metadata == null) {
+			metadata = EMPTY_METADATA;
+		}
+
+		return delegate.setCustomMetadata(id, new CustomMetadataUpdateRequest(metadata));
 	}
 
 	@Override

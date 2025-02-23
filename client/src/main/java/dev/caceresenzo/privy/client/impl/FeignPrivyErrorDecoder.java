@@ -39,6 +39,9 @@ public class FeignPrivyErrorDecoder extends ErrorDecoder.Default {
 			this.mappers.add(ErrorMapper.equals("[Input error] `address`: Invalid email address", PrivyClientException.InvalidEmailAddress::new));
 			this.mappers.add(ErrorMapper.equals("[Input error] `number`: Phone number is not valid", PrivyClientException.InvalidPhoneNumber::new));
 			this.mappers.add(ErrorMapper.equals("[Input error] `address`: Invalid Ethereum address", PrivyClientException.InvalidWalletAddress::new));
+
+			this.mappers.add(ErrorMapper.startsWith("[Input error] `custom_metadata", PrivyClientException.InvalidCustomMetadata::new));
+			this.mappers.add(ErrorMapper.equals("Size of custom metadata object too big (>1KB)", PrivyClientException.InvalidCustomMetadata::new));
 		}
 	}
 

@@ -6,6 +6,7 @@ import java.util.stream.Stream;
 import dev.caceresenzo.privy.PrivyException;
 import dev.caceresenzo.privy.client.impl.PrivyClientImpl;
 import dev.caceresenzo.privy.model.ApplicationSettings;
+import dev.caceresenzo.privy.model.CustomMetadata;
 import dev.caceresenzo.privy.model.User;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -85,6 +86,8 @@ public interface PrivyClient {
 	 * @returns A {@link User user}, if it exists.
 	 */
 	Optional<User> findUserByDiscordUsername(String username);
+
+	User setUserCustomMetadata(String id, CustomMetadata metadata);
 
 	/**
 	 * Delete the user object associated with the given user DID (decentralized ID).
