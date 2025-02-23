@@ -61,19 +61,19 @@ PrivyClient client = PrivyClient.builder()
 ### Stream Users
 
 ```java
-Stream<User> users = findAllUsers();
+Stream<User> users = client.findAllUsers();
 
 /* or get a list via */
-List<User> users = findAllUsers().toList();
+List<User> users = client.findAllUsers().toList();
 ```
 
 ### Stream Users by a Search Term
 
 ```java
-Stream<User> users = findAllUsers("john");
+Stream<User> users = client.findAllUsers("john");
 
 /* or get a list via */
-List<User> users = findAllUsers("john").toList();
+List<User> users = client.findAllUsers("john").toList();
 ```
 
 ### Find a User by an ID
