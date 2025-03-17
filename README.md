@@ -101,7 +101,7 @@ Optional<User> user = client.findUserByWallet("0xa0b1c2d3e4f5g6h7i8j9k0l1m2n3o4p
 ### Find a User by a Phone Number
 
 ```java
-Optional<User> user = client.findUserByWallet("+1 (234) 567-8912");
+Optional<User> user = client.findUserByPhone("+1 (234) 567-8912");
 ```
 
 ### Find a User by a Twitter Username
