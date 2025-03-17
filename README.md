@@ -16,6 +16,7 @@ This Java client connects with Privy.io, enabling simple user management and sec
 		- [Find a User by a Twitter Username](#find-a-user-by-a-twitter-username)
 		- [Find a User by a Twitter Subject](#find-a-user-by-a-twitter-subject)
 		- [Find a User by a Discord Username](#find-a-user-by-a-discord-username)
+		- [Set Custom Metadata for a User](#set-custom-metadata-for-a-user)
 		- [Delete a User by an ID](#delete-a-user-by-an-id)
 		- [Linked Accounts](#linked-accounts)
 - [Webhook](#webhook)
@@ -119,6 +120,19 @@ Optional<User> user = client.findUserByTwitterSubject("1234567890");
 
 ```java
 Optional<User> user = client.findUserByDiscordUsername("johndoe#0");
+```
+
+### Set Custom Metadata for a User
+
+```java
+CustomMetadata metadata = new CustomMetadata();
+metadata.putString("planet", "Earth");
+metadata.putNumber("age", 42);
+metadata.putBoolean("powerful", true);
+
+String userId = "a0b1c2d3e4f5g6h7i8j9k0l1m";
+
+User updatedUser = client.setCustomMetadata(userId, metadata);
 ```
 
 ### Delete a User by an ID

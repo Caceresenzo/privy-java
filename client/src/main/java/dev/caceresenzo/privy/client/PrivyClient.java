@@ -93,6 +93,7 @@ public interface PrivyClient {
 	 * @param userId DID of the user to set custom metadata for.
 	 * @param metadata the custom metadata to set for the user.
 	 * @return {@link User User} object updated with custom metadata.
+	 * @throws PrivyClientException.UserNotFound If the user does not exist.
 	 */
 	User setCustomMetadata(String userId, CustomMetadata metadata);
 
