@@ -29,12 +29,13 @@ public class FeignPrivyErrorDecoder extends ErrorDecoder.Default {
 			this.mappers.add(ErrorMapper.equals("Invalid app ID or app secret.", PrivyClientException.InvalidApplicationSecret::new));
 
 			this.mappers.add(ErrorMapper.equals("User not found", PrivyClientException.UserNotFound::new));
-			this.mappers.add(ErrorMapper.startsWith("User with email ", PrivyClientException.UserNotFound::new));
-			this.mappers.add(ErrorMapper.startsWith("User with wallet address ", PrivyClientException.UserNotFound::new));
-			this.mappers.add(ErrorMapper.startsWith("User with phone number ", PrivyClientException.UserNotFound::new));
-			this.mappers.add(ErrorMapper.startsWith("Twitter user with username ", PrivyClientException.UserNotFound::new));
-			this.mappers.add(ErrorMapper.startsWith("Twitter user with subject ", PrivyClientException.UserNotFound::new));
-			this.mappers.add(ErrorMapper.startsWith("Discord user with username ", PrivyClientException.UserNotFound::new));
+			this.mappers.add(ErrorMapper.equals("User not found with provided email.", PrivyClientException.UserNotFound::new));
+			this.mappers.add(ErrorMapper.equals("User not found with provided Wallet address.", PrivyClientException.UserNotFound::new));
+			this.mappers.add(ErrorMapper.equals("User not found with provided phone number.", PrivyClientException.UserNotFound::new));
+			this.mappers.add(ErrorMapper.equals("User not found with provided Twitter username.", PrivyClientException.UserNotFound::new));
+			this.mappers.add(ErrorMapper.equals("User not found with provided Twitter subject.", PrivyClientException.UserNotFound::new));
+			this.mappers.add(ErrorMapper.equals("Discord user not found for provided username.", PrivyClientException.UserNotFound::new));
+			this.mappers.add(ErrorMapper.equals("Github user not found for provided username.", PrivyClientException.UserNotFound::new));
 
 			this.mappers.add(ErrorMapper.equals("[Input error] `address`: Invalid email address", PrivyClientException.InvalidEmailAddress::new));
 			this.mappers.add(ErrorMapper.equals("[Input error] `number`: Phone number is not valid", PrivyClientException.InvalidPhoneNumber::new));
