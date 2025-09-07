@@ -88,6 +88,14 @@ public interface PrivyClient {
 	Optional<User> findUserByDiscordUsername(String username);
 
 	/**
+	* Get the user object associated with a Github username.
+	*
+	* @param username Github username to search for.
+	* @returns A {@link User user}, if it exists.
+	*/
+	Optional<User> findUserByGithubUsername(String username);
+
+	/**
 	 * Add customMetadata field to the user object.
 	 * 
 	 * @param userId DID of the user to set custom metadata for.

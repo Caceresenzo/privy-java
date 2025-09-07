@@ -176,6 +176,19 @@ public class PrivyClientImpl implements PrivyClient {
 	}
 
 	@Override
+	public Optional<User> findUserByGithubUsername(String username) {
+		if (username == null) {
+			return Optional.empty();
+		}
+
+		try {
+			return Optional.of(delegate.getUserByGithubUsername(new UsernameRequest(username)));
+		} catch (PrivyClientException.UserNotFound __) {
+			return Optional.empty();
+		}
+	}
+
+	@Override
 	public User setCustomMetadata(String userId, CustomMetadata metadata) {
 		if (metadata == null) {
 			metadata = EMPTY_METADATA;

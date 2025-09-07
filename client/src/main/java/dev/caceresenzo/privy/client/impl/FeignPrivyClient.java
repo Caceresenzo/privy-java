@@ -55,7 +55,11 @@ public interface FeignPrivyClient {
 	@RequestLine("POST /api/v1/users/discord/username")
 	@Headers(JSON_CONTENT_TYPE)
 	User getUserByDiscordUsername(UsernameRequest body);
-	
+
+	@RequestLine("POST /api/v1/users/github/username")
+	@Headers(JSON_CONTENT_TYPE)
+	User getUserByGithubUsername(UsernameRequest body);
+
 	@RequestLine("POST /api/v1/users/{id}/custom_metadata")
 	@Headers(JSON_CONTENT_TYPE)
 	User setCustomMetadata(@Param String id, CustomMetadataUpdateRequest body);
