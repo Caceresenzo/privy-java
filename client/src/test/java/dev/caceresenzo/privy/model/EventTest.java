@@ -261,6 +261,40 @@ class EventTest {
 	}
 
 	@Test
+	void userWalletCreated() {
+		final var receivedEvent = read("""
+			{
+			    "type": "user.wallet_created",
+			    "user": {
+			        "created_at": 969628260,
+			        "has_accepted_terms": false,
+			        "id": "did:privy:cfbsvtqo2c22202mo08847jdux2z",
+			        "is_guest": false,
+			        "linked_accounts": [{
+			                "address": "bilbo@privy.io",
+			                "first_verified_at": 969628260,
+			                "latest_verified_at": 969628260,
+			                "type": "email",
+			                "verified_at": 969628260
+			            }
+			        ],
+			        "mfa_methods": []
+			    },
+			    "wallet": {
+			        "type": "wallet",
+			        "address": "0x123...",
+			        "chain_type": "ethereum"
+			    }
+			}
+			""");
+
+		final var event = assertInstanceOf(Event.UserWalletCreated.class, receivedEvent);
+
+		assertEquals("did:privy:cfbsvtqo2c22202mo08847jdux2z", event.getUserId());
+		assertEquals("0x123...", event.getWallet().getAddress());
+	}
+
+	@Test
 	void multiFactorAuthenticationEnabled() {
 		final var receivedEvent = read("""
 			{

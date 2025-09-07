@@ -291,6 +291,11 @@ switch (receivedEvent) {
 		System.out.println(" and the old user was deleted? %s".formatted(event.isDeleted()));
 	}
 
+	case Event.UserWalletCreated event -> {
+		System.out.println("User Wallet Created: %s".formatted(event.getUserId()));
+		System.out.println(" with wallet address: %s".formatted(event.getWallet().getAddress()));
+	}
+
 	case Event.MultiFactorAuthenticationEnabled event -> {
 		System.out.println("Multi Factor Authentication Enabled: %s".formatted(event.getUserId()));
 		System.out.println(" with method: %s".formatted(event.getMethod()));

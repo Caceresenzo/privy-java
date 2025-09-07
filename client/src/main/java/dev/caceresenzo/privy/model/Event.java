@@ -19,6 +19,7 @@ import lombok.Data;
 	@JsonSubTypes.Type(value = Event.UserUnlinkedAccount.class, name = "user.unlinked_account"),
 	@JsonSubTypes.Type(value = Event.UserUpdatedAccount.class, name = "user.updated_account"),
 	@JsonSubTypes.Type(value = Event.UserTransferredAccount.class, name = "user.transferred_account"),
+	@JsonSubTypes.Type(value = Event.UserWalletCreated.class, name = "user.wallet_created"),
 	@JsonSubTypes.Type(value = Event.MultiFactorAuthenticationEnabled.class, name = "mfa.enabled"),
 	@JsonSubTypes.Type(value = Event.MultiFactorAuthenticationDisabled.class, name = "mfa.disabled"),
 	@JsonSubTypes.Type(value = Event.PrivateKeyExported.class, name = "wallet.private_key_export"),
@@ -115,6 +116,22 @@ public sealed interface Event {
 
 		public String getToUserId() {
 			return toUser.getId();
+		}
+
+	}
+
+	/** A wallet (embedded or smart wallet) was successfully created for a user. */
+	@Data
+	public static final class UserWalletCreated implements Event {
+
+		@JsonProperty("user")
+		private User user;
+
+		@JsonProperty("wallet")
+		private LinkedAccount.Wallet wallet;
+
+		public String getUserId() {
+			return user.getId();
 		}
 
 	}
