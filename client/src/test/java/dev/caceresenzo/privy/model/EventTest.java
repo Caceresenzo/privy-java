@@ -260,6 +260,38 @@ class EventTest {
 		assertTrue(userTransferredAccount.isDeleted());
 	}
 
+	@Test
+	void multiFactorAuthenticationEnabled() {
+		final var event = read("""
+			{
+				"type": "mfa.enabled",
+				"user_id": "user_123",
+				"method": "sms"
+			}
+			""");
+
+		final var multiFactorAuthenticationEnabled = assertInstanceOf(Event.MultiFactorAuthenticationEnabled.class, event);
+
+		assertEquals("user_123", multiFactorAuthenticationEnabled.getUserId());
+		assertEquals("sms", multiFactorAuthenticationEnabled.getMethod());
+	}
+
+	@Test
+	void multiFactorAuthenticationDisabled() {
+		final var event = read("""
+			{
+				"type": "mfa.disabled",
+				"user_id": "user_123",
+				"method": "sms"
+			}
+			""");
+
+		final var multiFactorAuthenticationDisabled = assertInstanceOf(Event.MultiFactorAuthenticationDisabled.class, event);
+
+		assertEquals("user_123", multiFactorAuthenticationDisabled.getUserId());
+		assertEquals("sms", multiFactorAuthenticationDisabled.getMethod());
+	}
+
 	@SneakyThrows
 	private Event read(String json) {
 		return mapper.readValue(json, Event.class);

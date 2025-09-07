@@ -19,6 +19,8 @@ import lombok.Data;
 	@JsonSubTypes.Type(value = Event.UserUnlinkedAccount.class, name = "user.unlinked_account"),
 	@JsonSubTypes.Type(value = Event.UserUpdatedAccount.class, name = "user.updated_account"),
 	@JsonSubTypes.Type(value = Event.UserTransferredAccount.class, name = "user.transferred_account"),
+	@JsonSubTypes.Type(value = Event.MultiFactorAuthenticationEnabled.class, name = "mfa.enabled"),
+	@JsonSubTypes.Type(value = Event.MultiFactorAuthenticationDisabled.class, name = "mfa.disabled"),
 })
 public sealed interface Event {
 
@@ -111,6 +113,30 @@ public sealed interface Event {
 		public String getToUserId() {
 			return toUser.getId();
 		}
+
+	}
+
+	/** A user has enabled MFA for their account. */
+	@Data
+	public static final class MultiFactorAuthenticationEnabled implements Event {
+
+		@JsonProperty("user_id")
+		private String userId;
+
+		@JsonProperty("method")
+		private String method;
+
+	}
+
+	/** A user has disabled MFA for their account. */
+	@Data
+	public static final class MultiFactorAuthenticationDisabled implements Event {
+
+		@JsonProperty("user_id")
+		private String userId;
+
+		@JsonProperty("method")
+		private String method;
 
 	}
 

@@ -256,44 +256,54 @@ Event event = webhook.verify(
 <summary>Testing the event type</summary>
 
 ```java
-switch (event) {
-	case Event.Test test -> {
-		System.out.println("Testing: %s".formatted(test.getMessage()));
+switch (receivedEvent) {
+	case Event.Test event -> {
+		System.out.println("Testing: %s".formatted(event.getMessage()));
 	}
 
-	case Event.UserCreated userCreated -> {
-		System.out.println("User Created: %s".formatted(userCreated.getUser().getId()));
+	case Event.UserCreated event -> {
+		System.out.println("User Created: %s".formatted(event.getUser().getId()));
 	}
 
-	case Event.UserAuthenticated userAuthenticated -> {
-		System.out.println("User Authenticated: %s".formatted(userAuthenticated.getUser().getId()));
-		System.out.println(" with account: %s".formatted(userAuthenticated.getAccount()));
+	case Event.UserAuthenticated event -> {
+		System.out.println("User Authenticated: %s".formatted(event.getUser().getId()));
+		System.out.println(" with account: %s".formatted(event.getAccount()));
 	}
 
-	case Event.UserLinkedAccount userLinkedAccount -> {
-		System.out.println("User Linked Account: %s".formatted(userLinkedAccount.getUser().getId()));
-		System.out.println(" with account: %s".formatted(userLinkedAccount.getAccount()));
+	case Event.UserLinkedAccount event -> {
+		System.out.println("User Linked Account: %s".formatted(event.getUser().getId()));
+		System.out.println(" with account: %s".formatted(event.getAccount()));
 	}
 
-	case Event.UserUnlinkedAccount userUnlinkedAccount -> {
-		System.out.println("User Unlinked Account: %s".formatted(userUnlinkedAccount.getUser().getId()));
-		System.out.println(" with account: %s".formatted(userUnlinkedAccount.getAccount()));
+	case Event.UserUnlinkedAccount event -> {
+		System.out.println("User Unlinked Account: %s".formatted(event.getUser().getId()));
+		System.out.println(" with account: %s".formatted(event.getAccount()));
 	}
 
-	case Event.UserUpdatedAccount userUpdatedAccount -> {
-		System.out.println("User Updated Account: %s".formatted(userUpdatedAccount.getUser().getId()));
-		System.out.println(" with account: %s".formatted(userUpdatedAccount.getAccount()));
+	case Event.UserUpdatedAccount event -> {
+		System.out.println("User Updated Account: %s".formatted(event.getUser().getId()));
+		System.out.println(" with account: %s".formatted(event.getAccount()));
 	}
 
-	case Event.UserTransferredAccount userTransferredAccount -> {
-		System.out.println("User Transferred Account: %s -> %s".formatted(userTransferredAccount.getFromUser().getId(), userTransferredAccount.getToUser().getId()));
-		System.out.println(" with account: %s".formatted(userTransferredAccount.getAccount()));
-		System.out.println(" and the old user was deleted? %s".formatted(userTransferredAccount.isDeleted()));
+	case Event.UserTransferredAccount event -> {
+		System.out.println("User Transferred Account: %s -> %s".formatted(event.getFromUser().getId(), event.getToUser().getId()));
+		System.out.println(" with account: %s".formatted(event.getAccount()));
+		System.out.println(" and the old user was deleted? %s".formatted(event.isDeleted()));
 	}
 
-	case Event.Other other -> {
-		System.out.println("Unknown event: %s".formatted(other.getType()));
-		System.out.println(" with properties: %s".formatted(other.getProperties()));
+	case Event.MultiFactorAuthenticationEnabled event -> {
+		System.out.println("Multi Factor Authentication Enabled: %s".formatted(event.getUserId()));
+		System.out.println(" with method: %s".formatted(event.getMethod()));
+	}
+
+	case Event.MultiFactorAuthenticationDisabled event -> {
+		System.out.println("Multi Factor Authentication Disabled: %s".formatted(event.getUserId()));
+		System.out.println(" with method: %s".formatted(event.getMethod()));
+	}
+
+	case Event.Other event -> {
+		System.out.println("Unknown event: %s".formatted(event.getType()));
+		System.out.println(" with properties: %s".formatted(event.getProperties()));
 	}
 }
 ```
