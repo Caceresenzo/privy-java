@@ -25,8 +25,8 @@ public class FeignPrivyErrorDecoder extends ErrorDecoder.Default {
 
 		this.mappers = new ArrayList<>();
 		{
-			this.mappers.add(ErrorMapper.equals("Invalid Privy app ID", PrivyClientException.InvalidApplicationSecret::new));
-			this.mappers.add(ErrorMapper.equals("Invalid app ID or app secret.", PrivyClientException.InvalidApplicationId::new));
+			this.mappers.add(ErrorMapper.equals("Invalid Privy app ID", PrivyClientException.InvalidApplicationId::new));
+			this.mappers.add(ErrorMapper.equals("Invalid app ID or app secret.", PrivyClientException.InvalidApplicationSecret::new));
 
 			this.mappers.add(ErrorMapper.equals("User not found", PrivyClientException.UserNotFound::new));
 			this.mappers.add(ErrorMapper.startsWith("User with email ", PrivyClientException.UserNotFound::new));
