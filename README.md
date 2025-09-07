@@ -301,6 +301,22 @@ switch (receivedEvent) {
 		System.out.println(" with method: %s".formatted(event.getMethod()));
 	}
 
+	case Event.PrivateKeyExported event -> {
+		System.out.println("Private Key Exported: %s".formatted(event.getUserId()));
+		System.out.println(" with wallet address: %s".formatted(event.getWalletAddress()));
+	}
+
+	case Event.WalletRecoverySetup event -> {
+		System.out.println("Wallet Recovery Setup: %s".formatted(event.getUserId()));
+		System.out.println(" with wallet address: %s".formatted(event.getWalletAddress()));
+		System.out.println(" with method: %s".formatted(event.getMethod()));
+	}
+
+	case Event.WalletRecovered event -> {
+		System.out.println("Wallet Recovered: %s".formatted(event.getUserId()));
+		System.out.println(" with wallet address: %s".formatted(event.getWalletAddress()));
+	}
+
 	case Event.Other event -> {
 		System.out.println("Unknown event: %s".formatted(event.getType()));
 		System.out.println(" with properties: %s".formatted(event.getProperties()));

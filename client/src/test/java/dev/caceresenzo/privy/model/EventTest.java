@@ -24,21 +24,21 @@ class EventTest {
 
 	@Test
 	void test() {
-		final var event = read("""
+		final var receivedEvent = read("""
 			{
 				"type": "privy.test",
 				"message": "Hello, World!"
 			}
 			""");
 
-		final var test = assertInstanceOf(Event.Test.class, event);
+		final var event = assertInstanceOf(Event.Test.class, receivedEvent);
 
-		assertEquals("Hello, World!", test.getMessage());
+		assertEquals("Hello, World!", event.getMessage());
 	}
 
 	@Test
 	void userCreated() {
-		final var event = read("""
+		final var receivedEvent = read("""
 			{
 				"type": "user.created",
 				"user": {
@@ -60,14 +60,14 @@ class EventTest {
 			}
 			""");
 
-		final var userCreated = assertInstanceOf(Event.UserCreated.class, event);
+		final var event = assertInstanceOf(Event.UserCreated.class, receivedEvent);
 
-		assertEquals("did:privy:cfbsvtqo2c22202mo08847jdux2z", userCreated.getUser().getId());
+		assertEquals("did:privy:cfbsvtqo2c22202mo08847jdux2z", event.getUser().getId());
 	}
 
 	@Test
 	void userAuthenticated() {
-		final var event = read("""
+		final var receivedEvent = read("""
 			{
 				"type": "user.authenticated",
 				"account": {
@@ -96,15 +96,15 @@ class EventTest {
 			}
 			""");
 
-		final var userAuthenticated = assertInstanceOf(Event.UserAuthenticated.class, event);
+		final var event = assertInstanceOf(Event.UserAuthenticated.class, receivedEvent);
 
-		assertInstanceOf(LinkedAccount.Email.class, userAuthenticated.getAccount());
-		assertEquals("did:privy:cfbsvtqo2c22202mo08847jdux2z", userAuthenticated.getUser().getId());
+		assertInstanceOf(LinkedAccount.Email.class, event.getAccount());
+		assertEquals("did:privy:cfbsvtqo2c22202mo08847jdux2z", event.getUser().getId());
 	}
 
 	@Test
 	void userLinkedAccount() {
-		final var event = read("""
+		final var receivedEvent = read("""
 			{
 				"type": "user.linked_account",
 				"account": {
@@ -133,15 +133,15 @@ class EventTest {
 			}
 			""");
 
-		final var userLinkedAccount = assertInstanceOf(Event.UserLinkedAccount.class, event);
+		final var event = assertInstanceOf(Event.UserLinkedAccount.class, receivedEvent);
 
-		assertInstanceOf(LinkedAccount.Email.class, userLinkedAccount.getAccount());
-		assertEquals("did:privy:cfbsvtqo2c22202mo08847jdux2z", userLinkedAccount.getUser().getId());
+		assertInstanceOf(LinkedAccount.Email.class, event.getAccount());
+		assertEquals("did:privy:cfbsvtqo2c22202mo08847jdux2z", event.getUser().getId());
 	}
 
 	@Test
 	void userUnlinkedAccount() {
-		final var event = read("""
+		final var receivedEvent = read("""
 			{
 				"type": "user.unlinked_account",
 				"account": {
@@ -170,15 +170,15 @@ class EventTest {
 			}
 			""");
 
-		final var userUnlinkedAccount = assertInstanceOf(Event.UserUnlinkedAccount.class, event);
+		final var event = assertInstanceOf(Event.UserUnlinkedAccount.class, receivedEvent);
 
-		assertInstanceOf(LinkedAccount.Email.class, userUnlinkedAccount.getAccount());
-		assertEquals("did:privy:cfbsvtqo2c22202mo08847jdux2z", userUnlinkedAccount.getUser().getId());
+		assertInstanceOf(LinkedAccount.Email.class, event.getAccount());
+		assertEquals("did:privy:cfbsvtqo2c22202mo08847jdux2z", event.getUser().getId());
 	}
 
 	@Test
 	void userUpdatedAccount() {
-		final var event = read("""
+		final var receivedEvent = read("""
 			{
 				"type": "user.updated_account",
 				"account": {
@@ -207,15 +207,15 @@ class EventTest {
 			}
 			""");
 
-		final var userUpdatedAccount = assertInstanceOf(Event.UserUpdatedAccount.class, event);
+		final var event = assertInstanceOf(Event.UserUpdatedAccount.class, receivedEvent);
 
-		assertInstanceOf(LinkedAccount.Email.class, userUpdatedAccount.getAccount());
-		assertEquals("did:privy:cfbsvtqo2c22202mo08847jdux2z", userUpdatedAccount.getUser().getId());
+		assertInstanceOf(LinkedAccount.Email.class, event.getAccount());
+		assertEquals("did:privy:cfbsvtqo2c22202mo08847jdux2z", event.getUser().getId());
 	}
 
 	@Test
 	void userTransferredAccount() {
-		final var event = read("""
+		final var receivedEvent = read("""
 			{
 			    "type": "user.transferred_account",
 			    "fromUser": {
@@ -252,17 +252,17 @@ class EventTest {
 			}
 			""");
 
-		final var userTransferredAccount = assertInstanceOf(Event.UserTransferredAccount.class, event);
+		final var event = assertInstanceOf(Event.UserTransferredAccount.class, receivedEvent);
 
-		assertInstanceOf(LinkedAccount.Phone.class, userTransferredAccount.getAccount());
-		assertEquals("did:privy:clu2wsin402h9h9kt6ae7dfuh", userTransferredAccount.getFromUserId());
-		assertEquals("did:privy:cfbsvtqo2c22202mo08847jdux2z", userTransferredAccount.getToUserId());
-		assertTrue(userTransferredAccount.isDeleted());
+		assertInstanceOf(LinkedAccount.Phone.class, event.getAccount());
+		assertEquals("did:privy:clu2wsin402h9h9kt6ae7dfuh", event.getFromUserId());
+		assertEquals("did:privy:cfbsvtqo2c22202mo08847jdux2z", event.getToUserId());
+		assertTrue(event.isDeleted());
 	}
 
 	@Test
 	void multiFactorAuthenticationEnabled() {
-		final var event = read("""
+		final var receivedEvent = read("""
 			{
 				"type": "mfa.enabled",
 				"user_id": "user_123",
@@ -270,15 +270,15 @@ class EventTest {
 			}
 			""");
 
-		final var multiFactorAuthenticationEnabled = assertInstanceOf(Event.MultiFactorAuthenticationEnabled.class, event);
+		final var event = assertInstanceOf(Event.MultiFactorAuthenticationEnabled.class, receivedEvent);
 
-		assertEquals("user_123", multiFactorAuthenticationEnabled.getUserId());
-		assertEquals("sms", multiFactorAuthenticationEnabled.getMethod());
+		assertEquals("user_123", event.getUserId());
+		assertEquals("sms", event.getMethod());
 	}
 
 	@Test
 	void multiFactorAuthenticationDisabled() {
-		final var event = read("""
+		final var receivedEvent = read("""
 			{
 				"type": "mfa.disabled",
 				"user_id": "user_123",
@@ -286,10 +286,66 @@ class EventTest {
 			}
 			""");
 
-		final var multiFactorAuthenticationDisabled = assertInstanceOf(Event.MultiFactorAuthenticationDisabled.class, event);
+		final var event = assertInstanceOf(Event.MultiFactorAuthenticationDisabled.class, receivedEvent);
 
-		assertEquals("user_123", multiFactorAuthenticationDisabled.getUserId());
-		assertEquals("sms", multiFactorAuthenticationDisabled.getMethod());
+		assertEquals("user_123", event.getUserId());
+		assertEquals("sms", event.getMethod());
+	}
+
+	@Test
+	void privateKeyExported() {
+		final var receivedEvent = read("""
+			{
+				"type": "wallet.private_key_export",
+				"user_id": "user_123",
+				"wallet_id": "wallet_123",
+				"wallet_address": "0x123..."
+			}
+			""");
+
+		final var event = assertInstanceOf(Event.PrivateKeyExported.class, receivedEvent);
+
+		assertEquals("user_123", event.getUserId());
+		assertEquals("wallet_123", event.getWalletId());
+		assertEquals("0x123...", event.getWalletAddress());
+	}
+
+	@Test
+	void walletRecoverySetup() {
+		final var receivedEvent = read("""
+			{
+				"type": "wallet.recovery_setup",
+				"user_id": "user_123",
+				"wallet_id": "wallet_123",
+				"wallet_address": "0x123...",
+				"method": "passkey"
+			}
+			""");
+
+		final var event = assertInstanceOf(Event.WalletRecoverySetup.class, receivedEvent);
+
+		assertEquals("user_123", event.getUserId());
+		assertEquals("wallet_123", event.getWalletId());
+		assertEquals("0x123...", event.getWalletAddress());
+		assertEquals("passkey", event.getMethod());
+	}
+
+	@Test
+	void walletRecovered() {
+		final var receivedEvent = read("""
+			{
+				"type": "wallet.recovered",
+				"user_id": "user_123",
+				"wallet_id": "wallet_123",
+				"wallet_address": "0x123..."
+			}
+			""");
+
+		final var event = assertInstanceOf(Event.WalletRecovered.class, receivedEvent);
+
+		assertEquals("user_123", event.getUserId());
+		assertEquals("wallet_123", event.getWalletId());
+		assertEquals("0x123...", event.getWalletAddress());
 	}
 
 	@SneakyThrows

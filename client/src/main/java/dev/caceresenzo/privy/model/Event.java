@@ -21,6 +21,9 @@ import lombok.Data;
 	@JsonSubTypes.Type(value = Event.UserTransferredAccount.class, name = "user.transferred_account"),
 	@JsonSubTypes.Type(value = Event.MultiFactorAuthenticationEnabled.class, name = "mfa.enabled"),
 	@JsonSubTypes.Type(value = Event.MultiFactorAuthenticationDisabled.class, name = "mfa.disabled"),
+	@JsonSubTypes.Type(value = Event.PrivateKeyExported.class, name = "wallet.private_key_export"),
+	@JsonSubTypes.Type(value = Event.WalletRecoverySetup.class, name = "wallet.recovery_setup"),
+	@JsonSubTypes.Type(value = Event.WalletRecovered.class, name = "wallet.recovered"),
 })
 public sealed interface Event {
 
@@ -137,6 +140,54 @@ public sealed interface Event {
 
 		@JsonProperty("method")
 		private String method;
+
+	}
+
+	/** A user has exported their private key from an embedded wallet. */
+	@Data
+	public static final class PrivateKeyExported implements Event {
+
+		@JsonProperty("user_id")
+		private String userId;
+
+		@JsonProperty("wallet_id")
+		private String walletId;
+
+		@JsonProperty("wallet_address")
+		private String walletAddress;
+
+	}
+
+	/** A user has set up wallet recovery for their embedded wallet. */
+	@Data
+	public static final class WalletRecoverySetup implements Event {
+
+		@JsonProperty("user_id")
+		private String userId;
+
+		@JsonProperty("wallet_id")
+		private String walletId;
+
+		@JsonProperty("wallet_address")
+		private String walletAddress;
+
+		@JsonProperty("method")
+		private String method;
+
+	}
+
+	/** A user has successfully recovered their embedded wallet. */
+	@Data
+	public static final class WalletRecovered implements Event {
+
+		@JsonProperty("user_id")
+		private String userId;
+
+		@JsonProperty("wallet_id")
+		private String walletId;
+
+		@JsonProperty("wallet_address")
+		private String walletAddress;
 
 	}
 
