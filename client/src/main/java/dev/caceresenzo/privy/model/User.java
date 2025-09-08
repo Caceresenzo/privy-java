@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
@@ -29,30 +30,37 @@ public class User {
 	@JsonProperty("created_at")
 	private Date createdAt;
 
+	@JsonIgnore
 	public Optional<LinkedAccount.Wallet> getWallet() {
 		return getAccount(LinkedAccount.Wallet.class);
 	}
 
+	@JsonIgnore
 	public Optional<LinkedAccount.Email> getEmail() {
 		return getAccount(LinkedAccount.Email.class);
 	}
 
+	@JsonIgnore
 	public Optional<LinkedAccount.Phone> getPhone() {
 		return getAccount(LinkedAccount.Phone.class);
 	}
 
+	@JsonIgnore
 	public Optional<LinkedAccount.Google> getGoogle() {
 		return getAccount(LinkedAccount.Google.class);
 	}
 
+	@JsonIgnore
 	public Optional<LinkedAccount.Twitter> getTwitter() {
 		return getAccount(LinkedAccount.Twitter.class);
 	}
 
+	@JsonIgnore
 	public Optional<LinkedAccount.Discord> getDiscord() {
 		return getAccount(LinkedAccount.Discord.class);
 	}
 
+	@JsonIgnore
 	public Optional<LinkedAccount.Github> getGithub() {
 		return getAccount(LinkedAccount.Github.class);
 	}
@@ -67,6 +75,14 @@ public class User {
 		}
 
 		return Optional.empty();
+	}
+
+	public CustomMetadata getCustomMetadata() {
+		if (customMetadata == null) {
+			customMetadata = new CustomMetadata();
+		}
+
+		return customMetadata;
 	}
 
 }

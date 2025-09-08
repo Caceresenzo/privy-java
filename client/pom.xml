@@ -13,6 +13,7 @@
 	<name>privy-client</name>
 
 	<properties>
+		<jsonwebtoken.version>0.12.6</jsonwebtoken.version>
 		<svix.version>1.38.0</svix.version>
 
 		<feign.version>13.3</feign.version>
@@ -24,6 +25,22 @@
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>${jsonwebtoken.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>${jsonwebtoken.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>${jsonwebtoken.version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>com.svix</groupId>
 			<artifactId>svix</artifactId>

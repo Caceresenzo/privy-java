@@ -20,6 +20,7 @@ This Java client connects with Privy.io, enabling simple user management and sec
 		- [Set Custom Metadata for a User](#set-custom-metadata-for-a-user)
 		- [Delete a User by an ID](#delete-a-user-by-an-id)
 		- [Linked Accounts](#linked-accounts)
+	- [Advanced Configuration](#advanced-configuration)
 - [Webhook](#webhook)
 	- [Configuration](#configuration-1)
 	- [Usage](#usage-1)
@@ -224,6 +225,40 @@ switch (account) {
 }
 ```
 </details>
+
+
+## Advanced Configuration
+
+The client can be configured further to meet the demands of the application:
+
+```java
+PrivyClient client = PrivyClient.builder()
+
+	/* change the api url */
+	.apiUrl("https://auth.privy.io")
+
+	/* mandatory credentials */
+	.applicationId("a0b1c2d3e4f5g6h7i8j9k0l1m")
+	.applicationSecret("a0b1c2d3e4f5g6h7i8j9k0l1m2n3o4p5q6r7s8t9u0v1w2x3y4z5a6b7c8d9e0f1g2h3i4j5k6l7m8n9o0p1q2r3")
+
+	/* change the iterator page size */
+	.maxPageSize(100)
+
+	/* should the key obtained via `client.getVerificationKey()` be cached? */
+	.cacheVerificationKey(true)
+
+	/* configure the JWT parser, usually not recommended, but can be useful for testing purposes. */
+	.jwtParserCustomizer((builder) -> builder
+		.clockSkewSeconds(60)
+		.clock(new FixedClock(System.currentTimeMillis())) /* stop the world */
+		.unsecured() /* enable `alg: none` */
+	)
+
+	.build();
+```
+
+> [!NOTE]
+> All values except those for `applicationId`, `applicationSecret` and `jwtParserCustomizer` are the default values.
 
 # Webhook
 

@@ -2,6 +2,7 @@ package dev.caceresenzo.privy.client;
 
 import java.security.PublicKey;
 import java.util.Optional;
+import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 import dev.caceresenzo.privy.PrivyException;
@@ -9,6 +10,8 @@ import dev.caceresenzo.privy.client.impl.PrivyClientImpl;
 import dev.caceresenzo.privy.model.ApplicationSettings;
 import dev.caceresenzo.privy.model.CustomMetadata;
 import dev.caceresenzo.privy.model.User;
+import io.jsonwebtoken.JwtParser;
+import io.jsonwebtoken.JwtParserBuilder;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -124,9 +127,20 @@ public interface PrivyClient {
 	/**
 	 * Get the auth token verification key.
 	 *
-	 * @returns The verification key.
+	 * @return The verification key.
 	 */
 	PublicKey getVerificationKey();
+
+	/**
+	 * Gets a user from the identity token. First, this verifies the token is valid and then parses the payload into a {@link User} object. <br />
+	 * Note the user object may be incomplete due to identity token size constraints. <br />
+	
+	 * @param idToken The identity token set as a cookie on the users browser.
+	 * @return {@link User User} object with parsed from the ID token.
+	 * @implNote A cached verification key may be returned.
+	 * @throws PrivyJwtException If the ID token is malformed, invalid or expired.
+	 */
+	User getUserFromIdToken(String idToken);
 
 	/**
 	 * Create a new builder.
@@ -156,6 +170,12 @@ public interface PrivyClient {
 		/** The page size used for pagination. */
 		private long maxPageSize = DEFAULT_MAX_PAGE_SIZE;
 
+		/** Cache the verification key on first fetch on the client instance. */
+		private boolean cacheVerificationKey = true;
+
+		/** Customize the {@link JwtParser JWT Parser} by customizing the {@link JwtParserBuilder builder}. */
+		private UnaryOperator<JwtParserBuilder> jwtParserCustomizer = UnaryOperator.identity();
+
 		/**
 		 * Build the client.
 		 *
@@ -166,7 +186,9 @@ public interface PrivyClient {
 				apiUrl,
 				applicationId,
 				applicationSecret,
-				maxPageSize
+				maxPageSize,
+				cacheVerificationKey,
+				jwtParserCustomizer
 			);
 		}
 

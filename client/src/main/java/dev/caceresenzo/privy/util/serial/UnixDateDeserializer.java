@@ -19,6 +19,10 @@ public class UnixDateDeserializer extends StdDeserializer<Date> {
 	public Date deserialize(JsonParser parser, DeserializationContext context) throws IOException, JsonProcessingException {
 		final var timestamp = parser.getLongValue();
 
+		return fromTimestamp(timestamp);
+	}
+
+	public static Date fromTimestamp(long timestamp) {
 		return new Date(timestamp * 1000);
 	}
 

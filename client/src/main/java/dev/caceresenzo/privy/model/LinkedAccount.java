@@ -3,6 +3,7 @@ package dev.caceresenzo.privy.model;
 import java.util.Date;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -34,6 +35,7 @@ public abstract sealed class LinkedAccount {
 	private Date firstVerifiedAt;
 
 	@JsonProperty("latest_verified_at")
+	@JsonAlias("lv")
 	private Date latestVerifiedAt;
 
 	/** Object representation of a user's wallet. */
@@ -228,6 +230,7 @@ public abstract sealed class LinkedAccount {
 
 		@JsonAnySetter
 		@JsonAnyGetter
+		@JsonIgnore
 		private Map<String, Object> properties;
 
 	}

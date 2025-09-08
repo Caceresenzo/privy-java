@@ -5,12 +5,18 @@ import java.security.PublicKey;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import dev.caceresenzo.privy.client.PrivyClient;
 import dev.caceresenzo.privy.client.PrivyClientException;
+import dev.caceresenzo.privy.client.PrivyJwtException;
 import dev.caceresenzo.privy.client.impl.FeignPrivyClient.AddressRequest;
 import dev.caceresenzo.privy.client.impl.FeignPrivyClient.CustomMetadataUpdateRequest;
 import dev.caceresenzo.privy.client.impl.FeignPrivyClient.PhoneRequest;
@@ -20,12 +26,17 @@ import dev.caceresenzo.privy.client.impl.auth.AuthRequestInterceptor;
 import dev.caceresenzo.privy.client.impl.pagination.PageSpliterator;
 import dev.caceresenzo.privy.model.ApplicationSettings;
 import dev.caceresenzo.privy.model.CustomMetadata;
+import dev.caceresenzo.privy.model.LinkedAccount;
 import dev.caceresenzo.privy.model.User;
 import dev.caceresenzo.privy.util.PrivyUtils;
+import dev.caceresenzo.privy.util.serial.UnixDateDeserializer;
 import feign.Feign;
 import feign.Retryer;
 import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
+import io.jsonwebtoken.JwtParser;
+import io.jsonwebtoken.JwtParserBuilder;
+import io.jsonwebtoken.Jwts;
 import lombok.SneakyThrows;
 
 public class PrivyClientImpl implements PrivyClient {
@@ -34,13 +45,21 @@ public class PrivyClientImpl implements PrivyClient {
 
 	private final String applicationId;
 	private final long maxPageSize;
+	private final boolean cacheVerificationKey;
+	private final JwtParser jwtParser;
+
+	private final ObjectMapper objectMapper;
 	private final FeignPrivyClient delegate;
+
+	private PublicKey cachedVerificationKey = null;
 
 	public PrivyClientImpl(
 		String apiUrl,
 		String applicationId,
 		String applicationSecret,
-		long maxPageSize
+		long maxPageSize,
+		boolean cacheVerificationKey,
+		UnaryOperator<JwtParserBuilder> jwtParserCustomizer
 	) {
 		Objects.requireNonNull(apiUrl, "apiUrl must be specified");
 		Objects.requireNonNull(applicationId, "applicationId must be specified");
@@ -50,15 +69,23 @@ public class PrivyClientImpl implements PrivyClient {
 			throw new IllegalArgumentException("maxPageSize must be positive");
 		}
 
-		final var mapper = PrivyUtils.createMapper();
-
 		this.applicationId = applicationId;
 		this.maxPageSize = maxPageSize;
+		this.cacheVerificationKey = cacheVerificationKey;
+
+		this.jwtParser = jwtParserCustomizer
+			.apply(Jwts.parser())
+			.keyLocator((__) -> getVerificationKey())
+			.requireAudience(applicationId)
+			.requireIssuer("privy.io")
+			.build();
+
+		this.objectMapper = PrivyUtils.createMapper();
 		this.delegate = Feign.builder()
-			.encoder(new JacksonEncoder(mapper))
-			.decoder(new JacksonDecoder(mapper))
+			.encoder(new JacksonEncoder(this.objectMapper))
+			.decoder(new JacksonDecoder(this.objectMapper))
 			.requestInterceptor(new AuthRequestInterceptor(applicationId, applicationSecret))
-			.errorDecoder(new FeignPrivyErrorDecoder(mapper))
+			.errorDecoder(new FeignPrivyErrorDecoder(this.objectMapper))
 			.retryer(Retryer.NEVER_RETRY)
 			.target(FeignPrivyClient.class, apiUrl);
 	}
@@ -225,6 +252,10 @@ public class PrivyClientImpl implements PrivyClient {
 	@SneakyThrows
 	@Override
 	public PublicKey getVerificationKey() {
+		if (cacheVerificationKey && cachedVerificationKey != null) {
+			return cachedVerificationKey;
+		}
+
 		final var publicKeyString = getApplicationSettings()
 			.getVerificationKey()
 			.replace("-----BEGIN PUBLIC KEY-----", "")
@@ -235,7 +266,49 @@ public class PrivyClientImpl implements PrivyClient {
 
 		final var keySpec = new X509EncodedKeySpec(publicKeyBytes);
 		final var keyFactory = KeyFactory.getInstance("EC");
-		return keyFactory.generatePublic(keySpec);
+		final var publicKey = keyFactory.generatePublic(keySpec);
+
+		if (cacheVerificationKey) {
+			cachedVerificationKey = publicKey;
+		}
+
+		return publicKey;
+	}
+
+	@Override
+	public User getUserFromIdToken(String idToken) {
+		final var jwt = jwtParser.parseSignedClaims(idToken);
+		final var payload = jwt.getPayload();
+
+		final var linkedAccountsJson = payload.get("linked_accounts");
+		if (!(linkedAccountsJson instanceof String linkedAccountsString)) {
+			throw new PrivyJwtException.Malformed("linked_accounts is not a string");
+		}
+
+		final List<LinkedAccount> linkedAccounts;
+		try {
+			linkedAccounts = objectMapper.readValue(linkedAccountsString, PrivyUtils.LINKED_ACCOUNT_LIST_TYPE_REFERENCE);
+		} catch (JsonProcessingException exception) {
+			throw new PrivyJwtException.Malformed("failed to parse linked accounts", exception);
+		}
+
+		CustomMetadata customMetadata = null;
+		if (payload.get("custom_metadata") instanceof String customMetadataString) {
+			try {
+				customMetadata = objectMapper.readValue(customMetadataString, CustomMetadata.class);
+			} catch (JsonProcessingException exception) {
+				throw new PrivyJwtException.Malformed("failed to parse linked accounts", exception);
+			}
+		}
+
+		final var user = new User();
+		user.setId(payload.getSubject());
+		user.setLinkedAccounts(linkedAccounts);
+		user.setGuest("t".equals(payload.get("guest")));
+		user.setCustomMetadata(customMetadata);
+		user.setCreatedAt(UnixDateDeserializer.fromTimestamp(Long.valueOf(payload.get("cr", String.class))));
+
+		return user;
 	}
 
 }
