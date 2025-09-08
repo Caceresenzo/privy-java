@@ -1,5 +1,9 @@
 package dev.caceresenzo.privy.client.impl;
 
+import java.security.KeyFactory;
+import java.security.PublicKey;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Optional;
@@ -22,6 +26,7 @@ import feign.Feign;
 import feign.Retryer;
 import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
+import lombok.SneakyThrows;
 
 public class PrivyClientImpl implements PrivyClient {
 
@@ -215,6 +220,22 @@ public class PrivyClientImpl implements PrivyClient {
 	@Override
 	public ApplicationSettings getApplicationSettings() {
 		return delegate.getApplicationSettings(applicationId);
+	}
+
+	@SneakyThrows
+	@Override
+	public PublicKey getVerificationKey() {
+		final var publicKeyString = getApplicationSettings()
+			.getVerificationKey()
+			.replace("-----BEGIN PUBLIC KEY-----", "")
+			.replace("-----END PUBLIC KEY-----", "")
+			.replaceAll("\\s", "");
+
+		final var publicKeyBytes = Base64.getDecoder().decode(publicKeyString);
+
+		final var keySpec = new X509EncodedKeySpec(publicKeyBytes);
+		final var keyFactory = KeyFactory.getInstance("EC");
+		return keyFactory.generatePublic(keySpec);
 	}
 
 }

@@ -1,5 +1,6 @@
 package dev.caceresenzo.privy.client;
 
+import java.security.PublicKey;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -119,6 +120,13 @@ public interface PrivyClient {
 	 * @return The {@link ApplicationSettings}.
 	 */
 	ApplicationSettings getApplicationSettings();
+
+	/**
+	 * Get the auth token verification key.
+	 *
+	 * @returns The verification key.
+	 */
+	PublicKey getVerificationKey();
 
 	/**
 	 * Create a new builder.
