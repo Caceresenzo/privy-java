@@ -35,15 +35,15 @@ This Java client connects with Privy.io, enabling simple user management and sec
 
 ```xml
 <properties>
-    <privy.version>0.7.0</privy.version>
+	<privy.version>0.7.0</privy.version>
 </properties>
 
 <dependencies>
-    <dependency>
-        <groupId>dev.caceresenzo.privy</groupId>
-        <artifactId>client</artifactId>
-        <version>${privy.version}</version>
-    </dependency>
+	<dependency>
+		<groupId>dev.caceresenzo.privy</groupId>
+		<artifactId>client</artifactId>
+		<version>${privy.version}</version>
+	</dependency>
 </dependencies>
 ```
 
@@ -343,11 +343,11 @@ There is a Spring Boot auto-configuration available.
 
 ```xml
 <dependencies>
-    <dependency>
-        <groupId>dev.caceresenzo.privy</groupId>
-        <artifactId>spring-boot-starter</artifactId>
-        <version>${privy.version}</version>
-    </dependency>
+	<dependency>
+		<groupId>dev.caceresenzo.privy</groupId>
+		<artifactId>spring-boot-starter</artifactId>
+		<version>${privy.version}</version>
+	</dependency>
 </dependencies>
 ```
 
