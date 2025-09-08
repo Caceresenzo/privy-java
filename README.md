@@ -20,6 +20,8 @@ This Java client connects with Privy.io, enabling simple user management and sec
 		- [Set Custom Metadata for a User](#set-custom-metadata-for-a-user)
 		- [Delete a User by an ID](#delete-a-user-by-an-id)
 		- [Linked Accounts](#linked-accounts)
+		- [Get the Verification Key](#get-the-verification-key)
+		- [Get a User from an ID Token](#get-a-user-from-an-id-token)
 	- [Advanced Configuration](#advanced-configuration)
 - [Webhook](#webhook)
 	- [Configuration](#configuration-1)
@@ -226,6 +228,24 @@ switch (account) {
 ```
 </details>
 
+### Get the Verification Key
+
+```java
+import java.security.PublicKey;
+
+PublicKey verificationKey = client.getVerificationKey();
+```
+
+> [!NOTE]
+> The verification key is cached by default. <br />
+> This behaviour can be disabled via the `.cacheVerificationKey(false)` method when building the client.
+
+### Get a User from an ID Token
+
+```java
+String idToken = request.getCookie("privy-id-token");
+User user = client.getUserFromIdToken(idToken);
+```
 
 ## Advanced Configuration
 
