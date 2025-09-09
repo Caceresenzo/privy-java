@@ -24,6 +24,7 @@ import lombok.ToString;
 	@JsonSubTypes.Type(value = LinkedAccount.Twitter.class, name = "twitter_oauth"),
 	@JsonSubTypes.Type(value = LinkedAccount.Discord.class, name = "discord_oauth"),
 	@JsonSubTypes.Type(value = LinkedAccount.Github.class, name = "github_oauth"),
+	@JsonSubTypes.Type(value = LinkedAccount.Passkey.class, name = "passkey"),
 })
 @Data
 public abstract sealed class LinkedAccount {
@@ -217,6 +218,17 @@ public abstract sealed class LinkedAccount {
 		/** The name associated with the Github account. */
 		@JsonProperty("name")
 		private String name;
+
+	}
+
+	/** Object representation of a user's Passkey. */
+	@Data
+	@ToString(callSuper = false)
+	@EqualsAndHashCode(callSuper = true)
+	public static final class Passkey extends LinkedAccount {
+
+		@JsonProperty("credential_id")
+		private String credentialId;
 
 	}
 

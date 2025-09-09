@@ -65,6 +65,11 @@ public class User {
 		return getAccount(LinkedAccount.Github.class);
 	}
 
+	@JsonIgnore
+	public Optional<LinkedAccount.Passkey> getPasskey() {
+		return getAccount(LinkedAccount.Passkey.class);
+	}
+
 	@SuppressWarnings("unchecked")
 	public <T extends LinkedAccount> Optional<T> getAccount(Class<T> clazz) {
 		for (final var account : getLinkedAccounts()) {

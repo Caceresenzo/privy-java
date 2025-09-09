@@ -217,6 +217,28 @@ class LinkedAccountTest {
 	}
 
 	@Test
+	void passkey() {
+		final var linkedAccount = read("""
+			{
+				"type": "passkey",
+				"credential_id": "aabbccddeeff",
+				"verified_at": 1725376993,
+				"first_verified_at": 1725376993,
+				"latest_verified_at": 1725376993
+			}
+			""");
+
+		final var passkey = assertInstanceOf(LinkedAccount.Passkey.class, linkedAccount);
+
+		assertEquals("aabbccddeeff", passkey.getCredentialId());
+
+		final var date = new Date(1725376993l * 1000);
+		assertEquals(date, passkey.getVerifiedAt());
+		assertEquals(date, passkey.getFirstVerifiedAt());
+		assertEquals(date, passkey.getLatestVerifiedAt());
+	}
+
+	@Test
 	void other() {
 		final var linkedAccount = read("""
 			{
