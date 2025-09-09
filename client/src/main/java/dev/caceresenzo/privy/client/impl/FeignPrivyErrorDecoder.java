@@ -34,6 +34,7 @@ public class FeignPrivyErrorDecoder extends ErrorDecoder.Default {
 			this.mappers.add(ErrorMapper.equals("User not found with provided phone number.", PrivyClientException.UserNotFound::new));
 			this.mappers.add(ErrorMapper.equals("User not found with provided Twitter username.", PrivyClientException.UserNotFound::new));
 			this.mappers.add(ErrorMapper.equals("User not found with provided Twitter subject.", PrivyClientException.UserNotFound::new));
+			this.mappers.add(ErrorMapper.equals("User not found with provided custom auth ID.", PrivyClientException.UserNotFound::new));
 			this.mappers.add(ErrorMapper.equals("Discord user not found for provided username.", PrivyClientException.UserNotFound::new));
 			this.mappers.add(ErrorMapper.equals("Github user not found for provided username.", PrivyClientException.UserNotFound::new));
 

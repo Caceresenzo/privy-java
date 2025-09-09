@@ -60,6 +60,10 @@ public interface FeignPrivyClient {
 	@Headers(JSON_CONTENT_TYPE)
 	User getUserByGithubUsername(UsernameRequest body);
 
+	@RequestLine("POST /api/v1/users/custom_auth/id")
+	@Headers(JSON_CONTENT_TYPE)
+	User getUserByCustomAuthId(CustomUserIdRequest body);
+
 	@RequestLine("POST /api/v1/users/{id}/custom_metadata")
 	@Headers(JSON_CONTENT_TYPE)
 	User setCustomMetadata(@Param String id, CustomMetadataUpdateRequest body);
@@ -80,6 +84,10 @@ public interface FeignPrivyClient {
 	static record UsernameRequest(String username) {}
 
 	static record SubjectRequest(String subject) {}
+
+	static record CustomUserIdRequest(
+		@JsonProperty("custom_user_id") String customUserId
+	) {}
 
 	static record CustomMetadataUpdateRequest(
 		@JsonProperty("custom_metadata") CustomMetadata metadata

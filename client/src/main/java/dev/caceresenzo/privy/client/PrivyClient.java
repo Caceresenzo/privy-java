@@ -100,6 +100,14 @@ public interface PrivyClient {
 	Optional<User> findUserByGithubUsername(String username);
 
 	/**
+	 * Gets a user object by their custom JWT auth ID, which is scoped to an individual app.
+	 *
+	 * @param customUserId The custom identifier of the user defined by their JWT.
+	 * @returns A {@link User user}, if it exists.
+	 */
+	Optional<User> findUserByCustomAuthId(String customUserId);
+
+	/**
 	 * Add customMetadata field to the user object.
 	 * 
 	 * @param userId DID of the user to set custom metadata for.

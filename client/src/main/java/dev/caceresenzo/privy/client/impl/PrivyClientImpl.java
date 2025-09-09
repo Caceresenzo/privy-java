@@ -19,6 +19,7 @@ import dev.caceresenzo.privy.client.PrivyClientException;
 import dev.caceresenzo.privy.client.PrivyJwtException;
 import dev.caceresenzo.privy.client.impl.FeignPrivyClient.AddressRequest;
 import dev.caceresenzo.privy.client.impl.FeignPrivyClient.CustomMetadataUpdateRequest;
+import dev.caceresenzo.privy.client.impl.FeignPrivyClient.CustomUserIdRequest;
 import dev.caceresenzo.privy.client.impl.FeignPrivyClient.PhoneRequest;
 import dev.caceresenzo.privy.client.impl.FeignPrivyClient.SubjectRequest;
 import dev.caceresenzo.privy.client.impl.FeignPrivyClient.UsernameRequest;
@@ -215,6 +216,19 @@ public class PrivyClientImpl implements PrivyClient {
 
 		try {
 			return Optional.of(delegate.getUserByGithubUsername(new UsernameRequest(username)));
+		} catch (PrivyClientException.UserNotFound __) {
+			return Optional.empty();
+		}
+	}
+
+	@Override
+	public Optional<User> findUserByCustomAuthId(String customUserId) {
+		if (customUserId == null) {
+			return Optional.empty();
+		}
+
+		try {
+			return Optional.of(delegate.getUserByCustomAuthId(new CustomUserIdRequest(customUserId)));
 		} catch (PrivyClientException.UserNotFound __) {
 			return Optional.empty();
 		}
