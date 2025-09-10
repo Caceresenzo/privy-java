@@ -22,6 +22,7 @@ This Java client connects with Privy.io, enabling simple user management and sec
 		- [Delete a User by an ID](#delete-a-user-by-an-id)
 		- [Linked Accounts](#linked-accounts)
 		- [Get the Verification Key](#get-the-verification-key)
+		- [Verity an Auth Token](#verity-an-auth-token)
 		- [Get a User from an ID Token](#get-a-user-from-an-id-token)
 	- [Advanced Configuration](#advanced-configuration)
 - [Webhook](#webhook)
@@ -247,12 +248,31 @@ PublicKey verificationKey = client.getVerificationKey();
 > The verification key is cached by default. <br />
 > This behaviour can be disabled via the `.cacheVerificationKey(false)` method when building the client.
 
+### Verity an Auth Token
+
+```java
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+
+String token = request.getCookie("privy-token");
+Jws<Claims> jwt = client.verifyAuthToken(token);
+
+Claims payload = jwt.getPayload();
+System.out.println("User ID: %s".formatted(payload.getSubject()));
+```
+
+> [!TIP]
+> We recommend keeping the verification key caching enabled (default behavior) if it is being used for authenticating requests.
+
 ### Get a User from an ID Token
 
 ```java
 String idToken = request.getCookie("privy-id-token");
 User user = client.getUserFromIdToken(idToken);
 ```
+
+> [!TIP]
+> We recommend keeping the verification key caching enabled (default behavior) if it is being used for authenticating requests.
 
 ## Advanced Configuration
 
