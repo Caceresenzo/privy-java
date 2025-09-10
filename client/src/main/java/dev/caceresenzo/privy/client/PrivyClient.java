@@ -128,7 +128,8 @@ public interface PrivyClient {
 	boolean deleteUserById(String id);
 
 	/**
-	 * Get the application settings associated with the given application.
+	 * Get the application settings associated with the given application. <br />
+	 * If the verification key caching is enabled, this will also refresh the cached verification key.
 	 *
 	 * @return The {@link ApplicationSettings}.
 	 */

@@ -264,7 +264,13 @@ public class PrivyClientImpl implements PrivyClient {
 
 	@Override
 	public ApplicationSettings getApplicationSettings() {
-		return delegate.getApplicationSettings(applicationId);
+		final var applicationSettings = delegate.getApplicationSettings(applicationId);
+
+		if (cacheVerificationKey) {
+			cachedVerificationKey = parsePublicKey(applicationSettings);
+		}
+
+		return applicationSettings;
 	}
 
 	@SneakyThrows
@@ -274,8 +280,19 @@ public class PrivyClientImpl implements PrivyClient {
 			return cachedVerificationKey;
 		}
 
-		final var publicKeyString = getApplicationSettings()
-			.getVerificationKey()
+		final var applicationSettings = delegate.getApplicationSettings(applicationId);
+		final var publicKey = parsePublicKey(applicationSettings);
+
+		if (cacheVerificationKey) {
+			cachedVerificationKey = publicKey;
+		}
+
+		return publicKey;
+	}
+
+	@SneakyThrows
+	private PublicKey parsePublicKey(ApplicationSettings applicationSettings) {
+		final var publicKeyString = applicationSettings.getVerificationKey()
 			.replace("-----BEGIN PUBLIC KEY-----", "")
 			.replace("-----END PUBLIC KEY-----", "")
 			.replaceAll("\\s", "");
@@ -284,13 +301,8 @@ public class PrivyClientImpl implements PrivyClient {
 
 		final var keySpec = new X509EncodedKeySpec(publicKeyBytes);
 		final var keyFactory = KeyFactory.getInstance("EC");
-		final var publicKey = keyFactory.generatePublic(keySpec);
 
-		if (cacheVerificationKey) {
-			cachedVerificationKey = publicKey;
-		}
-
-		return publicKey;
+		return keyFactory.generatePublic(keySpec);
 	}
 
 	@Override
