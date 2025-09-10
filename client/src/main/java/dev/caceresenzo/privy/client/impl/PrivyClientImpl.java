@@ -121,7 +121,7 @@ public class PrivyClientImpl implements PrivyClient {
 
 	@Override
 	public Optional<User> findUserById(String id) {
-		if (id == null) {
+		if (PrivyUtils.isBlank(id)) {
 			return Optional.empty();
 		}
 
@@ -134,7 +134,7 @@ public class PrivyClientImpl implements PrivyClient {
 
 	@Override
 	public Optional<User> findUserByEmail(String address) {
-		if (address == null) {
+		if (PrivyUtils.isBlank(address)) {
 			return Optional.empty();
 		}
 
@@ -147,7 +147,7 @@ public class PrivyClientImpl implements PrivyClient {
 
 	@Override
 	public Optional<User> findUserByWallet(String address) {
-		if (address == null) {
+		if (PrivyUtils.isBlank(address)) {
 			return Optional.empty();
 		}
 
@@ -160,7 +160,7 @@ public class PrivyClientImpl implements PrivyClient {
 
 	@Override
 	public Optional<User> findUserByPhone(String number) {
-		if (number == null) {
+		if (PrivyUtils.isBlank(number)) {
 			return Optional.empty();
 		}
 
@@ -173,7 +173,7 @@ public class PrivyClientImpl implements PrivyClient {
 
 	@Override
 	public Optional<User> findUserByTwitterUsername(String username) {
-		if (username == null) {
+		if (PrivyUtils.isBlank(username)) {
 			return Optional.empty();
 		}
 
@@ -186,7 +186,7 @@ public class PrivyClientImpl implements PrivyClient {
 
 	@Override
 	public Optional<User> findUserByTwitterSubject(String subject) {
-		if (subject == null) {
+		if (PrivyUtils.isBlank(subject)) {
 			return Optional.empty();
 		}
 
@@ -199,7 +199,7 @@ public class PrivyClientImpl implements PrivyClient {
 
 	@Override
 	public Optional<User> findUserByDiscordUsername(String username) {
-		if (username == null) {
+		if (PrivyUtils.isBlank(username)) {
 			return Optional.empty();
 		}
 
@@ -212,7 +212,7 @@ public class PrivyClientImpl implements PrivyClient {
 
 	@Override
 	public Optional<User> findUserByGithubUsername(String username) {
-		if (username == null) {
+		if (PrivyUtils.isBlank(username)) {
 			return Optional.empty();
 		}
 
@@ -225,7 +225,7 @@ public class PrivyClientImpl implements PrivyClient {
 
 	@Override
 	public Optional<User> findUserByCustomAuthId(String customUserId) {
-		if (customUserId == null) {
+		if (PrivyUtils.isBlank(customUserId)) {
 			return Optional.empty();
 		}
 
@@ -247,7 +247,7 @@ public class PrivyClientImpl implements PrivyClient {
 
 	@Override
 	public boolean deleteUserById(String id) {
-		if (id == null) {
+		if (PrivyUtils.isBlank(id)) {
 			return false;
 		}
 
