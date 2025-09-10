@@ -40,8 +40,10 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.JwtParserBuilder;
 import io.jsonwebtoken.Jwts;
+import lombok.Getter;
 import lombok.SneakyThrows;
 
+@Getter
 public class PrivyClientImpl implements PrivyClient {
 
 	private static final CustomMetadata EMPTY_METADATA = CustomMetadata.fromValues(Collections.emptyMap());

@@ -18,5 +18,6 @@ public class PrivyProperties {
 	private String applicationSecret;
 	private String webhookSigningKey;
 	private Long maxPageSize;
+	private Boolean cacheVerificationKey;
 
 }
