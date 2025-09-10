@@ -10,6 +10,8 @@ import dev.caceresenzo.privy.client.impl.PrivyClientImpl;
 import dev.caceresenzo.privy.model.ApplicationSettings;
 import dev.caceresenzo.privy.model.CustomMetadata;
 import dev.caceresenzo.privy.model.User;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.JwtParserBuilder;
 import lombok.Data;
@@ -140,6 +142,14 @@ public interface PrivyClient {
 	PublicKey getVerificationKey();
 
 	/**
+	 * Verify the auth token format, signature, and claims.
+	 *
+	 * @param token The auth token (JWT).
+	 * @return Parsed JWT containing auth token claims.
+	 */
+	Jws<Claims> verifyAuthToken(String token);
+
+	/**
 	 * Gets a user from the identity token. First, this verifies the token is valid and then parses the payload into a {@link User} object. <br />
 	 * Note the user object may be incomplete due to identity token size constraints. <br />
 	
@@ -165,6 +175,7 @@ public interface PrivyClient {
 
 		public static final String DEFAULT_API_URL = "https://auth.privy.io";
 		public static final long DEFAULT_MAX_PAGE_SIZE = 100;
+		public static final boolean DEFAULT_CACHE_VERIFICATION_KEY = true;
 
 		/** The URL of the Privy API. Defaults to `https://auth.privy.io`. */
 		private String apiUrl = DEFAULT_API_URL;
@@ -179,7 +190,7 @@ public interface PrivyClient {
 		private long maxPageSize = DEFAULT_MAX_PAGE_SIZE;
 
 		/** Cache the verification key on first fetch on the client instance. */
-		private boolean cacheVerificationKey = true;
+		private boolean cacheVerificationKey = DEFAULT_CACHE_VERIFICATION_KEY;
 
 		/** Customize the {@link JwtParser JWT Parser} by customizing the {@link JwtParserBuilder builder}. */
 		private UnaryOperator<JwtParserBuilder> jwtParserCustomizer = UnaryOperator.identity();

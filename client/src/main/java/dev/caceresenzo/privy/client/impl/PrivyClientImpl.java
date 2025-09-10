@@ -35,6 +35,8 @@ import feign.Feign;
 import feign.Retryer;
 import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.JwtParserBuilder;
 import io.jsonwebtoken.Jwts;
@@ -290,8 +292,13 @@ public class PrivyClientImpl implements PrivyClient {
 	}
 
 	@Override
+	public Jws<Claims> verifyAuthToken(String token) {
+		return jwtParser.parseSignedClaims(token);
+	}
+
+	@Override
 	public User getUserFromIdToken(String idToken) {
-		final var jwt = jwtParser.parseSignedClaims(idToken);
+		final var jwt = verifyAuthToken(idToken);
 		final var payload = jwt.getPayload();
 
 		final var linkedAccountsJson = payload.get("linked_accounts");
