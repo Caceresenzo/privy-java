@@ -4,23 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import dev.caceresenzo.privy.util.PrivyUtils;
+import dev.caceresenzo.privy.util.PrivyMapper;
 import lombok.SneakyThrows;
 
 class EventTest {
-
-	static ObjectMapper mapper;
-
-	@BeforeAll
-	static void setUp() {
-		mapper = PrivyUtils.createMapper();
-	}
 
 	@Test
 	void test() {
@@ -384,12 +373,7 @@ class EventTest {
 
 	@SneakyThrows
 	private Event read(String json) {
-		return mapper.readValue(json, Event.class);
-	}
-
-	@AfterAll
-	static void tearDown() {
-		mapper = null;
+		return PrivyMapper.INSTANCE.readValue(json, Event.class);
 	}
 
 }

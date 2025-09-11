@@ -1,26 +1,23 @@
 package dev.caceresenzo.privy.util;
 
 import java.util.Date;
-import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
-import dev.caceresenzo.privy.model.LinkedAccount;
 import dev.caceresenzo.privy.util.serial.UnixDateDeserializer;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class PrivyUtils {
+public class PrivyMapper {
 
-	public static final TypeReference<List<LinkedAccount>> LINKED_ACCOUNT_LIST_TYPE_REFERENCE = new TypeReference<>() {};
+	public static final ObjectMapper INSTANCE = newJackson();
 
-	public static ObjectMapper createMapper() {
+	private static ObjectMapper newJackson() {
 		final var module = new SimpleModule();
 		module.addDeserializer(Date.class, new UnixDateDeserializer());
 
@@ -32,10 +29,6 @@ public class PrivyUtils {
 			.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 			.addModule(module)
 			.build();
-	}
-
-	public static boolean isBlank(String value) {
-		return value == null || value.isBlank();
 	}
 
 }

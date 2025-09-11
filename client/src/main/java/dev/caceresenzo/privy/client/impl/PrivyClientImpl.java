@@ -12,7 +12,7 @@ import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 import dev.caceresenzo.privy.client.PrivyClient;
 import dev.caceresenzo.privy.client.PrivyClientException;
@@ -28,7 +28,7 @@ import dev.caceresenzo.privy.model.ApplicationSettings;
 import dev.caceresenzo.privy.model.CustomMetadata;
 import dev.caceresenzo.privy.model.LinkedAccount;
 import dev.caceresenzo.privy.model.User;
-import dev.caceresenzo.privy.util.PrivyUtils;
+import dev.caceresenzo.privy.util.PrivyMapper;
 import dev.caceresenzo.privy.util.serial.UnixDateDeserializer;
 import feign.Feign;
 import feign.Retryer;
@@ -47,13 +47,13 @@ import lombok.SneakyThrows;
 public class PrivyClientImpl implements PrivyClient {
 
 	private static final CustomMetadata EMPTY_METADATA = CustomMetadata.fromValues(Collections.emptyMap());
+	private static final TypeReference<List<LinkedAccount>> LINKED_ACCOUNT_LIST_TYPE_REFERENCE = new TypeReference<>() {};
 
 	private final String applicationId;
 	private final long maxPageSize;
 	private final boolean cacheVerificationKey;
 	private final JwtParser jwtParser;
 
-	private final ObjectMapper objectMapper;
 	private final FeignPrivyClient delegate;
 
 	private PublicKey cachedVerificationKey = null;
@@ -85,12 +85,11 @@ public class PrivyClientImpl implements PrivyClient {
 			.requireIssuer("privy.io")
 			.build();
 
-		this.objectMapper = PrivyUtils.createMapper();
 		this.delegate = Feign.builder()
-			.encoder(new JacksonEncoder(this.objectMapper))
-			.decoder(new JacksonDecoder(this.objectMapper))
+			.encoder(new JacksonEncoder(PrivyMapper.INSTANCE))
+			.decoder(new JacksonDecoder(PrivyMapper.INSTANCE))
 			.requestInterceptor(new AuthRequestInterceptor(applicationId, applicationSecret))
-			.errorDecoder(new FeignPrivyErrorDecoder(this.objectMapper))
+			.errorDecoder(new FeignPrivyErrorDecoder(PrivyMapper.INSTANCE))
 			.retryer(Retryer.NEVER_RETRY)
 			.target(FeignPrivyClient.class, apiUrl);
 	}
@@ -123,7 +122,7 @@ public class PrivyClientImpl implements PrivyClient {
 
 	@Override
 	public Optional<User> findUserById(String id) {
-		if (PrivyUtils.isBlank(id)) {
+		if (isBlank(id)) {
 			return Optional.empty();
 		}
 
@@ -136,7 +135,7 @@ public class PrivyClientImpl implements PrivyClient {
 
 	@Override
 	public Optional<User> findUserByEmail(String address) {
-		if (PrivyUtils.isBlank(address)) {
+		if (isBlank(address)) {
 			return Optional.empty();
 		}
 
@@ -149,7 +148,7 @@ public class PrivyClientImpl implements PrivyClient {
 
 	@Override
 	public Optional<User> findUserByWallet(String address) {
-		if (PrivyUtils.isBlank(address)) {
+		if (isBlank(address)) {
 			return Optional.empty();
 		}
 
@@ -162,7 +161,7 @@ public class PrivyClientImpl implements PrivyClient {
 
 	@Override
 	public Optional<User> findUserByPhone(String number) {
-		if (PrivyUtils.isBlank(number)) {
+		if (isBlank(number)) {
 			return Optional.empty();
 		}
 
@@ -175,7 +174,7 @@ public class PrivyClientImpl implements PrivyClient {
 
 	@Override
 	public Optional<User> findUserByTwitterUsername(String username) {
-		if (PrivyUtils.isBlank(username)) {
+		if (isBlank(username)) {
 			return Optional.empty();
 		}
 
@@ -188,7 +187,7 @@ public class PrivyClientImpl implements PrivyClient {
 
 	@Override
 	public Optional<User> findUserByTwitterSubject(String subject) {
-		if (PrivyUtils.isBlank(subject)) {
+		if (isBlank(subject)) {
 			return Optional.empty();
 		}
 
@@ -201,7 +200,7 @@ public class PrivyClientImpl implements PrivyClient {
 
 	@Override
 	public Optional<User> findUserByDiscordUsername(String username) {
-		if (PrivyUtils.isBlank(username)) {
+		if (isBlank(username)) {
 			return Optional.empty();
 		}
 
@@ -214,7 +213,7 @@ public class PrivyClientImpl implements PrivyClient {
 
 	@Override
 	public Optional<User> findUserByGithubUsername(String username) {
-		if (PrivyUtils.isBlank(username)) {
+		if (isBlank(username)) {
 			return Optional.empty();
 		}
 
@@ -227,7 +226,7 @@ public class PrivyClientImpl implements PrivyClient {
 
 	@Override
 	public Optional<User> findUserByCustomAuthId(String customUserId) {
-		if (PrivyUtils.isBlank(customUserId)) {
+		if (isBlank(customUserId)) {
 			return Optional.empty();
 		}
 
@@ -249,7 +248,7 @@ public class PrivyClientImpl implements PrivyClient {
 
 	@Override
 	public boolean deleteUserById(String id) {
-		if (PrivyUtils.isBlank(id)) {
+		if (isBlank(id)) {
 			return false;
 		}
 
@@ -322,7 +321,7 @@ public class PrivyClientImpl implements PrivyClient {
 
 		final List<LinkedAccount> linkedAccounts;
 		try {
-			linkedAccounts = objectMapper.readValue(linkedAccountsString, PrivyUtils.LINKED_ACCOUNT_LIST_TYPE_REFERENCE);
+			linkedAccounts = PrivyMapper.INSTANCE.readValue(linkedAccountsString, LINKED_ACCOUNT_LIST_TYPE_REFERENCE);
 		} catch (JsonProcessingException exception) {
 			throw new MalformedJwtException("failed to parse linked accounts", exception);
 		}
@@ -330,7 +329,7 @@ public class PrivyClientImpl implements PrivyClient {
 		CustomMetadata customMetadata = null;
 		if (payload.get("custom_metadata") instanceof String customMetadataString) {
 			try {
-				customMetadata = objectMapper.readValue(customMetadataString, CustomMetadata.class);
+				customMetadata = PrivyMapper.INSTANCE.readValue(customMetadataString, CustomMetadata.class);
 			} catch (JsonProcessingException exception) {
 				throw new MalformedJwtException("failed to parse linked accounts", exception);
 			}
@@ -344,6 +343,10 @@ public class PrivyClientImpl implements PrivyClient {
 		user.setCreatedAt(UnixDateDeserializer.fromTimestamp(Long.valueOf(payload.get("cr", String.class))));
 
 		return user;
+	}
+
+	public static boolean isBlank(String value) {
+		return value == null || value.isBlank();
 	}
 
 }

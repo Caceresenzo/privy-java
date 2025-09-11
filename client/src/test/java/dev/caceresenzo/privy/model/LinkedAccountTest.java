@@ -8,24 +8,13 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import java.util.Date;
 import java.util.Map;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import dev.caceresenzo.privy.util.PrivyUtils;
+import dev.caceresenzo.privy.util.PrivyMapper;
 import lombok.SneakyThrows;
 
 @SuppressWarnings("deprecation")
 class LinkedAccountTest {
-
-	static ObjectMapper mapper;
-
-	@BeforeAll
-	static void setUp() {
-		mapper = PrivyUtils.createMapper();
-	}
 
 	@Test
 	void wallet() {
@@ -262,12 +251,7 @@ class LinkedAccountTest {
 
 	@SneakyThrows
 	private LinkedAccount read(String json) {
-		return mapper.readValue(json, LinkedAccount.class);
-	}
-
-	@AfterAll
-	static void tearDown() {
-		mapper = null;
+		return PrivyMapper.INSTANCE.readValue(json, LinkedAccount.class);
 	}
 
 }
