@@ -12,6 +12,7 @@ import dev.caceresenzo.privy.model.CustomMetadata;
 import dev.caceresenzo.privy.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.JwtParserBuilder;
 import lombok.Data;
@@ -139,6 +140,7 @@ public interface PrivyClient {
 	 * Get the auth token verification key.
 	 *
 	 * @return The verification key.
+	 * @see #getApplicationSettings()
 	 */
 	PublicKey getVerificationKey();
 
@@ -147,6 +149,8 @@ public interface PrivyClient {
 	 *
 	 * @param token The auth token (JWT).
 	 * @return Parsed JWT containing auth token claims.
+	 * @throws JwtException If the token is malformed, invalid, or expired.
+	 * @see #getVerificationKey()
 	 */
 	Jws<Claims> verifyAuthToken(String token);
 
@@ -156,8 +160,9 @@ public interface PrivyClient {
 	
 	 * @param idToken The identity token set as a cookie on the users browser.
 	 * @return {@link User User} object with parsed from the ID token.
-	 * @implNote A cached verification key may be returned.
-	 * @throws PrivyJwtException If the ID token is malformed, invalid or expired.
+	 * @implNote A cached verification key may be used.
+	 * @throws JwtException If the id token is malformed, invalid, or expired.
+	 * @see #verifyAuthToken()
 	 */
 	User getUserFromIdToken(String idToken);
 

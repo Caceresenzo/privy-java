@@ -16,7 +16,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import dev.caceresenzo.privy.client.PrivyClient;
 import dev.caceresenzo.privy.client.PrivyClientException;
-import dev.caceresenzo.privy.client.PrivyJwtException;
 import dev.caceresenzo.privy.client.impl.FeignPrivyClient.AddressRequest;
 import dev.caceresenzo.privy.client.impl.FeignPrivyClient.CustomMetadataUpdateRequest;
 import dev.caceresenzo.privy.client.impl.FeignPrivyClient.CustomUserIdRequest;
@@ -40,6 +39,7 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.JwtParserBuilder;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import lombok.Getter;
 import lombok.SneakyThrows;
 
@@ -317,14 +317,14 @@ public class PrivyClientImpl implements PrivyClient {
 
 		final var linkedAccountsJson = payload.get("linked_accounts");
 		if (!(linkedAccountsJson instanceof String linkedAccountsString)) {
-			throw new PrivyJwtException.Malformed("linked_accounts is not a string");
+			throw new MalformedJwtException("linked_accounts is not a string");
 		}
 
 		final List<LinkedAccount> linkedAccounts;
 		try {
 			linkedAccounts = objectMapper.readValue(linkedAccountsString, PrivyUtils.LINKED_ACCOUNT_LIST_TYPE_REFERENCE);
 		} catch (JsonProcessingException exception) {
-			throw new PrivyJwtException.Malformed("failed to parse linked accounts", exception);
+			throw new MalformedJwtException("failed to parse linked accounts", exception);
 		}
 
 		CustomMetadata customMetadata = null;
@@ -332,7 +332,7 @@ public class PrivyClientImpl implements PrivyClient {
 			try {
 				customMetadata = objectMapper.readValue(customMetadataString, CustomMetadata.class);
 			} catch (JsonProcessingException exception) {
-				throw new PrivyJwtException.Malformed("failed to parse linked accounts", exception);
+				throw new MalformedJwtException("failed to parse linked accounts", exception);
 			}
 		}
 
