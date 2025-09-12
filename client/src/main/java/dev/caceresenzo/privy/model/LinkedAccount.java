@@ -24,6 +24,7 @@ import lombok.ToString;
 	@JsonSubTypes.Type(value = LinkedAccount.Twitter.class, name = "twitter_oauth"),
 	@JsonSubTypes.Type(value = LinkedAccount.Discord.class, name = "discord_oauth"),
 	@JsonSubTypes.Type(value = LinkedAccount.Github.class, name = "github_oauth"),
+	@JsonSubTypes.Type(value = LinkedAccount.LinkedIn.class, name = "linkedin_oauth"),
 	@JsonSubTypes.Type(value = LinkedAccount.Passkey.class, name = "passkey"),
 })
 @Data
@@ -218,6 +219,30 @@ public abstract sealed class LinkedAccount {
 		/** The name associated with the Github account. */
 		@JsonProperty("name")
 		private String name;
+
+	}
+
+	/** Object representation of a user's LinkedIn account. */
+	@Data
+	@ToString(callSuper = false)
+	@EqualsAndHashCode(callSuper = true)
+	public static final class LinkedIn extends LinkedAccount {
+
+		/** The `sub` claim from the LinkedIn-issued JWT for this account. */
+		@JsonProperty("subject")
+		private String subject;
+
+		/** The email associated with the LinkedIn account. */
+		@JsonProperty("email")
+		private String email;
+
+		/** The name associated with the LinkedIn account. */
+		@JsonProperty("name")
+		private String name;
+
+		/** The vanity name associated with the LinkedIn account. */
+		@JsonProperty("vanityName")
+		private String vanityName;
 
 	}
 

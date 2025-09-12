@@ -206,6 +206,32 @@ class LinkedAccountTest {
 	}
 
 	@Test
+	void linkedIn() {
+		final var linkedAccount = read("""
+			{
+				"type": "linkedin_oauth",
+				"subject": "1234567",
+				"email": "johndoe@example.com",
+				"name": "John Doe",
+				"verified_at": 1725376993,
+				"first_verified_at": 1725376993,
+				"latest_verified_at": 1725376993
+			}
+			""");
+
+		final var linkedIn = assertInstanceOf(LinkedAccount.LinkedIn.class, linkedAccount);
+
+		assertEquals("1234567", linkedIn.getSubject());
+		assertEquals("johndoe@example.com", linkedIn.getEmail());
+		assertEquals("John Doe", linkedIn.getName());
+
+		final var date = new Date(1725376993l * 1000);
+		assertEquals(date, linkedIn.getVerifiedAt());
+		assertEquals(date, linkedIn.getFirstVerifiedAt());
+		assertEquals(date, linkedIn.getLatestVerifiedAt());
+	}
+
+	@Test
 	void passkey() {
 		final var linkedAccount = read("""
 			{
