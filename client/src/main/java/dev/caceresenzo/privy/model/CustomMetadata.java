@@ -186,7 +186,7 @@ public class CustomMetadata {
 	 * @return A new {@link CustomMetadata} instance containing the filtered storage.
 	 */
 	public static CustomMetadata fromMap(Map<String, ?> values) {
-		final var filteredValues = HashMap.<String, Object>newHashMap(values.size());
+		final var filteredValues = new HashMap<String, Object>(values.size());
 
 		for (final var entry : values.entrySet()) {
 			final var value = entry.getValue();
