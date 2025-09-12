@@ -66,15 +66,23 @@ public class User {
 	}
 
 	@JsonIgnore
+	public Optional<LinkedAccount.LinkedIn> getLinkedIn() {
+		return getAccount(LinkedAccount.LinkedIn.class);
+	}
+
+	@JsonIgnore
 	public Optional<LinkedAccount.Passkey> getPasskey() {
 		return getAccount(LinkedAccount.Passkey.class);
 	}
 
 	@SuppressWarnings("unchecked")
 	public <T extends LinkedAccount> Optional<T> getAccount(Class<T> clazz) {
-		for (final var account : getLinkedAccounts()) {
+		if (clazz == null) {
+			return Optional.empty();
+		}
 
-			if (account.getClass().isAssignableFrom(clazz)) {
+		for (final var account : getLinkedAccounts()) {
+			if (clazz.equals(account.getClass())) {
 				return Optional.of((T) account);
 			}
 		}
