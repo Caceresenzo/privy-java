@@ -65,9 +65,7 @@ public class CustomMetadata {
 	 * @return The value or empty if not found or type mismatch.
 	 */
 	public Optional<Long> getNumber(String key) {
-		final var rawValue = storage.get(key);
-
-		if (rawValue instanceof Number value) {
+		if (storage.get(key) instanceof Number value) {
 			return Optional.of(value.longValue());
 		}
 
@@ -94,9 +92,7 @@ public class CustomMetadata {
 	 * @return The value or empty if not found or type mismatch.
 	 */
 	public Optional<Double> getDecimal(String key) {
-		final var rawValue = storage.get(key);
-
-		if (rawValue instanceof Number value) {
+		if (storage.get(key) instanceof Number value) {
 			return Optional.of(value.doubleValue());
 		}
 
@@ -123,9 +119,7 @@ public class CustomMetadata {
 	 * @return The value or empty if not found or type mismatch.
 	 */
 	public Optional<Boolean> getBoolean(String key) {
-		final var rawValue = storage.get(key);
-
-		if (rawValue instanceof Boolean value) {
+		if (storage.get(key) instanceof Boolean value) {
 			return Optional.of(value);
 		}
 
