@@ -20,7 +20,7 @@ public class CustomMetadataSerializer extends StdSerializer<CustomMetadata> {
 		if (value == null) {
 			generator.writeNull();
 		} else {
-			generator.writeObject(value.toValues());
+			generator.writeObject(value.toMap());
 		}
 	}
 

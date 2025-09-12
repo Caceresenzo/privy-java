@@ -14,7 +14,7 @@ import dev.caceresenzo.privy.model.CustomMetadata;
 @SuppressWarnings("serial")
 public class CustomMetadataDeserializer extends StdDeserializer<CustomMetadata> {
 
-	public static final TypeReference<Map<String, Object>> VALUES_MAP = new TypeReference<>() {};
+	public static final TypeReference<Map<String, Object>> STORAGE_MAP = new TypeReference<>() {};
 
 	public CustomMetadataDeserializer() {
 		super(CustomMetadata.class);
@@ -22,7 +22,7 @@ public class CustomMetadataDeserializer extends StdDeserializer<CustomMetadata> 
 
 	@Override
 	public CustomMetadata deserialize(JsonParser parser, DeserializationContext context) throws IOException, JacksonException {
-		return CustomMetadata.fromValues(parser.readValueAs(VALUES_MAP));
+		return CustomMetadata.fromMap(parser.readValueAs(STORAGE_MAP));
 	}
 
 }

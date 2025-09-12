@@ -15,14 +15,16 @@ import dev.caceresenzo.privy.client.impl.serial.CustomMetadataSerializer;
 @JsonDeserialize(using = CustomMetadataDeserializer.class)
 public class CustomMetadata {
 
-	private final Map<String, Object> values;
+	private static final CustomMetadata EMPTY = new CustomMetadata(Collections.emptyMap());
+
+	private final Map<String, Object> storage;
 
 	public CustomMetadata() {
 		this(new HashMap<>());
 	}
 
-	private CustomMetadata(Map<String, Object> values) {
-		this.values = values;
+	private CustomMetadata(Map<String, Object> storage) {
+		this.storage = storage;
 	}
 
 	/**
@@ -32,7 +34,7 @@ public class CustomMetadata {
 	 * @return The value or empty if not found or type mismatch.
 	 */
 	public Optional<String> getString(String key) {
-		if (values.get(key) instanceof String value) {
+		if (storage.get(key) instanceof String value) {
 			return Optional.of(value);
 		}
 
@@ -50,7 +52,7 @@ public class CustomMetadata {
 		if (value == null) {
 			remove(key);
 		} else {
-			values.put(key, value);
+			storage.put(key, value);
 		}
 
 		return this;
@@ -63,7 +65,7 @@ public class CustomMetadata {
 	 * @return The value or empty if not found or type mismatch.
 	 */
 	public Optional<Long> getNumber(String key) {
-		final var rawValue = values.get(key);
+		final var rawValue = storage.get(key);
 
 		if (rawValue instanceof Number value) {
 			return Optional.of(value.longValue());
@@ -80,7 +82,7 @@ public class CustomMetadata {
 	 * @return <code>this</code>
 	 */
 	public CustomMetadata putNumber(String key, long value) {
-		values.put(key, value);
+		storage.put(key, value);
 
 		return this;
 	}
@@ -92,7 +94,7 @@ public class CustomMetadata {
 	 * @return The value or empty if not found or type mismatch.
 	 */
 	public Optional<Double> getDecimal(String key) {
-		final var rawValue = values.get(key);
+		final var rawValue = storage.get(key);
 
 		if (rawValue instanceof Number value) {
 			return Optional.of(value.doubleValue());
@@ -109,7 +111,7 @@ public class CustomMetadata {
 	 * @return <code>this</code>
 	 */
 	public CustomMetadata putDecimal(String key, double value) {
-		values.put(key, value);
+		storage.put(key, value);
 
 		return this;
 	}
@@ -121,7 +123,7 @@ public class CustomMetadata {
 	 * @return The value or empty if not found or type mismatch.
 	 */
 	public Optional<Boolean> getBoolean(String key) {
-		final var rawValue = values.get(key);
+		final var rawValue = storage.get(key);
 
 		if (rawValue instanceof Boolean value) {
 			return Optional.of(value);
@@ -138,26 +140,67 @@ public class CustomMetadata {
 	 * @return <code>this</code>
 	 */
 	public CustomMetadata putBoolean(String key, boolean value) {
-		values.put(key, value);
+		storage.put(key, value);
 
 		return this;
 	}
 
+	/**
+	 * Remove a value from the metadata.
+	 *  
+	 * @param key The metadata's key to remove.
+	 * @return The value associated with the key, or <code>null</code> if not found.
+	 */
 	public Object remove(String key) {
-		return values.remove(key);
+		return storage.remove(key);
+	}
+
+	/**
+	 * Get the metadata's size.
+	 * 
+	 * @return The number of storage stored in this metadata.
+	 */
+	public int size() {
+		return storage.size();
 	}
 
 	@Override
 	public String toString() {
-		return "CustomMetadata(%s)".formatted(values);
+		return "CustomMetadata(%s)".formatted(storage);
 	}
 
-	public Map<String, Object> toValues() {
-		return Collections.unmodifiableMap(values);
+	/**
+	 * Get the storage of this metadata as a map.
+	 * 
+	 * @return A map containing the metadata's storage.
+	 */
+	public Map<String, Object> toMap() {
+		return new HashMap<>(storage);
 	}
 
-	public static CustomMetadata fromValues(Map<String, Object> values) {
-		return new CustomMetadata(new HashMap<>(values));
+	/**
+	 * Create a new {@link CustomMetadata} from the given storage. <br />
+	 * The storage are filtered to only include {@link String}, {@link Number}, and {@link Boolean} types.
+	 * 
+	 * @param storage The storage to create the metadata from.
+	 * @return A new {@link CustomMetadata} instance containing the filtered storage.
+	 */
+	public static CustomMetadata fromMap(Map<String, ?> values) {
+		final var filteredValues = HashMap.<String, Object>newHashMap(values.size());
+
+		for (final var entry : values.entrySet()) {
+			final var value = entry.getValue();
+
+			if (value instanceof String || value instanceof Number || value instanceof Boolean) {
+				filteredValues.put(entry.getKey(), value);
+			}
+		}
+
+		return new CustomMetadata(filteredValues);
+	}
+
+	public static CustomMetadata empty() {
+		return EMPTY;
 	}
 
 }

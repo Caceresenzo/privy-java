@@ -4,7 +4,6 @@ import java.security.KeyFactory;
 import java.security.PublicKey;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -46,7 +45,6 @@ import lombok.SneakyThrows;
 @Getter
 public class PrivyClientImpl implements PrivyClient {
 
-	private static final CustomMetadata EMPTY_METADATA = CustomMetadata.fromValues(Collections.emptyMap());
 	private static final TypeReference<List<LinkedAccount>> LINKED_ACCOUNT_LIST_TYPE_REFERENCE = new TypeReference<>() {};
 
 	private final String applicationId;
@@ -240,7 +238,7 @@ public class PrivyClientImpl implements PrivyClient {
 	@Override
 	public User setCustomMetadata(String userId, CustomMetadata metadata) {
 		if (metadata == null) {
-			metadata = EMPTY_METADATA;
+			metadata = CustomMetadata.empty();
 		}
 
 		return delegate.setCustomMetadata(userId, new CustomMetadataUpdateRequest(metadata));
