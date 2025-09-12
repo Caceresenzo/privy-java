@@ -228,6 +228,16 @@ switch (account) {
 		System.out.println(" with name: %s".formatted(github.getName()));
 	}
 
+	case LinkedAccount.LinkedIn linkedIn -> {
+		System.out.println("LinkedIn %s".formatted(linkedIn.getSubject()));
+		System.out.println(" with name: %s".formatted(linkedIn.getName()));
+	}
+
+	case LinkedAccount.Passkey passkey -> {
+		System.out.println("Passkey");
+		System.out.println(" with credentials id: %s".formatted(passkey.getCredentialId()));
+	}
+
 	case LinkedAccount.Other other -> {
 		System.out.println("Unknown %s".formatted(other.getType()));
 		System.out.println(" with properties: %s".formatted(other.getProperties()));
