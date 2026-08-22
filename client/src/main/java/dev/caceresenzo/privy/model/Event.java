@@ -1,5 +1,6 @@
 package dev.caceresenzo.privy.model;
 
+import java.util.Date;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
@@ -13,6 +14,7 @@ import lombok.Data;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type", visible = true, defaultImpl = Event.Other.class)
 @JsonSubTypes({
 	@JsonSubTypes.Type(value = Event.Test.class, name = "privy.test"),
+
 	@JsonSubTypes.Type(value = Event.UserCreated.class, name = "user.created"),
 	@JsonSubTypes.Type(value = Event.UserAuthenticated.class, name = "user.authenticated"),
 	@JsonSubTypes.Type(value = Event.UserLinkedAccount.class, name = "user.linked_account"),
@@ -22,7 +24,13 @@ import lombok.Data;
 	@JsonSubTypes.Type(value = Event.UserWalletCreated.class, name = "user.wallet_created"),
 	@JsonSubTypes.Type(value = Event.MultiFactorAuthenticationEnabled.class, name = "mfa.enabled"),
 	@JsonSubTypes.Type(value = Event.MultiFactorAuthenticationDisabled.class, name = "mfa.disabled"),
+
+	@JsonSubTypes.Type(value = Event.WalletArchived.class, name = "wallet.archived"),
+	@JsonSubTypes.Type(value = Event.WalletRestored.class, name = "wallet.restored"),
+	@JsonSubTypes.Type(value = Event.FundsDeposited.class, name = "wallet.funds_deposited"),
+	@JsonSubTypes.Type(value = Event.FundsWithdrawn.class, name = "wallet.funds_withdrawn"),
 	@JsonSubTypes.Type(value = Event.PrivateKeyExported.class, name = "wallet.private_key_export"),
+	// @JsonSubTypes.Type(value = Event.SeedPhraseExported.class, name = "wallet.seed_phrase_export"),
 	@JsonSubTypes.Type(value = Event.WalletRecoverySetup.class, name = "wallet.recovery_setup"),
 	@JsonSubTypes.Type(value = Event.WalletRecovered.class, name = "wallet.recovered"),
 })
@@ -160,6 +168,149 @@ public sealed interface Event {
 
 	}
 
+	/** A wallet was archived via the API. */
+	@Data
+	public static final class WalletArchived implements Event {
+
+		@JsonProperty("wallet_id")
+		private String walletId;
+
+		@JsonProperty("wallet_address")
+		private String walletAddress;
+
+		@JsonProperty("chain_type")
+		private String chainType;
+
+		@JsonProperty("archived_at")
+		private Date archivedAt;
+
+	}
+
+	/** A wallet was restored from archive. */
+	@Data
+	public static final class WalletRestored implements Event {
+
+		@JsonProperty("wallet_id")
+		private String walletId;
+
+		@JsonProperty("wallet_address")
+		private String walletAddress;
+
+		@JsonProperty("chain_type")
+		private String chainType;
+
+	}
+
+	/** Funds were deposited into a user's embedded wallet. */
+	@Data
+	public static final class FundsDeposited implements Event {
+
+		@JsonProperty("wallet_id")
+		private String walletId;
+
+		@JsonProperty("idempotency_key")
+		private String idempotencyKey;
+
+		@JsonProperty("caip2")
+		private String caip2;
+
+		@JsonProperty("asset")
+		private Asset asset;
+
+		@JsonProperty("amount")
+		private String amount;
+
+		@JsonProperty("transaction_hash")
+		private String transactionHash;
+
+		@JsonProperty("sender")
+		private String sender;
+
+		@JsonProperty("recipient")
+		private String recipient;
+
+		@JsonProperty("block")
+		private Block block;
+
+		@Data
+		public static final class Asset {
+
+			@JsonProperty("type")
+			private String type;
+
+			@JsonProperty("address")
+			private String address;
+
+		}
+
+		@Data
+		public static final class Block {
+
+			@JsonProperty("number")
+			private long number;
+
+			@JsonProperty("timestamp")
+			private Date timestamp;
+
+		}
+
+	}
+
+	/** Funds were withdrawn from a user's embedded wallet. */
+	@Data
+	public static final class FundsWithdrawn implements Event {
+
+		@JsonProperty("wallet_id")
+		private String walletId;
+
+		@JsonProperty("idempotency_key")
+		private String idempotencyKey;
+
+		@JsonProperty("caip2")
+		private String caip2;
+
+		@JsonProperty("asset")
+		private Asset asset;
+
+		@JsonProperty("amount")
+		private String amount;
+
+		@JsonProperty("transaction_hash")
+		private String transactionHash;
+
+		@JsonProperty("sender")
+		private String sender;
+
+		@JsonProperty("recipient")
+		private String recipient;
+
+		@JsonProperty("block")
+		private Block block;
+
+		@Data
+		public static final class Asset {
+
+			@JsonProperty("type")
+			private String type;
+
+			@JsonProperty("address")
+			private String address;
+
+		}
+
+		@Data
+		public static final class Block {
+
+			@JsonProperty("number")
+			private long number;
+
+			@JsonProperty("timestamp")
+			private Date timestamp;
+
+		}
+
+	}
+
 	/** A user has exported their private key from an embedded wallet. */
 	@Data
 	public static final class PrivateKeyExported implements Event {
@@ -174,6 +325,10 @@ public sealed interface Event {
 		private String walletAddress;
 
 	}
+
+	// /** A user exported their seed phrase from an embedded wallet. */
+	// @Data
+	// public static final class SeedPhraseExported implements Event {}
 
 	/** A user has set up wallet recovery for their embedded wallet. */
 	@Data

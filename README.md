@@ -405,6 +405,28 @@ switch (receivedEvent) {
 		System.out.println(" with method: %s".formatted(event.getMethod()));
 	}
 
+	case Event.WalletArchived event -> {
+		System.out.println("Wallet Archived: %s".formatted(event.getWalletAddress()));
+	}
+
+	case Event.WalletRestored event -> {
+		System.out.println("Wallet Restored: %s".formatted(event.getWalletAddress()));
+	}
+
+	case Event.FundsDeposited event -> {
+		System.out.println("Funds Deposited: %s".formatted(event.getAsset()));
+		System.out.println(" from: %s".formatted(event.getSender()));
+		System.out.println(" to: %s".formatted(event.getRecipient()));
+		System.out.println(" for a total amount of: %s".formatted(event.getAmount()));
+	}
+
+	case Event.FundsWithdrawn event -> {
+		System.out.println("Funds Withdrawn: %s".formatted(event.getAsset()));
+		System.out.println(" from: %s".formatted(event.getSender()));
+		System.out.println(" to: %s".formatted(event.getRecipient()));
+		System.out.println(" for a total amount of: %s".formatted(event.getAmount()));
+	}
+
 	case Event.PrivateKeyExported event -> {
 		System.out.println("Private Key Exported: %s".formatted(event.getUserId()));
 		System.out.println(" with wallet address: %s".formatted(event.getWalletAddress()));

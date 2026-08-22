@@ -2,6 +2,7 @@ package dev.caceresenzo.privy.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -313,6 +314,114 @@ class EventTest {
 
 		assertEquals("user_123", event.getUserId());
 		assertEquals("sms", event.getMethod());
+	}
+
+	@Test
+	void walletArchived() {
+		final var receivedEvent = read("""
+			{
+				"type": "wallet.archived",
+				"wallet_id": "wallet_123",
+				"wallet_address": "0x123...",
+				"chain_type": "ethereum",
+				"archived_at": 1715000003
+			}
+			""");
+
+		final var event = assertInstanceOf(Event.WalletArchived.class, receivedEvent);
+
+		assertEquals("wallet_123", event.getWalletId());
+		assertEquals("0x123...", event.getWalletAddress());
+		assertEquals("ethereum", event.getChainType());
+		assertNotNull(event.getArchivedAt());
+	}
+
+	@Test
+	void walletRestored() {
+		final var receivedEvent = read("""
+			{
+				"type": "wallet.restored",
+				"wallet_id": "wallet_123",
+				"wallet_address": "0x123...",
+				"chain_type": "ethereum"
+			}
+			""");
+
+		final var event = assertInstanceOf(Event.WalletRestored.class, receivedEvent);
+
+		assertEquals("wallet_123", event.getWalletId());
+		assertEquals("0x123...", event.getWalletAddress());
+		assertEquals("ethereum", event.getChainType());
+	}
+
+	@Test
+	void fundsDeposited() {
+		final var receivedEvent = read("""
+			{
+				"type": "wallet.funds_deposited",
+				"wallet_id": "wallet_123",
+				"idempotency_key": "an_uuid",
+				"caip2": "eip155:1",
+				"asset": {
+					"type": "native-token",
+					"address": null
+				},
+				"amount": "1000000000000000000",
+				"transaction_hash": "0xabc...",
+				"sender": "0x123...",
+				"recipient": "0x456...",
+				"block": {
+					"number": 19832451,
+					"timestamp": 1715000003
+				}
+			}
+			""");
+
+		final var event = assertInstanceOf(Event.FundsDeposited.class, receivedEvent);
+
+		assertEquals("wallet_123", event.getWalletId());
+		assertEquals("an_uuid", event.getIdempotencyKey());
+		assertEquals("eip155:1", event.getCaip2());
+		assertEquals("1000000000000000000", event.getAmount());
+		assertEquals("0xabc...", event.getTransactionHash());
+		assertEquals("0x123...", event.getSender());
+		assertEquals("0x456...", event.getRecipient());
+		assertNotNull(event.getBlock().getTimestamp());
+	}
+
+	@Test
+	void fundsWithdrawn() {
+		final var receivedEvent = read("""
+			{
+				"type": "wallet.funds_withdrawn",
+				"wallet_id": "wallet_123",
+				"idempotency_key": "an_uuid",
+				"caip2": "eip155:1",
+				"asset": {
+					"type": "native-token",
+					"address": null
+				},
+				"amount": "1000000000000000000",
+				"transaction_hash": "0xabc...",
+				"sender": "0x123...",
+				"recipient": "0x456...",
+				"block": {
+					"number": 19832451,
+					"timestamp": 1715000003
+				}
+			}
+			""");
+
+		final var event = assertInstanceOf(Event.FundsWithdrawn.class, receivedEvent);
+
+		assertEquals("wallet_123", event.getWalletId());
+		assertEquals("an_uuid", event.getIdempotencyKey());
+		assertEquals("eip155:1", event.getCaip2());
+		assertEquals("1000000000000000000", event.getAmount());
+		assertEquals("0xabc...", event.getTransactionHash());
+		assertEquals("0x123...", event.getSender());
+		assertEquals("0x456...", event.getRecipient());
+		assertNotNull(event.getBlock().getTimestamp());
 	}
 
 	@Test
