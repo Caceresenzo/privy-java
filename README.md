@@ -432,6 +432,11 @@ switch (receivedEvent) {
 		System.out.println(" with wallet address: %s".formatted(event.getWalletAddress()));
 	}
 
+	case Event.SeedPhraseExported event -> {
+		System.out.println("Seed Phrase Exported: %s".formatted(event.getUserId()));
+		System.out.println(" with wallet address: %s".formatted(event.getWalletAddress()));
+	}
+
 	case Event.WalletRecoverySetup event -> {
 		System.out.println("Wallet Recovery Setup: %s".formatted(event.getUserId()));
 		System.out.println(" with wallet address: %s".formatted(event.getWalletAddress()));

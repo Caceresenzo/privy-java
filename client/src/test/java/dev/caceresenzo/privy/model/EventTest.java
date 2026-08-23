@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.math.BigInteger;
+
 import org.junit.jupiter.api.Test;
 
 import dev.caceresenzo.privy.util.PrivyMapper;
@@ -382,7 +384,7 @@ class EventTest {
 		assertEquals("wallet_123", event.getWalletId());
 		assertEquals("an_uuid", event.getIdempotencyKey());
 		assertEquals("eip155:1", event.getCaip2());
-		assertEquals("1000000000000000000", event.getAmount());
+		assertEquals(new BigInteger("1000000000000000000"), event.getAmount());
 		assertEquals("0xabc...", event.getTransactionHash());
 		assertEquals("0x123...", event.getSender());
 		assertEquals("0x456...", event.getRecipient());
@@ -417,7 +419,7 @@ class EventTest {
 		assertEquals("wallet_123", event.getWalletId());
 		assertEquals("an_uuid", event.getIdempotencyKey());
 		assertEquals("eip155:1", event.getCaip2());
-		assertEquals("1000000000000000000", event.getAmount());
+		assertEquals(new BigInteger("1000000000000000000"), event.getAmount());
 		assertEquals("0xabc...", event.getTransactionHash());
 		assertEquals("0x123...", event.getSender());
 		assertEquals("0x456...", event.getRecipient());
@@ -436,6 +438,24 @@ class EventTest {
 			""");
 
 		final var event = assertInstanceOf(Event.PrivateKeyExported.class, receivedEvent);
+
+		assertEquals("user_123", event.getUserId());
+		assertEquals("wallet_123", event.getWalletId());
+		assertEquals("0x123...", event.getWalletAddress());
+	}
+
+	@Test
+	void seedPhraseExported() {
+		final var receivedEvent = read("""
+			{
+				"type": "wallet.seed_phrase_export",
+				"user_id": "user_123",
+				"wallet_id": "wallet_123",
+				"wallet_address": "0x123..."
+			}
+			""");
+
+		final var event = assertInstanceOf(Event.SeedPhraseExported.class, receivedEvent);
 
 		assertEquals("user_123", event.getUserId());
 		assertEquals("wallet_123", event.getWalletId());

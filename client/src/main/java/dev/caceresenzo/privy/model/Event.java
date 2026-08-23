@@ -1,5 +1,6 @@
 package dev.caceresenzo.privy.model;
 
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.Map;
 
@@ -30,7 +31,7 @@ import lombok.Data;
 	@JsonSubTypes.Type(value = Event.FundsDeposited.class, name = "wallet.funds_deposited"),
 	@JsonSubTypes.Type(value = Event.FundsWithdrawn.class, name = "wallet.funds_withdrawn"),
 	@JsonSubTypes.Type(value = Event.PrivateKeyExported.class, name = "wallet.private_key_export"),
-	// @JsonSubTypes.Type(value = Event.SeedPhraseExported.class, name = "wallet.seed_phrase_export"),
+	@JsonSubTypes.Type(value = Event.SeedPhraseExported.class, name = "wallet.seed_phrase_export"),
 	@JsonSubTypes.Type(value = Event.WalletRecoverySetup.class, name = "wallet.recovery_setup"),
 	@JsonSubTypes.Type(value = Event.WalletRecovered.class, name = "wallet.recovered"),
 })
@@ -218,10 +219,13 @@ public sealed interface Event {
 		private Asset asset;
 
 		@JsonProperty("amount")
-		private String amount;
+		private BigInteger amount;
 
 		@JsonProperty("transaction_hash")
 		private String transactionHash;
+
+		@JsonProperty("transaction_fee")
+		private BigInteger transactionFee;
 
 		@JsonProperty("sender")
 		private String sender;
@@ -231,28 +235,6 @@ public sealed interface Event {
 
 		@JsonProperty("block")
 		private Block block;
-
-		@Data
-		public static final class Asset {
-
-			@JsonProperty("type")
-			private String type;
-
-			@JsonProperty("address")
-			private String address;
-
-		}
-
-		@Data
-		public static final class Block {
-
-			@JsonProperty("number")
-			private long number;
-
-			@JsonProperty("timestamp")
-			private Date timestamp;
-
-		}
 
 	}
 
@@ -273,10 +255,13 @@ public sealed interface Event {
 		private Asset asset;
 
 		@JsonProperty("amount")
-		private String amount;
+		private BigInteger amount;
 
 		@JsonProperty("transaction_hash")
 		private String transactionHash;
+
+		@JsonProperty("transaction_fee")
+		private BigInteger transactionFee;
 
 		@JsonProperty("sender")
 		private String sender;
@@ -286,28 +271,6 @@ public sealed interface Event {
 
 		@JsonProperty("block")
 		private Block block;
-
-		@Data
-		public static final class Asset {
-
-			@JsonProperty("type")
-			private String type;
-
-			@JsonProperty("address")
-			private String address;
-
-		}
-
-		@Data
-		public static final class Block {
-
-			@JsonProperty("number")
-			private long number;
-
-			@JsonProperty("timestamp")
-			private Date timestamp;
-
-		}
 
 	}
 
@@ -326,9 +289,20 @@ public sealed interface Event {
 
 	}
 
-	// /** A user exported their seed phrase from an embedded wallet. */
-	// @Data
-	// public static final class SeedPhraseExported implements Event {}
+	/** A user exported their seed phrase from an embedded wallet. */
+	@Data
+	public static final class SeedPhraseExported implements Event {
+
+		@JsonProperty("user_id")
+		private String userId;
+
+		@JsonProperty("wallet_id")
+		private String walletId;
+
+		@JsonProperty("wallet_address")
+		private String walletAddress;
+
+	}
 
 	/** A user has set up wallet recovery for their embedded wallet. */
 	@Data
