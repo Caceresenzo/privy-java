@@ -6,7 +6,9 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import dev.caceresenzo.privy.util.serial.UnixDateDeserializer;
 import lombok.Data;
 
 @Data
@@ -28,6 +30,7 @@ public class User {
 	public CustomMetadata customMetadata;
 
 	@JsonProperty("created_at")
+	@JsonDeserialize(using = UnixDateDeserializer.AsSeconds.class)
 	private Date createdAt;
 
 	@JsonIgnore

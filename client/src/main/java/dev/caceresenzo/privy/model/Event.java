@@ -9,7 +9,9 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import dev.caceresenzo.privy.util.serial.UnixDateDeserializer;
 import lombok.Data;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type", visible = true, defaultImpl = Event.Other.class)
@@ -183,6 +185,7 @@ public sealed interface Event {
 		private String chainType;
 
 		@JsonProperty("archived_at")
+		@JsonDeserialize(using = UnixDateDeserializer.AsMilliseconds.class)
 		private Date archivedAt;
 
 	}

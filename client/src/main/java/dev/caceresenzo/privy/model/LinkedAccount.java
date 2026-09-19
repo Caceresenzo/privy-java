@@ -10,7 +10,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import dev.caceresenzo.privy.util.serial.UnixDateDeserializer;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -31,13 +33,16 @@ import lombok.ToString;
 public abstract sealed class LinkedAccount {
 
 	@JsonProperty("verified_at")
+	@JsonDeserialize(using = UnixDateDeserializer.AsSeconds.class)
 	private Date verifiedAt;
 
 	@JsonProperty("first_verified_at")
+	@JsonDeserialize(using = UnixDateDeserializer.AsSeconds.class)
 	private Date firstVerifiedAt;
 
 	@JsonProperty("latest_verified_at")
 	@JsonAlias("lv")
+	@JsonDeserialize(using = UnixDateDeserializer.AsSeconds.class)
 	private Date latestVerifiedAt;
 
 	/** Object representation of a user's wallet. */
