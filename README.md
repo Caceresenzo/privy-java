@@ -24,6 +24,9 @@ This Java client connects with Privy.io, enabling simple user management and sec
 		- [Get the Verification Key](#get-the-verification-key)
 		- [Verity an Auth Token](#verity-an-auth-token)
 		- [Get a User from an ID Token](#get-a-user-from-an-id-token)
+		- [Stream Wallets](#stream-wallets)
+		- [Find a Wallet by an ID](#find-a-wallet-by-an-id)
+		- [Find a Wallet by an Address](#find-a-wallet-by-an-address)
 	- [Advanced Configuration](#advanced-configuration)
 - [Webhook](#webhook)
 	- [Configuration](#configuration-1)
@@ -244,6 +247,7 @@ switch (account) {
 	}
 }
 ```
+
 </details>
 
 ### Get the Verification Key
@@ -283,6 +287,27 @@ User user = client.getUserFromIdToken(idToken);
 
 > [!TIP]
 > We recommend keeping the verification key caching enabled (default behavior) if it is being used for authenticating requests.
+
+### Stream Wallets
+
+```java
+Stream<Wallet> wallets = client.findAllWallets();
+
+/* or get a list via */
+List<Wallet> wallets = client.findAllWallets().toList();
+```
+
+### Find a Wallet by an ID
+
+```java
+Optional<Wallet> wallet = client.findWalletById("a0b1c2d3e4f5g6h7i8j9k0l1m");
+```
+
+### Find a Wallet by an Address
+
+```java
+Optional<Wallet> wallet = client.findWalletByAddress("0x0123456789abcdef0123456789abcdef12345678");
+```
 
 ## Advanced Configuration
 
@@ -454,6 +479,7 @@ switch (receivedEvent) {
 	}
 }
 ```
+
 </details>
 
 # Spring Boot Starter
