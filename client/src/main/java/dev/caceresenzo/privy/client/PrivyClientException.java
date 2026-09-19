@@ -28,4 +28,7 @@ public class PrivyClientException extends PrivyException {
 	@StandardException
 	public static class InvalidCustomMetadata extends PrivyClientException {}
 
+	@StandardException
+	public static class WalletNotFound extends PrivyClientException {}
+
 }

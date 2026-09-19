@@ -7,6 +7,7 @@ import dev.caceresenzo.privy.client.impl.pagination.Page;
 import dev.caceresenzo.privy.model.ApplicationSettings;
 import dev.caceresenzo.privy.model.CustomMetadata;
 import dev.caceresenzo.privy.model.User;
+import dev.caceresenzo.privy.model.Wallet;
 import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
@@ -67,6 +68,16 @@ public interface FeignPrivyClient {
 
 	@RequestLine("GET /v1/apps/{applicationId}")
 	ApplicationSettings getApplicationSettings(@Param String applicationId);
+
+	@RequestLine("GET /v1/wallets?limit={limit}&cursor={cursor}")
+	Page<Wallet> getWallets(@Param long limit, @Param String cursor);
+
+	@RequestLine("GET /v1/wallets/{walletId}")
+	Wallet getWalletById(@Param String walletId);
+
+	@RequestLine("POST /v1/wallets/address")
+	@Headers(JSON_CONTENT_TYPE)
+	Wallet getWalletByAddress(AddressRequest body);
 
 	static record SearchRequest(
 		String searchTerm,

@@ -10,6 +10,7 @@ import dev.caceresenzo.privy.client.impl.PrivyClientImpl;
 import dev.caceresenzo.privy.model.ApplicationSettings;
 import dev.caceresenzo.privy.model.CustomMetadata;
 import dev.caceresenzo.privy.model.User;
+import dev.caceresenzo.privy.model.Wallet;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
@@ -165,6 +166,29 @@ public interface PrivyClient {
 	 * @see #verifyAuthToken()
 	 */
 	User getUserFromIdToken(String idToken);
+
+	/**
+	 * Get the wallets associated with this application.
+	 *
+	 * @return A {@link Stream stream} of {@link Wallet wallets}.
+	 */
+	Stream<Wallet> findAllWallets();
+
+	/**
+	 * Get the wallet object associated with the given ID.
+	 *
+	 * @param id ID for the wallet to fetch.
+	 * @return A {@link Wallet wallet}, if it exists.
+	 */
+	Optional<Wallet> findWalletById(String id);
+
+	/**
+	 * Get the wallet object associated with the given wallet address.
+	 *
+	 * @param address Blockchain address for the wallet to fetch.
+	 * @return A {@link Wallet wallet}, if it exists.
+	 */
+	Optional<Wallet> findWalletByAddress(String address);
 
 	/**
 	 * Create a new builder.

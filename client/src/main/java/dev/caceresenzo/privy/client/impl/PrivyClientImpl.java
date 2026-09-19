@@ -27,6 +27,7 @@ import dev.caceresenzo.privy.model.ApplicationSettings;
 import dev.caceresenzo.privy.model.CustomMetadata;
 import dev.caceresenzo.privy.model.LinkedAccount;
 import dev.caceresenzo.privy.model.User;
+import dev.caceresenzo.privy.model.Wallet;
 import dev.caceresenzo.privy.util.PrivyMapper;
 import dev.caceresenzo.privy.util.serial.UnixDateDeserializer;
 import feign.Feign;
@@ -334,9 +335,42 @@ public class PrivyClientImpl implements PrivyClient {
 		user.setLinkedAccounts(linkedAccounts);
 		user.setGuest("t".equals(payload.get("guest")));
 		user.setCustomMetadata(customMetadata);
-		user.setCreatedAt(UnixDateDeserializer.fromTimestamp(Long.valueOf(payload.get("cr", String.class))));
+		user.setCreatedAt(UnixDateDeserializer.AsSeconds.from(Long.valueOf(payload.get("cr", String.class))));
 
 		return user;
+	}
+
+	@Override
+	public Stream<Wallet> findAllWallets() {
+		return PageSpliterator.stream(
+			(nextCursor) -> delegate.getWallets(maxPageSize, nextCursor)
+		);
+	}
+
+	@Override
+	public Optional<Wallet> findWalletById(String id) {
+		if (isBlank(id)) {
+			return Optional.empty();
+		}
+
+		try {
+			return Optional.of(delegate.getWalletById(id));
+		} catch (PrivyClientException.WalletNotFound __) {
+			return Optional.empty();
+		}
+	}
+
+	@Override
+	public Optional<Wallet> findWalletByAddress(String address) {
+		if (isBlank(address)) {
+			return Optional.empty();
+		}
+
+		try {
+			return Optional.of(delegate.getWalletByAddress(new AddressRequest(address)));
+		} catch (PrivyClientException.WalletNotFound __) {
+			return Optional.empty();
+		}
 	}
 
 	public static boolean isBlank(String value) {

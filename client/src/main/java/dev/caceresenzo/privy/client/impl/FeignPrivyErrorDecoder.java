@@ -44,6 +44,8 @@ public class FeignPrivyErrorDecoder extends ErrorDecoder.Default {
 
 			this.mappers.add(ErrorMapper.startsWith("[Input error] `custom_metadata", PrivyClientException.InvalidCustomMetadata::new));
 			this.mappers.add(ErrorMapper.equals("Size of custom metadata object too big (>1KB)", PrivyClientException.InvalidCustomMetadata::new));
+
+			this.mappers.add(ErrorMapper.equals("Wallet not found", PrivyClientException.WalletNotFound::new));
 		}
 	}
 
