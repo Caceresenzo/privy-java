@@ -18,6 +18,12 @@ public class PageSpliterator<T> implements Spliterator<T> {
 	private Iterator<T> currentIterator;
 	private String nextCursor;
 
+	public PageSpliterator(Function<String, Page<T>> nextPageGetter) {
+		this.nextPageGetter = Objects.requireNonNull(nextPageGetter);
+
+		setPage(nextPageGetter.apply(null));
+	}
+
 	public PageSpliterator(Page<T> firstPage, Function<String, Page<T>> nextPageGetter) {
 		this.nextPageGetter = Objects.requireNonNull(nextPageGetter);
 
@@ -65,6 +71,10 @@ public class PageSpliterator<T> implements Spliterator<T> {
 
 	public Stream<T> asStream() {
 		return StreamSupport.stream(this, false);
+	}
+
+	public static <T> Stream<T> stream(Function<String, Page<T>> nextPageGetter) {
+		return new PageSpliterator<>(nextPageGetter).asStream();
 	}
 
 }

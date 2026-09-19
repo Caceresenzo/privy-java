@@ -16,9 +16,6 @@ public interface FeignPrivyClient {
 
 	String JSON_CONTENT_TYPE = "Content-Type: application/json";
 
-	@RequestLine("GET /api/v1/users?limit={limit}")
-	Page<User> getUsers(@Param long limit);
-
 	@RequestLine("GET /api/v1/users?limit={limit}&cursor={cursor}")
 	Page<User> getUsers(@Param long limit, @Param String cursor);
 

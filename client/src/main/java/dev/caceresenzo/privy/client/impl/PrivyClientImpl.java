@@ -89,17 +89,16 @@ public class PrivyClientImpl implements PrivyClient {
 			.requestInterceptor(new AuthRequestInterceptor(applicationId, applicationSecret))
 			.errorDecoder(new FeignPrivyErrorDecoder(PrivyMapper.INSTANCE))
 			.retryer(Retryer.NEVER_RETRY)
+			.logger(new feign.Logger.ErrorLogger())
+			.logLevel(feign.Logger.Level.FULL)
 			.target(FeignPrivyClient.class, apiUrl);
 	}
 
 	@Override
 	public Stream<User> findAllUsers() {
-		final var firstPage = delegate.getUsers(maxPageSize);
-
-		return new PageSpliterator<>(
-			firstPage,
+		return PageSpliterator.stream(
 			(nextCursor) -> delegate.getUsers(maxPageSize, nextCursor)
-		).asStream();
+		);
 	}
 
 	@Override
@@ -110,12 +109,9 @@ public class PrivyClientImpl implements PrivyClient {
 			null
 		);
 
-		final var firstPage = delegate.searchUsers(body);
-
-		return new PageSpliterator<>(
-			firstPage,
+		return PageSpliterator.stream(
 			(nextCursor) -> delegate.searchUsers(body.withCursor(nextCursor))
-		).asStream();
+		);
 	}
 
 	@Override
