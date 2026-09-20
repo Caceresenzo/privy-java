@@ -128,6 +128,7 @@
 							</execution>
 						</executions>
 						<configuration>
+							<keyname>${env.GPG_KEY_ID}</keyname>
 							<gpgArguments>
 								<arg>--pinentry-mode</arg>
 								<arg>loopback</arg>
