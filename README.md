@@ -43,7 +43,7 @@ This Java client connects with Privy.io, enabling simple user management and sec
 
 ```xml
 <properties>
-	<privy.version>0.11.0</privy.version>
+	<privy.version>0.11.1</privy.version>
 </properties>
 
 <dependencies>
