@@ -90,8 +90,6 @@ public class PrivyClientImpl implements PrivyClient {
 			.requestInterceptor(new AuthRequestInterceptor(applicationId, applicationSecret))
 			.errorDecoder(new FeignPrivyErrorDecoder(PrivyMapper.INSTANCE))
 			.retryer(Retryer.NEVER_RETRY)
-			.logger(new feign.Logger.ErrorLogger())
-			.logLevel(feign.Logger.Level.FULL)
 			.target(FeignPrivyClient.class, apiUrl);
 	}
 
