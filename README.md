@@ -177,6 +177,10 @@ Optional<LinkedAccount.Email> email = user.getAccount(LinkedAccount.Email.class)
 Optional<LinkedAccount.Google> google = user.getAccount(LinkedAccount.Google.class);
 Optional<LinkedAccount.Github> github = user.getAccount(LinkedAccount.Github.class);
 
+/* access all wallets */
+List<LinkedAccount.Wallet> wallets = user.getWallets();
+List<LinkedAccount.Wallet> wallets = user.getAccounts(LinkedAccount.Wallet.class);
+
 /* iterate over accounts */
 for (LinkedAccount account : user.getLinkedAccounts()) {
 	System.out.println(account);

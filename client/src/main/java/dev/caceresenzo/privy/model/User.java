@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import dev.caceresenzo.privy.util.serial.UnixDateDeserializer;
+import io.jsonwebtoken.lang.Collections;
 import lombok.Data;
 
 @Data
@@ -36,6 +37,11 @@ public class User {
 	@JsonIgnore
 	public Optional<LinkedAccount.Wallet> getWallet() {
 		return getAccount(LinkedAccount.Wallet.class);
+	}
+
+	@JsonIgnore
+	public List<LinkedAccount.Wallet> getWallets() {
+		return getAccounts(LinkedAccount.Wallet.class);
 	}
 
 	@JsonIgnore
@@ -78,7 +84,6 @@ public class User {
 		return getAccount(LinkedAccount.Passkey.class);
 	}
 
-	@SuppressWarnings("unchecked")
 	public <T extends LinkedAccount> Optional<T> getAccount(Class<T> clazz) {
 		if (clazz == null) {
 			return Optional.empty();
@@ -86,11 +91,22 @@ public class User {
 
 		for (final var account : getLinkedAccounts()) {
 			if (clazz.equals(account.getClass())) {
-				return Optional.of((T) account);
+				return Optional.of(clazz.cast(account));
 			}
 		}
 
 		return Optional.empty();
+	}
+
+	public <T extends LinkedAccount> List<T> getAccounts(Class<T> clazz) {
+		if (clazz == null) {
+			return Collections.emptyList();
+		}
+
+		return getLinkedAccounts().stream()
+			.filter((account) -> clazz.equals(account.getClass()))
+			.map(clazz::cast)
+			.toList();
 	}
 
 	public CustomMetadata getCustomMetadata() {
