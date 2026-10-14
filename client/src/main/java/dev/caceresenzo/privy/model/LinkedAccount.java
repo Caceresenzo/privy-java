@@ -246,7 +246,7 @@ public abstract sealed class LinkedAccount {
 		private String name;
 
 		/** The vanity name associated with the LinkedIn account. */
-		@JsonProperty("vanityName")
+		@JsonProperty("vanity_name")
 		private String vanityName;
 
 	}

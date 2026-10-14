@@ -47,7 +47,7 @@ class LinkedAccountTest {
 		assertEquals("privy", wallet.getWalletClientType());
 		assertEquals("embedded", wallet.getConnectorType());
 
-		final var date = new Date(1724800479l * 1000);
+		final var date = new Date(1724800479L * 1000);
 		assertEquals(date, wallet.getVerifiedAt());
 		assertEquals(date, wallet.getFirstVerifiedAt());
 		assertEquals(date, wallet.getLatestVerifiedAt());
@@ -69,10 +69,10 @@ class LinkedAccountTest {
 
 		assertEquals("johndoe@example.com", email.getAddress());
 
-		final var date = new Date(1724800476l * 1000);
+		final var date = new Date(1724800476L * 1000);
 		assertEquals(date, email.getVerifiedAt());
 		assertEquals(date, email.getFirstVerifiedAt());
-		assertEquals(new Date(1725126079l * 1000), email.getLatestVerifiedAt());
+		assertEquals(new Date(1725126079L * 1000), email.getLatestVerifiedAt());
 	}
 
 	@Test
@@ -91,7 +91,7 @@ class LinkedAccountTest {
 
 		assertEquals("+12819374192", phone.getNumber());
 
-		final var date = new Date(1725378363l * 1000);
+		final var date = new Date(1725378363L * 1000);
 		assertEquals(date, phone.getVerifiedAt());
 		assertEquals(date, phone.getFirstVerifiedAt());
 		assertEquals(date, phone.getLatestVerifiedAt());
@@ -117,7 +117,7 @@ class LinkedAccountTest {
 		assertEquals("johndoe@example.com", google.getEmail());
 		assertEquals("John Doe", google.getName());
 
-		final var date = new Date(1725376993l * 1000);
+		final var date = new Date(1725376993L * 1000);
 		assertEquals(date, google.getVerifiedAt());
 		assertEquals(date, google.getFirstVerifiedAt());
 		assertEquals(date, google.getLatestVerifiedAt());
@@ -145,7 +145,7 @@ class LinkedAccountTest {
 		assertEquals("johndoe", twitter.getUsername());
 		assertEquals("https://pbs.twimg.com/profile_images/x/x.jpg", twitter.getProfilePictureUrl());
 
-		final var date = new Date(1725376993l * 1000);
+		final var date = new Date(1725376993L * 1000);
 		assertEquals(date, twitter.getVerifiedAt());
 		assertEquals(date, twitter.getFirstVerifiedAt());
 		assertEquals(date, twitter.getLatestVerifiedAt());
@@ -171,7 +171,7 @@ class LinkedAccountTest {
 		assertEquals("johndoe#0", discord.getUsername());
 		assertEquals("johndoe@example.com", discord.getEmail());
 
-		final var date = new Date(1725127202l * 1000);
+		final var date = new Date(1725127202L * 1000);
 		assertEquals(date, discord.getVerifiedAt());
 		assertEquals(date, discord.getFirstVerifiedAt());
 		assertEquals(date, discord.getLatestVerifiedAt());
@@ -199,7 +199,7 @@ class LinkedAccountTest {
 		assertEquals("johndoe@example.com", github.getEmail());
 		assertEquals("John Doe", github.getName());
 
-		final var date = new Date(1725376993l * 1000);
+		final var date = new Date(1725376993L * 1000);
 		assertEquals(date, github.getVerifiedAt());
 		assertEquals(date, github.getFirstVerifiedAt());
 		assertEquals(date, github.getLatestVerifiedAt());
@@ -213,6 +213,7 @@ class LinkedAccountTest {
 				"subject": "1234567",
 				"email": "johndoe@example.com",
 				"name": "John Doe",
+				"vanity_name": "johndoe",
 				"verified_at": 1725376993,
 				"first_verified_at": 1725376993,
 				"latest_verified_at": 1725376993
@@ -224,8 +225,9 @@ class LinkedAccountTest {
 		assertEquals("1234567", linkedIn.getSubject());
 		assertEquals("johndoe@example.com", linkedIn.getEmail());
 		assertEquals("John Doe", linkedIn.getName());
+		assertEquals("johndoe", linkedIn.getVanityName());
 
-		final var date = new Date(1725376993l * 1000);
+		final var date = new Date(1725376993L * 1000);
 		assertEquals(date, linkedIn.getVerifiedAt());
 		assertEquals(date, linkedIn.getFirstVerifiedAt());
 		assertEquals(date, linkedIn.getLatestVerifiedAt());
@@ -247,7 +249,7 @@ class LinkedAccountTest {
 
 		assertEquals("aabbccddeeff", passkey.getCredentialId());
 
-		final var date = new Date(1725376993l * 1000);
+		final var date = new Date(1725376993L * 1000);
 		assertEquals(date, passkey.getVerifiedAt());
 		assertEquals(date, passkey.getFirstVerifiedAt());
 		assertEquals(date, passkey.getLatestVerifiedAt());
@@ -272,7 +274,7 @@ class LinkedAccountTest {
 			Map.entry("name", "John Doe")
 		);
 
-		assertEquals(new Date(1725376993l * 1000), other.getVerifiedAt());
+		assertEquals(new Date(1725376993L * 1000), other.getVerifiedAt());
 	}
 
 	@SneakyThrows
