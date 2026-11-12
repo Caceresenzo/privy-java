@@ -21,6 +21,8 @@ import dev.caceresenzo.privy.client.impl.FeignPrivyClient.CustomUserIdRequest;
 import dev.caceresenzo.privy.client.impl.FeignPrivyClient.PhoneRequest;
 import dev.caceresenzo.privy.client.impl.FeignPrivyClient.SubjectRequest;
 import dev.caceresenzo.privy.client.impl.FeignPrivyClient.UsernameRequest;
+import dev.caceresenzo.privy.client.impl.FeignPrivyClient.WalletCreateRequest;
+import dev.caceresenzo.privy.client.impl.FeignPrivyClient.WalletsCreateRequest;
 import dev.caceresenzo.privy.client.impl.auth.AuthRequestInterceptor;
 import dev.caceresenzo.privy.client.impl.pagination.PageSpliterator;
 import dev.caceresenzo.privy.model.ApplicationSettings;
@@ -369,6 +371,14 @@ public class PrivyClientImpl implements PrivyClient {
 		} catch (PrivyClientException.WalletNotFound __) {
 			return Optional.empty();
 		}
+	}
+
+	@Override
+	public User createWallet(String userId, String chainType) {
+		Objects.requireNonNull(userId, "userId must be specified");
+		Objects.requireNonNull(chainType, "chainType must be specified");
+
+		return delegate.createWallets(userId, new WalletsCreateRequest(List.of(new WalletCreateRequest(chainType))));
 	}
 
 	public static boolean isBlank(String value) {

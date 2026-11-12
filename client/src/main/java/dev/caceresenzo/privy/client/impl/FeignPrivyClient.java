@@ -1,5 +1,7 @@
 package dev.caceresenzo.privy.client.impl;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -79,6 +81,10 @@ public interface FeignPrivyClient {
 	@Headers(JSON_CONTENT_TYPE)
 	Wallet getWalletByAddress(AddressRequest body);
 
+	@RequestLine("POST /v1/users/{id}/wallets")
+	@Headers(JSON_CONTENT_TYPE)
+	User createWallets(@Param String id, WalletsCreateRequest body);
+
 	static record SearchRequest(
 		String searchTerm,
 		long limit,
@@ -99,6 +105,14 @@ public interface FeignPrivyClient {
 
 	static record CustomMetadataUpdateRequest(
 		@JsonProperty("custom_metadata") CustomMetadata metadata
+	) {}
+
+	static record WalletsCreateRequest(
+		List<WalletCreateRequest> wallets
+	) {}
+
+	static record WalletCreateRequest(
+		@JsonProperty("chain_type") String chainType
 	) {}
 
 }

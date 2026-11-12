@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 import dev.caceresenzo.privy.PrivyException;
 import dev.caceresenzo.privy.client.impl.PrivyClientImpl;
 import dev.caceresenzo.privy.model.ApplicationSettings;
+import dev.caceresenzo.privy.model.ChainTypes;
 import dev.caceresenzo.privy.model.CustomMetadata;
 import dev.caceresenzo.privy.model.User;
 import dev.caceresenzo.privy.model.Wallet;
@@ -158,7 +159,7 @@ public interface PrivyClient {
 	/**
 	 * Gets a user from the identity token. First, this verifies the token is valid and then parses the payload into a {@link User} object. <br />
 	 * Note the user object may be incomplete due to identity token size constraints. <br />
-	
+	 *
 	 * @param idToken The identity token set as a cookie on the users browser.
 	 * @return {@link User User} object with parsed from the ID token.
 	 * @implNote A cached verification key may be used.
@@ -189,6 +190,16 @@ public interface PrivyClient {
 	 * @return A {@link Wallet wallet}, if it exists.
 	 */
 	Optional<Wallet> findWalletByAddress(String address);
+
+	/**
+	 * Create an embedded wallet for an existing user.
+	 *
+	 * @param userId DID of the user to create the wallet for.
+	 * @param chainType Chain type of the wallet, see {@link ChainTypes}.
+	 * @return {@link User User} object updated with the new wallet in its linked accounts.
+	 * @throws PrivyClientException.UserNotFound If the user does not exist.
+	 */
+	User createWallet(String userId, String chainType);
 
 	/**
 	 * Create a new builder.

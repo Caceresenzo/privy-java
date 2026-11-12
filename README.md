@@ -27,6 +27,7 @@ This Java client connects with Privy.io, enabling simple user management and sec
 		- [Stream Wallets](#stream-wallets)
 		- [Find a Wallet by an ID](#find-a-wallet-by-an-id)
 		- [Find a Wallet by an Address](#find-a-wallet-by-an-address)
+		- [Create a Wallet for a User](#create-a-wallet-for-a-user)
 	- [Advanced Configuration](#advanced-configuration)
 - [Webhook](#webhook)
 	- [Configuration](#configuration-1)
@@ -312,6 +313,14 @@ Optional<Wallet> wallet = client.findWalletById("a0b1c2d3e4f5g6h7i8j9k0l1m");
 ```java
 Optional<Wallet> wallet = client.findWalletByAddress("0x0123456789abcdef0123456789abcdef12345678");
 ```
+
+### Create a Wallet for a User
+
+```java
+User user = client.createWallet("did:privy:a0b1c2d3e4f5g6h7i8j9k0l1m", ChainTypes.SOLANA);
+```
+
+The new wallet is available in the returned user's linked accounts (`user.getWallets()`).
 
 ## Advanced Configuration
 
