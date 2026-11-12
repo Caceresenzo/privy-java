@@ -56,11 +56,8 @@ public abstract sealed class LinkedAccount {
 		private String address;
 
 		/**
-		 * Chain type of the wallet address.
-		 *
-		 * @deprecated Use `chainId` instead.
+		 * Chain type of the wallet address, see {@link ChainTypes}.
 		 */
-		@Deprecated
 		@JsonProperty("chain_type")
 		private String chainType;
 
@@ -68,6 +65,8 @@ public abstract sealed class LinkedAccount {
 		 * CAIP-2 formatted chain ID during the most recent verification.
 		 *
 		 * e.g. eip155:1, eip155:5, eip155:137, etc.
+		 *
+		 * May be <code>null</code>, e.g. for external Solana wallets.
 		 */
 		@JsonProperty("chain_id")
 		private String chainId;
